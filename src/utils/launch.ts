@@ -8,7 +8,7 @@ const production = async (bot: Telegraf<MyContext>): Promise<void> => {
 
     await new Promise(resolve => setTimeout(resolve, 2000))
 
-    const webhookUrl = `${process.env.VERCEL_URL}/api/index`
+    const webhookUrl = `${process.env.WEBHOOK_URL}/api/index`
 
     const success = await bot.telegram.setWebhook(webhookUrl)
 
