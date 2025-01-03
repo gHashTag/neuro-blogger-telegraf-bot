@@ -23,6 +23,7 @@
     "envalid": "^7.3.1",
     "form-data": "^4.0.1",
     "jest-mock": "^29.7.0",
+    "node-fetch": "^3.3.2",
     "openai": "^4.77.0",
     "replicate": "^0.32.0",
     "telegraf": "^4.16.3",

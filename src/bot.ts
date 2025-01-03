@@ -1,18 +1,16 @@
 import dotenv from 'dotenv'
-
-// Загружаем переменные окружения из .env файла
 dotenv.config()
 
-// Создаем экземпляр бота с токеном из переменных окружения
-import bot from './core/bot'
-import { production } from './utils/launch'
-import { development } from './utils/launch'
+import { development, production } from './utils/launch'
 
-// Настраиваем команды бота
-bot.start(ctx => ctx.reply('Welcome!!!!'))
-bot.help(ctx => ctx.reply('Send me a sticker'))
-bot.on('sticker', ctx => ctx.reply('👍'))
-bot.hears('hi', ctx => ctx.reply('Hey there'))
+import { handleModelCallback, handleTextMessage } from './handlers'
+import bot from './core/bot'
+
+import { setBotCommands } from './setCommands'
+import { registerCommands, stage } from './registerCommands'
+import { handleCallback } from './handlers/handleCallback'
+import { MyContext, MyTextMessageContext } from './interfaces'
+import myComposer from './hearsHandlers'
 
 if (process.env.NODE_ENV === 'development') {
   development(bot).catch(console.error)
@@ -20,6 +18,36 @@ if (process.env.NODE_ENV === 'development') {
   production(bot).catch(console.error)
 }
 
-// Обеспечиваем корректное завершение работы бота
-process.once('SIGINT', () => bot.stop('SIGINT'))
-process.once('SIGTERM', () => bot.stop('SIGTERM'))
+console.log(`Starting bot in ${process.env.NODE_ENV} mode`)
+
+setBotCommands(bot)
+registerCommands(bot)
+
+bot.use(stage.middleware())
+bot.use(myComposer.middleware())
+
+bot.on('pre_checkout_query', async ctx => {
+  await ctx.answerPreCheckoutQuery(true)
+  return
+})
+
+// bot.on("successful_payment", handleSuccessfulPayment)
+bot.action('callback_query', (ctx: MyContext) => handleCallback(ctx))
+
+bot.action(/^select_model_/, async ctx => {
+  console.log('CASE: select_model_', ctx.match)
+  const model = ctx.match.input.replace('select_model_', '')
+  console.log('Selected model:', model)
+  await handleModelCallback(ctx, model)
+})
+
+bot.on('text', (ctx: MyTextMessageContext) => handleTextMessage(ctx))
+
+bot.catch(err => {
+  const error = err as Error
+  console.error('Error:', error.message)
+})
+
+// Enable graceful stop
+process.once('SIGINT', () => bot.stop())
+process.once('SIGTERM', () => bot.stop())
