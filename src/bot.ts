@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 // Создаем экземпляр бота с токеном из переменных окружения
-import bot, { isDev } from './core/bot'
+import bot from './core/bot'
 import { production } from './utils/launch'
 import { development } from './utils/launch'
 
