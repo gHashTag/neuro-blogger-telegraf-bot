@@ -8,17 +8,20 @@ const production = async (bot: Telegraf<MyContext>): Promise<void> => {
 
     await new Promise(resolve => setTimeout(resolve, 2000))
 
-    const webhookUrl = `${process.env.WEBHOOK_URL}`
+    const webhookUrl = process.env.WEBHOOK_URL
+    const port = Number(process.env.PORT) || 3000
 
-    const success = await bot.telegram.setWebhook(webhookUrl)
+    await bot.launch({
+      webhook: {
+        domain: webhookUrl,
+        port: port,
+        //path: '/api/index', // Необязательный путь, можно не указывать
+        secretToken: process.env.SECRET_TOKEN,
+      },
+    })
 
-    if (success) {
-      console.log(`Webhook successfully set to ${webhookUrl}`)
-      console.log('Bot is running in webhook mode')
-      await bot.launch()
-    } else {
-      throw new Error('Failed to set webhook')
-    }
+    console.log(`Webhook successfully set to ${webhookUrl}`)
+    console.log('Bot is running in webhook mode')
   } catch (e) {
     console.error('Error in production setup:', e)
     throw e
