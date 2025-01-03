@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   app:
-    container_name: ai-server-express
+    container_name: neuro-blogger-telegram-bot
     build:
       context: ./
       dockerfile: Dockerfile.dev
