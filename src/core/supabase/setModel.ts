@@ -1,4 +1,4 @@
-import { supabase } from '.';
+import { supabase } from '.'
 
 export async function setModel(telegram_id: string, model: string) {
   try {
@@ -6,8 +6,8 @@ export async function setModel(telegram_id: string, model: string) {
       .from('users')
       .update({ model })
       .eq('telegram_id', telegram_id)
-      .select('*');
+      .select('*')
   } catch (error) {
-    throw new Error('Error setModel: ' + error);
+    throw new Error('Error setModel: ' + error)
   }
 }

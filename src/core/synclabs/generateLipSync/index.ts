@@ -1,13 +1,13 @@
-import { isDev } from '../../../helpers';
-import { supabase } from '../../supabase';
-import axios from 'axios';
+import { isDev } from '../../../helpers'
+import { supabase } from '../../supabase'
+import axios from 'axios'
 
 if (!process.env.SYNC_LABS_API_KEY) {
-  throw new Error('SYNC_LABS_API_KEY is not set');
+  throw new Error('SYNC_LABS_API_KEY is not set')
 }
 
 if (!process.env.NGROK) {
-  throw new Error('NGROK is not set');
+  throw new Error('NGROK is not set')
 }
 
 export async function generateLipSync(
@@ -17,17 +17,17 @@ export async function generateLipSync(
 ) {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-  };
+  }
 
   // Добавляем API ключ только если он определен
   if (process.env.SYNC_LABS_API_KEY) {
-    headers['x-api-key'] = process.env.SYNC_LABS_API_KEY;
+    headers['x-api-key'] = process.env.SYNC_LABS_API_KEY
   }
 
   const webhookUrl = isDev
     ? `${process.env.NGROK}/api/synclabs-webhook`
-    : `${process.env.ELESTIO_URL}/api/synclabs-webhook`;
-  console.log(webhookUrl, 'webhookUrl');
+    : `${process.env.ELESTIO_URL}/api/synclabs-webhook`
+  console.log(webhookUrl, 'webhookUrl')
 
   try {
     const response = await axios.post(
@@ -48,22 +48,22 @@ export async function generateLipSync(
         webhookUrl,
       },
       { headers }
-    );
+    )
 
-    const data = response.data;
+    const data = response.data
 
-    console.log(response.data, 'response.data');
+    console.log(response.data, 'response.data')
 
     await supabase.from('synclabs_videos').insert({
       user_id: userId,
       video_id: data.id,
       status: 'processing',
-    });
+    })
 
-    return data;
+    return data
   } catch (error) {
-    console.error('Ошибка при генерации видео:', error);
-    throw error;
+    console.error('Ошибка при генерации видео:', error)
+    throw error
   }
 }
 
@@ -72,11 +72,11 @@ export async function getVideoStatus(videoId: string) {
     .from('synclabs_videos')
     .select('*')
     .eq('video_id', videoId)
-    .single();
+    .single()
 
   if (error) {
-    throw error;
+    throw error
   }
 
-  return data;
+  return data
 }

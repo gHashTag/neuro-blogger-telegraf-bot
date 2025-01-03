@@ -1,16 +1,16 @@
-import { supabase } from '.';
+import { supabase } from '.'
 
 export const getUserModel = async (telegram_id: string): Promise<string> => {
   const { data, error } = await supabase
     .from('users')
     .select('model')
     .eq('telegram_id', telegram_id.toString())
-    .single();
+    .single()
 
   if (error) {
-    console.error('Error getting user model:', error);
-    return 'gpt-4o';
+    console.error('Error getting user model:', error)
+    return 'gpt-4o'
   }
 
-  return data?.model || 'gpt-4o';
-};
+  return data?.model || 'gpt-4o'
+}

@@ -1,8 +1,8 @@
-import Replicate from 'replicate';
+import Replicate from 'replicate'
 
 export const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
-});
+})
 
 export const modelPricing: Record<string, string> = {
   'black-forest-labs/flux-1.1-pro': '$0.040 / image',
@@ -32,41 +32,41 @@ export const modelPricing: Record<string, string> = {
   'stability-ai/stable-diffusion-3.5-large': '$0.065 / image',
   'stability-ai/stable-diffusion-3.5-large-turbo': '$0.040 / image',
   'stability-ai/stable-diffusion-3.5-medium': '$0.035 / image',
-};
+}
 
 interface ModelConfig {
-  key: string;
-  word: string;
+  key: string
+  word: string
   description: {
-    ru: string;
-    en: string;
-  };
+    ru: string
+    en: string
+  }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getInput: (prompt: string, aspect_ratio?: string) => Record<string, any>;
-  price: number;
+  getInput: (prompt: string, aspect_ratio?: string) => Record<string, any>
+  price: number
 }
 
 const getInput = (prompt: string, aspect_ratio: string) => {
-  console.log(aspect_ratio, 'getInput aspect_ratio');
-  let width: number, height: number;
+  console.log(aspect_ratio, 'getInput aspect_ratio')
+  let width: number, height: number
 
   switch (aspect_ratio) {
     case '1:1':
-      width = 1024;
-      height = 1024;
-      break;
+      width = 1024
+      height = 1024
+      break
     case '16:9':
-      width = 1368;
-      height = 768;
-      break;
+      width = 1368
+      height = 768
+      break
     case '9:16':
-      width = 768;
-      height = 1368;
-      break;
+      width = 768
+      height = 1368
+      break
     default:
-      width = 1368;
-      height = 1024;
-      break;
+      width = 1368
+      height = 1024
+      break
   }
 
   return {
@@ -76,8 +76,8 @@ const getInput = (prompt: string, aspect_ratio: string) => {
     height,
     negative_prompt:
       'nsfw, erotic, violence, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry',
-  };
-};
+  }
+}
 export const models: Record<string, ModelConfig> = {
   flux: {
     key: 'black-forest-labs/flux-1.1-pro-ultra',
@@ -167,4 +167,4 @@ export const models: Record<string, ModelConfig> = {
       getInput(prompt, aspect_ratio || '16:9'),
     price: 0.022,
   },
-};
+}

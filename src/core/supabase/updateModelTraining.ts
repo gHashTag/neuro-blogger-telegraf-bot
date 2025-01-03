@@ -1,12 +1,12 @@
-import { supabase } from '.';
+import { supabase } from '.'
 
 // Определяем тип для обновлений и экспортируем его
 export type ModelTrainingUpdate = {
-  status?: string;
-  error?: string;
-  model_url?: string;
-  replicate_training_id?: string;
-};
+  status?: string
+  error?: string
+  model_url?: string
+  replicate_training_id?: string
+}
 
 export const updateModelTraining = async (
   user_id: string,
@@ -18,9 +18,9 @@ export const updateModelTraining = async (
     .update(updates)
     .eq('user_id', user_id)
     .eq('model_name', model_name)
-    .eq('status', 'processing');
+    .eq('status', 'processing')
   if (error)
     throw new Error(
       `Ошибка при обновлении записи о тренировке: ${error.message}`
-    );
-};
+    )
+}

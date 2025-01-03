@@ -1,9 +1,9 @@
-export type VideoModel = 'minimax' | 'haiper' | 'ray' | 'i2vgen-xl';
+export type VideoModel = 'minimax' | 'haiper' | 'ray' | 'i2vgen-xl'
 
 export interface VideoModelConfig {
-  name: VideoModel;
-  title: string;
-  description: string;
+  name: VideoModel
+  title: string
+  description: string
 }
 
 export const VIDEO_MODELS: VideoModelConfig[] = [
@@ -27,7 +27,7 @@ export const VIDEO_MODELS: VideoModelConfig[] = [
     title: 'I2VGen-XL',
     description: 'Продвинутая модель для детальной анимации',
   },
-];
+]
 
 export type Mode =
   | 'neuro_photo'
@@ -39,6 +39,6 @@ export type Mode =
   | 'text_to_speech'
   | 'text_to_image'
   | 'text_to_video'
-  | 'voice';
+  | 'voice'
 
-export type ModeCosts = Required<Record<Mode, number>>;
+export type ModeCosts = Required<Record<Mode, number>>

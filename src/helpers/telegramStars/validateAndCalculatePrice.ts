@@ -1,8 +1,5 @@
-import { MyContext, VideoModel } from '../../interfaces';
-import {
-  calculateFinalPrice,
-  MODEL_PRICES,
-} from '../../helpers/telegramStars/';
+import { MyContext, VideoModel } from '../../interfaces'
+import { calculateFinalPrice, MODEL_PRICES } from '../../helpers/telegramStars/'
 
 export async function validateAndCalculatePrice(
   videoModel: string,
@@ -16,24 +13,24 @@ export async function validateAndCalculatePrice(
       isRu
         ? 'Пожалуйста, выберите корректную модель'
         : 'Please choose a valid model'
-    );
-    return null;
+    )
+    return null
   }
 
-  const model = videoModel as VideoModel;
+  const model = videoModel as VideoModel
   if (!(model in MODEL_PRICES)) {
-    await ctx.reply('Ошибка: неверная модель видео.');
-    return null;
+    await ctx.reply('Ошибка: неверная модель видео.')
+    return null
   }
 
-  const price = calculateFinalPrice(model);
-  ctx.session.paymentAmount = price;
+  const price = calculateFinalPrice(model)
+  ctx.session.paymentAmount = price
   if (currentBalance < price) {
     await ctx.reply(
       isRu ? 'Недостаточно средств на балансе' : 'Insufficient balance'
-    );
-    return null;
+    )
+    return null
   }
 
-  return price;
+  return price
 }

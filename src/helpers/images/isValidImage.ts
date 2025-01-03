@@ -1,11 +1,11 @@
 export async function isValidImage(buffer: Buffer): Promise<boolean> {
   try {
     // Проверяем первые байты файла на соответствие сигнатурам изображений
-    const header = buffer.slice(0, 4);
+    const header = buffer.slice(0, 4)
 
     // Проверка на JPEG
     if (header[0] === 0xff && header[1] === 0xd8 && header[2] === 0xff) {
-      return true;
+      return true
     }
 
     // Проверка на PNG
@@ -15,11 +15,11 @@ export async function isValidImage(buffer: Buffer): Promise<boolean> {
       header[2] === 0x4e &&
       header[3] === 0x47
     ) {
-      return true;
+      return true
     }
 
-    return false;
+    return false
   } catch (error) {
-    return false;
+    return false
   }
 }

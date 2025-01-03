@@ -1,8 +1,8 @@
-import { replicate } from '.';
-import { supabase } from '../supabase';
-import axios, { isAxiosError } from 'axios';
+import { replicate } from '.'
+import { supabase } from '../supabase'
+import axios, { isAxiosError } from 'axios'
 
-const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB - максимальный размер для Telegram
+const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50MB - максимальный размер для Telegram
 
 export const retry = async <T>(
   fn: () => Promise<T>,
@@ -10,20 +10,20 @@ export const retry = async <T>(
   delay = 1000
 ): Promise<T> => {
   try {
-    return await fn();
+    return await fn()
   } catch (error) {
-    if (attempts <= 1) throw error;
-    await new Promise(resolve => setTimeout(resolve, delay));
-    return retry(fn, attempts - 1, delay * 2);
+    if (attempts <= 1) throw error
+    await new Promise(resolve => setTimeout(resolve, delay))
+    return retry(fn, attempts - 1, delay * 2)
   }
-};
+}
 
 async function downloadFile(url: string): Promise<Buffer> {
   try {
-    console.log('Downloading from URL:', url);
+    console.log('Downloading from URL:', url)
 
     if (!url || typeof url !== 'string' || !url.startsWith('http')) {
-      throw new Error(`Invalid URL received: ${url}`);
+      throw new Error(`Invalid URL received: ${url}`)
     }
 
     const response = await axios.get(url, {
@@ -31,23 +31,23 @@ async function downloadFile(url: string): Promise<Buffer> {
       timeout: 60000,
       maxRedirects: 5,
       validateStatus: status => status === 200,
-    });
+    })
 
     if (!response.data) {
-      throw new Error('Empty response data');
+      throw new Error('Empty response data')
     }
 
-    const buffer = Buffer.from(response.data);
+    const buffer = Buffer.from(response.data)
 
     if (buffer.length > MAX_FILE_SIZE) {
       throw new Error(
         `File size (${buffer.length} bytes) exceeds Telegram limit of ${MAX_FILE_SIZE} bytes`
-      );
+      )
     }
 
-    return buffer;
+    return buffer
   } catch (error) {
-    console.error('Error downloading file:', error);
+    console.error('Error downloading file:', error)
     if (isAxiosError(error)) {
       console.error('Axios error details:', {
         response: error.response?.data,
@@ -58,13 +58,13 @@ async function downloadFile(url: string): Promise<Buffer> {
           method: error.config?.method,
           headers: error.config?.headers,
         },
-      });
+      })
     }
     throw new Error(
       `Failed to download file: ${
         error instanceof Error ? error.message : 'Unknown error'
       }`
-    );
+    )
   }
 }
 
@@ -74,10 +74,10 @@ export const generateVideo = async (
   userId: string
 ): Promise<{ video: Buffer }> => {
   try {
-    console.log('Starting video generation with model:', model);
-    console.log('Prompt:', prompt);
+    console.log('Starting video generation with model:', model)
+    console.log('Prompt:', prompt)
 
-    let output: unknown;
+    let output: unknown
 
     if (model === 'haiper') {
       const input = {
@@ -85,48 +85,48 @@ export const generateVideo = async (
         duration: 6,
         aspect_ratio: '16:9',
         use_prompt_enhancer: true,
-      };
-      console.log('Haiper model input:', input);
-      output = await replicate.run('haiper-ai/haiper-video-2', { input });
+      }
+      console.log('Haiper model input:', input)
+      output = await replicate.run('haiper-ai/haiper-video-2', { input })
     } else {
       const input = {
         prompt,
         prompt_optimizer: true,
-      };
-      console.log('Minimax model input:', input);
-      output = await replicate.run('minimax/video-01', { input });
+      }
+      console.log('Minimax model input:', input)
+      output = await replicate.run('minimax/video-01', { input })
     }
 
-    console.log('Raw API output:', output);
-    console.log('Output type:', typeof output);
+    console.log('Raw API output:', output)
+    console.log('Output type:', typeof output)
     if (Array.isArray(output)) {
-      console.log('Output is array of length:', output.length);
+      console.log('Output is array of length:', output.length)
     }
 
     if (!output) {
-      throw new Error('No video generated');
+      throw new Error('No video generated')
     }
 
-    let videoUrl: string;
+    let videoUrl: string
     if (Array.isArray(output)) {
       if (!output[0]) {
-        throw new Error('Empty array or first element is undefined');
+        throw new Error('Empty array or first element is undefined')
       }
-      videoUrl = output[0];
+      videoUrl = output[0]
     } else if (typeof output === 'string') {
-      videoUrl = output;
+      videoUrl = output
     } else {
       console.error(
         'Unexpected output format:',
         JSON.stringify(output, null, 2)
-      );
-      throw new Error(`Unexpected output format from API: ${typeof output}`);
+      )
+      throw new Error(`Unexpected output format from API: ${typeof output}`)
     }
 
-    console.log('Final video URL:', videoUrl);
+    console.log('Final video URL:', videoUrl)
 
-    const video = await downloadFile(videoUrl);
-    console.log('Video downloaded successfully, size:', video.length, 'bytes');
+    const video = await downloadFile(videoUrl)
+    console.log('Video downloaded successfully, size:', video.length, 'bytes')
 
     // Сохраняем в таблицу assets
     const { data, error } = await supabase.from('assets').insert({
@@ -136,22 +136,22 @@ export const generateVideo = async (
       storage_path: `videos/${model}/${new Date().toISOString()}`,
       public_url: videoUrl,
       text: prompt,
-    });
+    })
 
     if (error) {
-      console.error('Supabase error:', error);
+      console.error('Supabase error:', error)
     } else {
-      console.log('Video metadata saved to database:', data);
+      console.log('Video metadata saved to database:', data)
     }
 
-    return { video };
+    return { video }
   } catch (error) {
-    console.error('Error generating video:', error);
+    console.error('Error generating video:', error)
     if (error instanceof Error) {
-      console.error('Error name:', error.name);
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
+      console.error('Error name:', error.name)
+      console.error('Error message:', error.message)
+      console.error('Error stack:', error.stack)
     }
-    throw error;
+    throw error
   }
-};
+}

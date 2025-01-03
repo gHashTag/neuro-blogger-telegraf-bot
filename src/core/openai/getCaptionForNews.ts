@@ -1,4 +1,4 @@
-import { openai } from '.';
+import { openai } from '.'
 
 export async function getCaptionForNews({ prompt }: { prompt: string }) {
   try {
@@ -24,18 +24,18 @@ export async function getCaptionForNews({ prompt }: { prompt: string }) {
         },
       ],
       temperature: 0.7,
-    });
-    console.log(completion, 'completion');
+    })
+    console.log(completion, 'completion')
 
-    const content = completion.choices[0].message.content;
+    const content = completion.choices[0].message.content
     if (content === null) {
-      throw new Error('Received null content from OpenAI');
+      throw new Error('Received null content from OpenAI')
     }
 
-    console.log(content);
-    return content;
+    console.log(content)
+    return content
   } catch (error) {
-    console.error('Error:', error);
-    throw error; // Перебрасываем ошибку, чтобы она могла быть обработана выше
+    console.error('Error:', error)
+    throw error // Перебрасываем ошибку, чтобы она могла быть обработана выше
   }
 }

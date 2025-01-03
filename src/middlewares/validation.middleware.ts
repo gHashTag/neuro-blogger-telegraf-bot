@@ -1,7 +1,7 @@
-import { plainToInstance } from 'class-transformer';
-import { validateOrReject, ValidationError } from 'class-validator';
-import { NextFunction, Request, Response } from 'express';
-import { HttpException } from '@exceptions/HttpException';
+import { plainToInstance } from 'class-transformer'
+import { validateOrReject, ValidationError } from 'class-validator'
+import { NextFunction, Request, Response } from 'express'
+import { HttpException } from '@exceptions/HttpException'
 
 /**
  * @name ValidationMiddleware
@@ -18,37 +18,37 @@ export const ValidationMiddleware = (
   forbidNonWhitelisted = true
 ) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const dto = plainToInstance(type, req.body);
+    const dto = plainToInstance(type, req.body)
     validateOrReject(dto, {
       skipMissingProperties,
       whitelist,
       forbidNonWhitelisted,
     })
       .then(() => {
-        req.body = dto;
-        next();
+        req.body = dto
+        next()
       })
       .catch((errors: ValidationError[]) => {
         const message = errors
           .map((error: ValidationError) => Object.values(error.constraints))
-          .join(', ');
-        next(new HttpException(400, message));
-      });
-  };
-};
+          .join(', ')
+        next(new HttpException(400, message))
+      })
+  }
+}
 
 export const validateCreateAvatarVoice = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { fileId, username, telegram_id } = req.body;
+  const { fileId, username, telegram_id } = req.body
 
   if (!fileId || !username || !telegram_id) {
     return res
       .status(400)
-      .json({ message: 'fileId, username, and telegram_id are required' });
+      .json({ message: 'fileId, username, and telegram_id are required' })
   }
 
-  next();
-};
+  next()
+}

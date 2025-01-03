@@ -1,4 +1,4 @@
-import { supabase } from '.';
+import { supabase } from '.'
 
 export async function saveUserEmail(
   telegram_id: string,
@@ -7,10 +7,10 @@ export async function saveUserEmail(
   const { error } = await supabase
     .from('users')
     .update({ email })
-    .eq('telegram_id', telegram_id);
+    .eq('telegram_id', telegram_id)
 
   if (error) {
-    console.error('Ошибка при сохранении e-mail:', error);
-    throw new Error('Не удалось сохранить e-mail пользователя');
+    console.error('Ошибка при сохранении e-mail:', error)
+    throw new Error('Не удалось сохранить e-mail пользователя')
   }
 }

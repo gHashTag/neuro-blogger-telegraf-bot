@@ -1,4 +1,4 @@
-import { supabase } from '.';
+import { supabase } from '.'
 
 export async function deleteFileFromSupabase(
   bucketName: string,
@@ -7,14 +7,14 @@ export async function deleteFileFromSupabase(
   try {
     const { data, error } = await supabase.storage
       .from(bucketName)
-      .remove([fileName]);
+      .remove([fileName])
 
     if (error) {
-      console.error('Ошибка при удалении файла из Supabase:', error.message);
+      console.error('Ошибка при удалении файла из Supabase:', error.message)
     } else {
-      console.log('Файл успешно удален из Supabase:', data);
+      console.log('Файл успешно удален из Supabase:', data)
     }
   } catch (error) {
-    console.error('Ошибка при удалении файла из Supabase:', error);
+    console.error('Ошибка при удалении файла из Supabase:', error)
   }
 }

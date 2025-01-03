@@ -1,39 +1,39 @@
-import { replicate } from '.';
+import { replicate } from '.'
 import {
   createModelTraining,
   updateModelTraining,
   ModelTrainingUpdate,
-} from '../supabase';
+} from '../supabase'
 interface TrainingInput {
-  steps: number;
-  lora_rank: number;
-  optimizer: string;
-  batch_size: number;
-  resolution: string;
-  autocaption: boolean;
-  input_images: string;
-  trigger_word: string;
-  learning_rate: number;
-  wandb_project: string;
-  wandb_save_interval: number;
-  caption_dropout_rate: number;
-  cache_latents_to_disk: boolean;
-  wandb_sample_interval: number;
+  steps: number
+  lora_rank: number
+  optimizer: string
+  batch_size: number
+  resolution: string
+  autocaption: boolean
+  input_images: string
+  trigger_word: string
+  learning_rate: number
+  wandb_project: string
+  wandb_save_interval: number
+  caption_dropout_rate: number
+  cache_latents_to_disk: boolean
+  wandb_sample_interval: number
 }
 
 interface ApiError extends Error {
   response?: {
-    status: number;
-  };
+    status: number
+  }
 }
 
 interface TrainingResponse {
-  id: string;
-  status: string;
+  id: string
+  status: string
   urls: {
-    get: string;
-  };
-  error?: string;
+    get: string
+  }
+  error?: string
 }
 
 export async function trainFluxModel(
@@ -42,21 +42,21 @@ export async function trainFluxModel(
   modelName: string,
   userId: string
 ): Promise<string> {
-  let currentTraining: TrainingResponse | null = null;
+  let currentTraining: TrainingResponse | null = null
 
   try {
     if (!process.env.REPLICATE_USERNAME) {
-      throw new Error('REPLICATE_USERNAME is not set');
+      throw new Error('REPLICATE_USERNAME is not set')
     }
 
-    const destination: `${string}/${string}` = `${process.env.REPLICATE_USERNAME}/${modelName}`;
+    const destination: `${string}/${string}` = `${process.env.REPLICATE_USERNAME}/${modelName}`
     console.log('Training configuration:', {
       username: process.env.REPLICATE_USERNAME,
       modelName,
       destination,
       triggerWord,
       zipUrl,
-    });
+    })
 
     // Сначала создаем модель
     try {
@@ -69,22 +69,22 @@ export async function trainFluxModel(
           visibility: 'public',
           hardware: 'gpu-t4',
         }
-      );
-      console.log('Model created:', model);
+      )
+      console.log('Model created:', model)
     } catch (error) {
       // Игнорируем ошибку если модель уже существует
-      const apiError = error as ApiError;
+      const apiError = error as ApiError
       if (apiError.response?.status !== 409) {
         // Добавляем более подробное логирование ошибки
         if (apiError.response?.status === 400) {
-          console.error('Model creation validation error:', error);
+          console.error('Model creation validation error:', error)
           throw new Error(
             'Ошибка валидации при создании модели. Проверьте параметры конфигурации.'
-          );
+          )
         }
-        throw error;
+        throw error
       }
-      console.log('Model already exists, continuing with training...');
+      console.log('Model already exists, continuing with training...')
     }
 
     // Создаем запись о тренировке
@@ -93,7 +93,7 @@ export async function trainFluxModel(
       model_name: modelName,
       trigger_word: triggerWord,
       zip_url: zipUrl,
-    });
+    })
 
     // Создаем тренировку в Replicate
     currentTraining = await replicate.trainings.create(
@@ -115,20 +115,20 @@ export async function trainFluxModel(
           wandb_project: 'flux_train_replicate',
         } as TrainingInput,
       }
-    );
+    )
 
     // Обновляем запись с ID тренировки
     await updateModelTraining(userId, modelName, {
       replicate_training_id: currentTraining.id,
-    });
+    })
 
     // Ждем завершения тренировки
-    let status = currentTraining.status;
+    let status = currentTraining.status
     while (status !== 'succeeded' && status !== 'failed') {
-      await new Promise(resolve => setTimeout(resolve, 10000));
-      const updatedTraining = await replicate.trainings.get(currentTraining.id);
-      status = updatedTraining.status;
-      console.log(`Training status: ${status}`);
+      await new Promise(resolve => setTimeout(resolve, 10000))
+      const updatedTraining = await replicate.trainings.get(currentTraining.id)
+      status = updatedTraining.status
+      console.log(`Training status: ${status}`)
 
       // Добавляем логирование деталей тренировки
       if (updatedTraining.error) {
@@ -136,40 +136,40 @@ export async function trainFluxModel(
           error: updatedTraining.error,
           status: updatedTraining.status,
           id: updatedTraining.id,
-        });
+        })
       }
 
       // Обновляем статус в базе
-      await updateModelTraining(userId, modelName, { status });
+      await updateModelTraining(userId, modelName, { status })
     }
 
     if (status === 'failed') {
       // Получаем детали ошибки
-      const failedTraining = await replicate.trainings.get(currentTraining.id);
+      const failedTraining = await replicate.trainings.get(currentTraining.id)
       console.error('Training failed details:', {
         error: failedTraining.error,
         status: failedTraining.status,
         id: failedTraining.id,
         urls: failedTraining.urls,
-      });
+      })
 
       await updateModelTraining(userId, modelName, {
         status: 'failed',
         error: failedTraining.error || 'Unknown error',
-      } as ModelTrainingUpdate);
+      } as ModelTrainingUpdate)
 
       throw new Error(
         `Training failed: ${failedTraining.error || 'Unknown error'}`
-      );
+      )
     }
 
     // Обновляем URL модели
     await updateModelTraining(userId, modelName, {
       status: 'completed',
       model_url: currentTraining.urls.get,
-    });
+    })
 
-    return currentTraining.urls.get;
+    return currentTraining.urls.get
   } catch (error) {
     console.error('Training error details:', {
       error,
@@ -177,13 +177,13 @@ export async function trainFluxModel(
       modelName,
       triggerWord,
       trainingId: currentTraining?.id,
-    });
+    })
 
     if ((error as ApiError).response?.status === 404) {
       throw new Error(
         `Ошибка при создании или доступе к модели. Проверьте REPLICATE_USERNAME (${process.env.REPLICATE_USERNAME}) и права доступа.`
-      );
+      )
     }
-    throw error;
+    throw error
   }
 }

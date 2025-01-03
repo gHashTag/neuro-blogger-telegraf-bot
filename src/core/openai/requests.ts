@@ -1,13 +1,13 @@
-import { openai } from '.';
+import { openai } from '.'
 
 type UserData = {
-  username: string;
-  first_name: string;
-  last_name: string;
-  company: string;
-  position: string;
-  designation: string;
-};
+  username: string
+  first_name: string
+  last_name: string
+  company: string
+  position: string
+  designation: string
+}
 export const answerAi = async (
   model: string,
   userData: UserData,
@@ -16,7 +16,7 @@ export const answerAi = async (
 ): Promise<string> => {
   const systemPrompt = `Respond in the language: ${languageCode} You communicate with: ${JSON.stringify(
     userData
-  )}`;
+  )}`
   const response = await openai.chat.completions.create({
     model: model,
     messages: [
@@ -29,12 +29,12 @@ export const answerAi = async (
         content: prompt,
       },
     ],
-  });
+  })
 
-  const content = response.choices[0].message.content;
+  const content = response.choices[0].message.content
   if (!content) {
-    throw new Error('Empty response from GPT');
+    throw new Error('Empty response from GPT')
   }
 
-  return content;
-};
+  return content
+}

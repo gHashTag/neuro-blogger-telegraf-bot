@@ -1,5 +1,5 @@
-import { Payment } from '../../interfaces/supabase.interface';
-import { supabase } from '.';
+import { Payment } from '../../interfaces/supabase.interface'
+import { supabase } from '.'
 
 export async function getPaymentsInfoByUsername(
   username: string
@@ -9,25 +9,25 @@ export async function getPaymentsInfoByUsername(
     .from('users')
     .select('user_id')
     .eq('username', username)
-    .single();
+    .single()
 
   if (userError) {
-    console.error('Error fetching user ID:', userError);
-    return [];
+    console.error('Error fetching user ID:', userError)
+    return []
   }
 
-  const user_id = userData?.user_id;
+  const user_id = userData?.user_id
 
   // Получаем все строчки с данным user_id из таблицы payments
   const { data: paymentsData, error: paymentsError } = await supabase
     .from('payments')
     .select('*')
-    .eq('user_id', user_id);
+    .eq('user_id', user_id)
 
   if (paymentsError) {
-    console.error('Error fetching payments info:', paymentsError);
-    return [];
+    console.error('Error fetching payments info:', paymentsError)
+    return []
   }
 
-  return paymentsData;
+  return paymentsData
 }

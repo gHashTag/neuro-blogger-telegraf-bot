@@ -1,4 +1,4 @@
-import { supabase } from '.';
+import { supabase } from '.'
 
 export const savePrompt = async (
   prompt: string,
@@ -14,15 +14,15 @@ export const savePrompt = async (
     .eq('model_type', model_type)
     .eq('media_url', media_url)
     .eq('telegram_id', telegram_id)
-    .maybeSingle();
+    .maybeSingle()
 
   if (selectError) {
-    console.error('Ошибка при проверке существующего промпта:', selectError);
-    return null;
+    console.error('Ошибка при проверке существующего промпта:', selectError)
+    return null
   }
 
   if (existingPrompt) {
-    return existingPrompt.prompt_id;
+    return existingPrompt.prompt_id
   }
 
   // Если промпт не существует, добавляем его в таблицу
@@ -35,12 +35,12 @@ export const savePrompt = async (
       telegram_id: telegram_id,
     })
     .select()
-    .single();
+    .single()
 
   if (error) {
-    console.error('Ошибка при сохранении промпта:', error);
-    return null;
+    console.error('Ошибка при сохранении промпта:', error)
+    return null
   }
 
-  return newPrompt.prompt_id;
-};
+  return newPrompt.prompt_id
+}

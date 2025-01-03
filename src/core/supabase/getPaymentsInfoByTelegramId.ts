@@ -1,5 +1,5 @@
-import { Payment } from '../../interfaces';
-import { supabase } from '.';
+import { Payment } from '../../interfaces'
+import { supabase } from '.'
 
 export async function getPaymentsInfoByTelegramId(
   telegram_id: string
@@ -8,24 +8,24 @@ export async function getPaymentsInfoByTelegramId(
     .from('users')
     .select('user_id')
     .eq('telegram_id', telegram_id.toString())
-    .single();
+    .single()
 
   if (userError || !userData) {
-    console.error('Error fetching user ID:', userError);
-    return [];
+    console.error('Error fetching user ID:', userError)
+    return []
   }
 
-  const user_id = userData.user_id;
+  const user_id = userData.user_id
 
   const { data: paymentsData, error: paymentsError } = await supabase
     .from('payments')
     .select('*')
-    .eq('user_id', user_id);
+    .eq('user_id', user_id)
 
   if (paymentsError || !paymentsData) {
-    console.error('Error fetching payments info:', paymentsError);
-    return [];
+    console.error('Error fetching payments info:', paymentsError)
+    return []
   }
 
-  return paymentsData;
+  return paymentsData
 }

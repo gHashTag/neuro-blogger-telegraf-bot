@@ -1,5 +1,5 @@
-import { setHistoryProps } from '../../interfaces/supabase.interface';
-import { supabase } from '.';
+import { setHistoryProps } from '../../interfaces/supabase.interface'
+import { supabase } from '.'
 
 export const setHistory = async ({
   brand,
@@ -14,10 +14,10 @@ export const setHistory = async ({
 }: setHistoryProps) => {
   // Удаление символов # и *
   const sanitizeResponse = (text: string) => {
-    return text.replace(/[#*]/g, '');
-  };
+    return text.replace(/[#*]/g, '')
+  }
 
-  const sanitizedResponse = sanitizeResponse(response);
+  const sanitizedResponse = sanitizeResponse(response)
 
   const { error } = await supabase.from('clips').insert({
     brand: brand,
@@ -29,12 +29,12 @@ export const setHistory = async ({
     chat_id: chat_id,
     lang: lang,
     trigger,
-  });
+  })
 
   if (error) {
-    console.error('Error setting lifehack history:', error);
-    return false;
+    console.error('Error setting lifehack history:', error)
+    return false
   }
 
-  return true;
-};
+  return true
+}

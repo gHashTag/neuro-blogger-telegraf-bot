@@ -1,2 +1,2 @@
-export * from './createImagesZip';
-export * from './isValidImage';
+export * from './createImagesZip'
+export * from './isValidImage'

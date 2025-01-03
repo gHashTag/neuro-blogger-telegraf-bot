@@ -1,4 +1,4 @@
-import { supabase } from '.';
+import { supabase } from '.'
 
 export const getHistory = async (
   brand: string,
@@ -12,13 +12,13 @@ export const getHistory = async (
     .limit(10)
     .eq('brand', brand)
     .eq('command', command)
-    .eq('type', type);
+    .eq('type', type)
 
   if (error) {
-    console.error('Error fetching lifehacks history:', error);
-    return [];
+    console.error('Error fetching lifehacks history:', error)
+    return []
   }
 
-  console.log(data);
-  return data;
-};
+  console.log(data)
+  return data
+}

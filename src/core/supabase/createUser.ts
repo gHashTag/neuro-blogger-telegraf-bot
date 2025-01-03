@@ -1,5 +1,5 @@
-import { CreateUserData } from '../../interfaces/supabase.interface';
-import { supabase } from '.';
+import { CreateUserData } from '../../interfaces/supabase.interface'
+import { supabase } from '.'
 
 export const createUser = async (userData: CreateUserData) => {
   const {
@@ -17,33 +17,33 @@ export const createUser = async (userData: CreateUserData) => {
     aspect_ratio,
     balance,
     inviter,
-  } = userData;
+  } = userData
 
-  let inviterUser;
+  let inviterUser
   if (inviter) {
     const { data: checkInviter, error: fetchError } = await supabase
       .from('users')
       .select('user_id')
       .eq('user_id', inviter)
-      .maybeSingle();
+      .maybeSingle()
 
     if (fetchError)
-      throw new Error(`Ошибка при проверке инвайтера: ${fetchError.message}`);
-    inviterUser = checkInviter;
+      throw new Error(`Ошибка при проверке инвайтера: ${fetchError.message}`)
+    inviterUser = checkInviter
   }
 
-  const isInviter = inviter && inviterUser;
+  const isInviter = inviter && inviterUser
 
   const { data: existingUser, error } = await supabase
     .from('users')
     .select('*')
     .eq('telegram_id', telegram_id.toString())
-    .maybeSingle();
+    .maybeSingle()
 
   if (error) {
     throw new Error(
       `Ошибка при проверке существующего пользователя: ${error.message}`
-    );
+    )
   }
 
   if (existingUser) {
@@ -61,17 +61,17 @@ export const createUser = async (userData: CreateUserData) => {
       aspect_ratio,
       balance,
       ...(!existingUser.inviter && isInviter ? { inviter } : {}),
-    };
+    }
 
     const { error: updateError } = await supabase
       .from('users')
       .update(updates)
-      .eq('telegram_id', telegram_id.toString());
+      .eq('telegram_id', telegram_id.toString())
 
     if (updateError) {
       throw new Error(
         `Ошибка при обновлении пользователя: ${updateError.message}`
-      );
+      )
     }
   } else {
     // Создаем базовый объект пользователя без inviter
@@ -90,18 +90,18 @@ export const createUser = async (userData: CreateUserData) => {
       aspect_ratio,
       balance,
       ...(isInviter ? { inviter } : {}),
-    };
+    }
 
     const { error: insertError } = await supabase
       .from('users')
-      .insert([newUser]);
+      .insert([newUser])
 
     if (insertError) {
       throw new Error(
         `Ошибка при добавлении пользователя: ${insertError.message}`
-      );
+      )
     }
   }
 
-  return existingUser;
-};
+  return existingUser
+}

@@ -1,4 +1,4 @@
-import { openai } from '.';
+import { openai } from '.'
 
 export const upgradePrompt = async (prompt: string) => {
   try {
@@ -17,11 +17,11 @@ export const upgradePrompt = async (prompt: string) => {
       ],
       temperature: 0.7,
       max_tokens: 1000,
-    });
+    })
 
-    return completion.choices[0].message.content;
+    return completion.choices[0].message.content
   } catch (error) {
-    console.error('Error in upgradePrompt:', error);
-    throw error;
+    console.error('Error in upgradePrompt:', error)
+    throw error
   }
-};
+}

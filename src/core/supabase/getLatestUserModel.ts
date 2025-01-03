@@ -1,5 +1,5 @@
-import { supabase } from '.';
-import { ModelTraining } from '../../interfaces/supabase.interface';
+import { supabase } from '.'
+import { ModelTraining } from '../../interfaces/supabase.interface'
 
 export async function getLatestUserModel(
   userId: number
@@ -11,12 +11,12 @@ export async function getLatestUserModel(
     .eq('status', 'completed')
     .order('created_at', { ascending: false })
     .limit(1)
-    .single();
-  console.log(data, 'getLatestUserModel');
+    .single()
+  console.log(data, 'getLatestUserModel')
   if (error) {
-    console.error('Error getting user model:', error);
-    return null;
+    console.error('Error getting user model:', error)
+    return null
   }
 
-  return data as ModelTraining;
+  return data as ModelTraining
 }

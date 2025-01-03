@@ -1,4 +1,4 @@
-import { supabase } from '.';
+import { supabase } from '.'
 
 export const updateUserVoice = async (
   telegram_id: string,
@@ -7,8 +7,8 @@ export const updateUserVoice = async (
   const { error } = await supabase
     .from('users')
     .update({ voice_id_elevenlabs })
-    .eq('telegram_id', telegram_id.toString());
+    .eq('telegram_id', telegram_id.toString())
   if (error) {
-    throw new Error(`Ошибка при обновлении пользователя: ${error.message}`);
+    throw new Error(`Ошибка при обновлении пользователя: ${error.message}`)
   }
-};
+}
