@@ -79,130 +79,146 @@ export const improvePromptWizard = new Scenes.WizardScene<MyContext>(
         return ctx.scene.leave()
       }
 
-      if (text === (isRu ? '✅ Да. Cгенерировать?' : '✅ Yes. Generate?')) {
-        // Логика для генерации изображения
-        const mode = ctx.session.mode
-        if (!mode)
-          throw new Error(
-            isRu ? 'Не удалось определить режим' : 'Could not identify mode'
-          )
-        if (!ctx.session.videoModel)
-          throw new Error(
-            isRu
-              ? 'improvePromptWizard: Не удалось определить модель'
-              : 'improvePromptWizard: Could not identify model'
-          )
-        if (!ctx.from.id)
-          throw new Error(
-            isRu
-              ? 'improvePromptWizard: Не удалось определить telegram_id'
-              : 'improvePromptWizard: Could not identify telegram_id'
-          )
-        if (!ctx.from.username)
-          throw new Error(
-            isRu
-              ? 'improvePromptWizard: Не удалось определить username'
-              : 'improvePromptWizard: Could not identify username'
-          )
-        if (!isRu)
-          throw new Error(
-            isRu
-              ? 'improvePromptWizard: Не удалось определить isRu'
-              : 'improvePromptWizard: Could not identify isRu'
-          )
+      switch (text) {
+        case isRu ? '✅ Да. Cгенерировать?' : '✅ Yes. Generate?': {
+          const mode = ctx.session.mode
+          if (!mode)
+            throw new Error(
+              isRu ? 'Не удалось определить режим' : 'Could not identify mode'
+            )
 
-        if (mode === 'neuro_photo') {
-          await generateNeuroImage(
-            ctx.session.prompt,
-            ctx.session.userModel.model_url,
-            1,
-            ctx.from.id,
-            ctx
-          )
-        } else if (mode === 'text_to_video') {
-          await generateTextToVideo(
-            ctx.session.prompt,
-            ctx.session.videoModel,
-            ctx.from.id,
-            ctx.from.username,
-            isRu
-          )
-        } else if (mode === 'generate_image') {
-          await generateImage(
-            ctx.session.prompt,
-            ctx.session.selectedModel,
-            1,
-            ctx.from.id,
-            isRu,
-            ctx
-          )
-        } else {
-          throw new Error(
-            isRu
-              ? 'improvePromptWizard: Неизвестный режим'
-              : 'improvePromptWizard: Unknown mode'
-          )
+          if (!ctx.from.id)
+            throw new Error(
+              isRu
+                ? 'improvePromptWizard: Не удалось определить telegram_id'
+                : 'improvePromptWizard: Could not identify telegram_id'
+            )
+          if (!ctx.from.username)
+            throw new Error(
+              isRu
+                ? 'improvePromptWizard: Не удалось определить username'
+                : 'improvePromptWizard: Could not identify username'
+            )
+          if (!isRu)
+            throw new Error(
+              isRu
+                ? 'improvePromptWizard: Не удалось определить isRu'
+                : 'improvePromptWizard: Could not identify isRu'
+            )
+          console.log(mode, 'mode')
+          switch (mode) {
+            case 'neuro_photo':
+              await generateNeuroImage(
+                ctx.session.prompt,
+                ctx.session.userModel.model_url,
+                1,
+                ctx.from.id,
+                ctx
+              )
+              break
+            case 'text_to_video':
+              if (!ctx.session.videoModel)
+                throw new Error(
+                  isRu
+                    ? 'improvePromptWizard: Не удалось определить видео модель'
+                    : 'improvePromptWizard: Could not identify video model'
+                )
+
+              console.log(ctx.session.videoModel, 'ctx.session.videoModel')
+              if (!ctx.session.videoModel)
+                throw new Error(
+                  isRu
+                    ? 'improvePromptWizard: Не удалось определить видео модель'
+                    : 'improvePromptWizard: Could not identify video model'
+                )
+              await generateTextToVideo(
+                ctx.session.prompt,
+                ctx.session.videoModel,
+                ctx.from.id,
+                ctx.from.username,
+                isRu
+              )
+              break
+            case 'text_to_image':
+              await generateImage(
+                ctx.session.prompt,
+                ctx.session.selectedModel,
+                1,
+                ctx.from.id,
+                isRu,
+                ctx
+              )
+              break
+            default:
+              throw new Error(
+                isRu
+                  ? 'improvePromptWizard: Неизвестный режим'
+                  : 'improvePromptWizard: Unknown mode'
+              )
+          }
+          return ctx.scene.leave()
         }
-        return ctx.scene.leave()
-      } else if (text === (isRu ? '🔄 Еще раз улучшить' : '🔄 Improve again')) {
-        ctx.session.attempts = (ctx.session.attempts || 0) + 1
 
-        if (ctx.session.attempts >= MAX_ATTEMPTS) {
+        case isRu ? '🔄 Еще раз улучшить' : '🔄 Improve again': {
+          ctx.session.attempts = (ctx.session.attempts || 0) + 1
+
+          if (ctx.session.attempts >= MAX_ATTEMPTS) {
+            await ctx.reply(
+              isRu
+                ? 'Достигнуто максимальное количество попыток улучшения промпта.'
+                : 'Maximum number of prompt improvement attempts reached.'
+            )
+            return ctx.scene.leave()
+          }
+
           await ctx.reply(
             isRu
-              ? 'Достигнуто максимальное количество попыток улучшения промпта.'
-              : 'Maximum number of prompt improvement attempts reached.'
+              ? '⏳ Повторное улучшение промпта...'
+              : '⏳ Re-improving prompt...'
           )
-          return ctx.scene.leave()
-        }
-
-        // Повторное улучшение промпта
-        await ctx.reply(
-          isRu
-            ? '⏳ Повторное улучшение промпта...'
-            : '⏳ Re-improving prompt...'
-        )
-        const improvedPrompt = await upgradePrompt(ctx.session.prompt)
-        if (!improvedPrompt) {
-          await sendPromptImprovementFailureMessage(ctx, isRu)
-          return ctx.scene.leave()
-        }
-
-        ctx.session.prompt = improvedPrompt
-
-        await ctx.reply(
-          isRu
-            ? 'Улучшенный промпт:\n```\n' + improvedPrompt + '\n```'
-            : 'Improved prompt:\n```\n' + improvedPrompt + '\n```',
-          {
-            reply_markup: Markup.keyboard([
-              [
-                Markup.button.text(
-                  isRu ? '✅ Да. Cгенерировать?' : '✅ Yes. Generate?'
-                ),
-              ],
-              [
-                Markup.button.text(
-                  isRu ? '🔄 Еще раз улучшить' : '🔄 Improve again'
-                ),
-              ],
-              [Markup.button.text(isRu ? '❌ Отмена' : '❌ Cancel')],
-            ]).resize().reply_markup,
-            parse_mode: 'MarkdownV2',
+          const improvedPrompt = await upgradePrompt(ctx.session.prompt)
+          if (!improvedPrompt) {
+            await sendPromptImprovementFailureMessage(ctx, isRu)
+            return ctx.scene.leave()
           }
-        )
 
-        // eslint-disable-next-line consistent-return
-        return
-      } else if (text === (isRu ? '❌ Отмена' : '❌ Cancel')) {
-        await ctx.reply(isRu ? 'Операция отменена' : 'Operation cancelled')
-        return ctx.scene.leave()
+          ctx.session.prompt = improvedPrompt
+
+          await ctx.reply(
+            isRu
+              ? 'Улучшенный промпт:\n```\n' + improvedPrompt + '\n```'
+              : 'Improved prompt:\n```\n' + improvedPrompt + '\n```',
+            {
+              reply_markup: Markup.keyboard([
+                [
+                  Markup.button.text(
+                    isRu ? '✅ Да. Cгенерировать?' : '✅ Yes. Generate?'
+                  ),
+                ],
+                [
+                  Markup.button.text(
+                    isRu ? '🔄 Еще раз улучшить' : '🔄 Improve again'
+                  ),
+                ],
+                [Markup.button.text(isRu ? '❌ Отмена' : '❌ Cancel')],
+              ]).resize().reply_markup,
+              parse_mode: 'MarkdownV2',
+            }
+          )
+          break
+        }
+
+        case isRu ? '❌ Отмена' : '❌ Cancel': {
+          await ctx.reply(isRu ? 'Операция отменена' : 'Operation cancelled')
+          return ctx.scene.leave()
+        }
+
+        default: {
+          await sendGenericErrorMessage(ctx, isRu)
+          return ctx.scene.leave()
+        }
       }
     }
-
-    await sendGenericErrorMessage(ctx, isRu)
-    throw new Error('improvePromptWizard: Unknown error')
-    return ctx.scene.leave()
   }
 )
 

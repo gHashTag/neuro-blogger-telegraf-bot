@@ -22,7 +22,7 @@ export async function handleGenerateImage(
       return
     }
 
-    const prompt = data.replace('generate_image_', '')
+    const prompt = data.replace('text_to_image_', '')
 
     // Получаем текущий баланс пользователя
     const currentBalance = await getUserBalance(ctx.from.id)

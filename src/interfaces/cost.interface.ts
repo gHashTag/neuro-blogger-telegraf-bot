@@ -1,3 +1,5 @@
+import { VideoModel } from '@/helpers'
+
 export interface VideoModelConfig {
   name: VideoModel
   title: string
@@ -29,7 +31,6 @@ export const VIDEO_MODELS: VideoModelConfig[] = [
 
 export type Mode =
   | 'neuro_photo'
-  | 'generate_image'
   | 'text_to_video'
   | 'image_to_video'
   | 'avatar'

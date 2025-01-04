@@ -174,8 +174,10 @@ myComposer.hears(
     const mode = ctx.session.mode
     if (mode === 'neuro_photo') {
       await ctx.scene.enter('neuroPhotoWizard')
-    } else {
+    } else if (mode === 'text_to_image') {
       await ctx.scene.enter('textPromptToImageWizard')
+    } else {
+      console.log('CASE: Неизвестный режим')
     }
   }
 )

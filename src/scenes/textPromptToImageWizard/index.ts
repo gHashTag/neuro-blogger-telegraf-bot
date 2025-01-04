@@ -68,10 +68,13 @@ export const textPromptToImageWizard = new Scenes.WizardScene<MyContext>(
       }
 
       ctx.session.prompt = text
-      ctx.session.mode = 'generate_image'
+      ctx.session.mode = 'text_to_image'
+
+      console.log(ctx.session.selectedModel, 'ctx.session.selectedModel')
+
       await generateImage(
         text,
-        ctx.session.selectedModel || '',
+        ctx.session.selectedModel,
         1,
         ctx.from.id,
         isRu,
