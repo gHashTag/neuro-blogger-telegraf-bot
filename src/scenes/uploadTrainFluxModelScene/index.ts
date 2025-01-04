@@ -1,9 +1,8 @@
 import { Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
-import * as fs from 'fs/promises'
 import { createImagesZip } from '../../helpers/images/createImagesZip'
 import { ensureSupabaseAuth } from '../../core/supabase'
-import { uploadToSupabase } from '../../core/supabase/uploadToSupabase'
+import * as fs from 'fs/promises'
 import { createModelTraining } from '../../services'
 import { isRussian } from '@/helpers/language'
 
@@ -48,14 +47,15 @@ uploadTrainFluxModelScene.enter(async ctx => {
     )
 
     await createModelTraining({
-      zipUrl: zipPath,
+      filePath: zipPath,
       triggerWord,
       modelName: ctx.session.modelName,
+      steps: 1000,
       telegram_id: ctx.session.targetUserId.toString(),
       is_ru: isRu,
     })
 
-    // await fs.unlink(zipPath).catch(console.error)
+    await fs.unlink(zipPath).catch(console.error)
   } catch (error) {
     console.error('Error in uploadTrainFluxModelScene:', error)
     await ctx.reply(

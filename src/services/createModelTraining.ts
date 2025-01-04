@@ -1,13 +1,15 @@
 import axios, { AxiosResponse } from 'axios'
-
+import FormData from 'form-data'
+import fs from 'fs'
 import { isDev } from '../helpers'
 
 interface ModelTrainingRequest {
-  zipUrl: string
+  filePath: string
   triggerWord: string
   modelName: string
   telegram_id: string
   is_ru: boolean
+  steps: number
 }
 
 interface ModelTrainingResponse {
@@ -15,23 +17,34 @@ interface ModelTrainingResponse {
   model_id?: string
 }
 
-const ngrokUrl =
-  'https://6b29-2403-6200-8870-14d1-a945-e097-a2b2-6c1.ngrok-free.app'
-
 export async function createModelTraining(
   requestData: ModelTrainingRequest
 ): Promise<ModelTrainingResponse> {
   try {
     const url = `${
-      isDev ? ngrokUrl : process.env.ELESTIO_URL
+      isDev ? 'http://localhost:3000' : process.env.ELESTIO_URL
     }/generate/create-model-training`
+
+    // Проверяем, что файл существует
+    if (!fs.existsSync(requestData.filePath)) {
+      throw new Error('Файл не найден: ' + requestData.filePath)
+    }
+
+    // Создаем FormData для передачи файла
+    const formData = new FormData()
+    formData.append('zipUrl', fs.createReadStream(requestData.filePath))
+    formData.append('triggerWord', requestData.triggerWord)
+    formData.append('modelName', requestData.modelName)
+    formData.append('steps', requestData.steps)
+    formData.append('telegram_id', requestData.telegram_id)
+    formData.append('is_ru', requestData.is_ru.toString())
 
     const response: AxiosResponse<ModelTrainingResponse> = await axios.post(
       url,
-      requestData,
+      formData,
       {
         headers: {
-          'Content-Type': 'application/json',
+          ...formData.getHeaders(),
         },
       }
     )
