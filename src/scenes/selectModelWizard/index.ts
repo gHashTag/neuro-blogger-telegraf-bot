@@ -1,6 +1,7 @@
 import { Scenes, Markup } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import { getAvailableModels } from '../../commands/selectModelCommand/getAvailableModels'
+import { sendGenericErrorMessage } from '@/menu'
 
 export const selectModelWizard = new Scenes.WizardScene<MyContext>(
   'selectModelWizard',
@@ -66,11 +67,7 @@ export const selectModelWizard = new Scenes.WizardScene<MyContext>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const callbackQuery = ctx.callbackQuery as any
     if (!callbackQuery || !callbackQuery.data) {
-      await ctx.reply(
-        isRu
-          ? '❌ Произошла ошибка. Пожалуйста, попробуйте еще раз.'
-          : '❌ An error occurred. Please try again.'
-      )
+      await sendGenericErrorMessage(ctx, isRu)
       return ctx.scene.leave()
     }
 

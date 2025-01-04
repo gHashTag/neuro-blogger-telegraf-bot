@@ -1,3 +1,4 @@
+import { sendGenerationErrorMessage } from '@/menu'
 import { getPrompt } from '../../core/supabase'
 import { MyContext } from '../../interfaces'
 
@@ -29,10 +30,6 @@ export async function handleNeuroVideo(
     // await ctx.conversation.enter("imageToVideo")
   } catch (error) {
     console.error('Error starting video generation:', error)
-    await ctx.reply(
-      isRu
-        ? 'Произошла ошибка при запуске генерации видео. Пожалуйста, попробуйте позже.'
-        : 'An error occurred while starting video generation. Please try again later.'
-    )
+    await sendGenerationErrorMessage(ctx, isRu)
   }
 }

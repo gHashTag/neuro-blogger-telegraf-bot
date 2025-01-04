@@ -9,6 +9,10 @@ import {
 } from '../../helpers/telegramStars'
 import { generateNeuroImage } from '../../services/generateNeuroImage'
 import { getLatestUserModel } from '../../core/supabase'
+import {
+  sendGenerationCancelledMessage,
+  sendPhotoDescriptionRequest,
+} from '@/menu'
 
 export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
   'neuroPhotoWizard',
@@ -59,17 +63,7 @@ export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
 
     ctx.session.mode = 'neuro_photo'
 
-    // Запрашиваем промпт
-    await ctx.reply(
-      isRu
-        ? `📸 Опишите, какую фотографию вы хотите сгенерировать`
-        : `📸 Describe what kind of photo you want to generate.`,
-      {
-        reply_markup: {
-          force_reply: true,
-        },
-      }
-    )
+    await sendPhotoDescriptionRequest(ctx, isRu)
 
     return ctx.wizard.next()
   },
@@ -79,6 +73,11 @@ export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
 
     if (promptMsg && 'text' in promptMsg) {
       const promptText = promptMsg.text
+
+      if (promptText === (isRu ? 'Отменить генерацию' : 'Cancel generation')) {
+        await sendGenerationCancelledMessage(ctx, isRu)
+        return ctx.scene.leave()
+      }
 
       console.log(promptText, 'promptText')
       console.log(ctx.session.userModel, 'ctx.session.userModel')

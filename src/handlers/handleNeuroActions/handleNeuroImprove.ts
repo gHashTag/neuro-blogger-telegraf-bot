@@ -2,6 +2,7 @@ import { getPrompt, supabase } from '../../core/supabase'
 
 import { MyContext } from '../../interfaces'
 import { upgradePrompt } from '../../core/openai/upgradePrompt'
+import { sendPromptImprovementMessage } from '@/menu/sendPromptImprovementMessage'
 
 export async function handleNeuroImprove(
   ctx: MyContext,
@@ -31,11 +32,7 @@ export async function handleNeuroImprove(
       return
     }
 
-    await ctx.reply(
-      isRu
-        ? '⏳ Начинаю улучшение промпта...'
-        : '⏳ Starting prompt improvement...'
-    )
+    await sendPromptImprovementMessage(ctx, isRu)
 
     const improvedPrompt = await upgradePrompt(promptData.prompt)
     console.log('Improved prompt:', improvedPrompt)

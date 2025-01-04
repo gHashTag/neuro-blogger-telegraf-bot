@@ -4,6 +4,7 @@ import { MyContext } from '../../interfaces'
 import { refundUser } from '../../helpers/telegramStars'
 import { Scenes } from 'telegraf'
 import { isRussian } from '../../helpers/language'
+import { sendGenericErrorMessage } from '@/menu'
 
 interface Prediction {
   input: {
@@ -79,9 +80,8 @@ export const cancelPredictionsWizard = new Scenes.WizardScene<MyContext>(
       return ctx.scene.leave()
     } catch (error) {
       console.error('Error cancelling predictions:', error)
-      await ctx.reply(
-        'Произошла ошибка при отмене предсказания. Пожалуйста, попробуйте позже.'
-      )
+      const isRu = isRussian(ctx)
+      await sendGenericErrorMessage(ctx, isRu, error)
       return ctx.scene.leave()
     }
   }

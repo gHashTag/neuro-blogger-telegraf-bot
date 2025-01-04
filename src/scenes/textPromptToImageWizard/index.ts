@@ -1,4 +1,4 @@
-import { Scenes, Markup } from 'telegraf'
+import { Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import {
   getUserBalance,
@@ -8,7 +8,11 @@ import {
 } from '../../helpers/telegramStars'
 import { isRussian } from '../../helpers/language'
 import { generateImage } from '../../services/generateReplicateImage'
-import { mainMenu, sendGenerationCancelledMessage } from '../../menu'
+import {
+  sendGenerationCancelledMessage,
+  sendPhotoDescriptionRequest,
+  sendGenericErrorMessage,
+} from '../../menu'
 
 export const textPromptToImageWizard = new Scenes.WizardScene<MyContext>(
   'textPromptToImageWizard',
@@ -17,7 +21,7 @@ export const textPromptToImageWizard = new Scenes.WizardScene<MyContext>(
     console.log('CASE: textPromptToImageCommand')
 
     if (!ctx.from || !ctx.from.id || !ctx.chat?.id) {
-      await ctx.reply(isRu ? '❌ Произошла ошибка' : '❌ An error occurred')
+      await sendGenericErrorMessage(ctx, isRu)
       return ctx.scene.leave()
     }
     ctx.session.mode = 'image_to_prompt'
@@ -36,18 +40,7 @@ export const textPromptToImageWizard = new Scenes.WizardScene<MyContext>(
       isRu
     )
 
-    const keyboard = Markup.keyboard([
-      [Markup.button.text(isRu ? 'Отменить генерацию' : 'Cancel generation')],
-    ]).resize()
-
-    await ctx.reply(
-      isRu
-        ? '👋 Напишите промпт на английском для генерации изображения.'
-        : '👋 Hello! Write a prompt in English to generate an image.',
-      {
-        reply_markup: keyboard.reply_markup,
-      }
-    )
+    await sendPhotoDescriptionRequest(ctx, isRu)
 
     return ctx.wizard.next()
   },

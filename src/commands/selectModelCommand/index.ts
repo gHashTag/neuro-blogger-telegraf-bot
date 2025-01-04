@@ -2,6 +2,7 @@ import { Markup } from 'telegraf'
 import { MyContext } from '../../interfaces'
 
 import { getAvailableModels } from './getAvailableModels'
+import { sendGenericErrorMessage } from '@/menu'
 
 // Функция для получения доступных моделей
 export async function selectModelCommand(ctx: MyContext) {
@@ -42,10 +43,6 @@ export async function selectModelCommand(ctx: MyContext) {
     return
   } catch (error) {
     console.error('Error creating model selection menu:', error)
-    await ctx.reply(
-      isRu
-        ? '❌ Ошибка при получении списка моделей'
-        : '❌ Error fetching models list'
-    )
+    await sendGenericErrorMessage(ctx, isRu, error)
   }
 }

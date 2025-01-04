@@ -5,6 +5,7 @@ import { ensureSupabaseAuth } from '../../core/supabase'
 import { createModelTraining } from '../../services'
 import { isRussian } from '@/helpers/language'
 import { deleteZipFile } from '@/helpers'
+import { sendGenericErrorMessage } from '@/menu'
 
 export const uploadTrainFluxModelScene = new Scenes.BaseScene<MyContext>(
   'uploadTrainFluxModelScene'
@@ -48,11 +49,7 @@ uploadTrainFluxModelScene.enter(async ctx => {
     await deleteZipFile(zipPath)
   } catch (error) {
     console.error('Error in uploadTrainFluxModelScene:', error)
-    await ctx.reply(
-      isRu
-        ? '❌ Произошла ошибка. Пожалуйста, попробуйте еще раз.'
-        : '❌ An error occurred. Please try again.'
-    )
+    await sendGenericErrorMessage(ctx, isRu, error)
   } finally {
     await ctx.scene.leave()
   }

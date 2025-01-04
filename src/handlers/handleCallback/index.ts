@@ -1,3 +1,4 @@
+import { sendGenericErrorMessage } from '@/menu'
 import { isRussian } from '../../helpers/language'
 import { MyContext } from '../../interfaces'
 
@@ -29,11 +30,7 @@ export async function handleCallback(ctx: MyContext) {
       await ctx.answerCbQuery()
     } catch (e) {
       console.error('Не удалось ответить на callback query:', e)
-      await ctx.reply(
-        isRu
-          ? 'Произошла ошибка. Пожалуйста, попробуйте позже.'
-          : 'An error occurred. Please try again later.'
-      )
+      await sendGenericErrorMessage(ctx, isRu, error)
     }
     throw error
   }

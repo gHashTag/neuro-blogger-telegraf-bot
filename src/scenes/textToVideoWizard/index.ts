@@ -7,7 +7,7 @@ import {
 } from '../../helpers/telegramStars/'
 import { generateTextToVideo } from '../../services/generateTextToVideo'
 import { isRussian } from '../../helpers/language'
-import { videoModelKeyboard } from '../../menu'
+import { sendGenericErrorMessage, videoModelKeyboard } from '../../menu'
 
 import { VideoModel, VIDEO_MODELS } from '../../interfaces'
 
@@ -105,11 +105,8 @@ export const textToVideoWizard = new Scenes.WizardScene<MyContext>(
       )
       return ctx.wizard.next()
     } else {
-      await ctx.reply(
-        isRu
-          ? 'Произошла ошибка при обработке запроса'
-          : 'An error occurred while processing the request'
-      )
+      console.log('textToVideoWizard: else')
+      await sendGenericErrorMessage(ctx, isRu)
       return ctx.scene.leave()
     }
   },
@@ -143,11 +140,7 @@ export const textToVideoWizard = new Scenes.WizardScene<MyContext>(
 
       await ctx.scene.leave()
     } else {
-      await ctx.reply(
-        isRu
-          ? 'Произошла ошибка при обработке запроса'
-          : 'An error occurred while processing the request'
-      )
+      await sendGenericErrorMessage(ctx, isRu)
       await ctx.scene.leave()
     }
   }

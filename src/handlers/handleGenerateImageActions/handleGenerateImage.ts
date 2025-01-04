@@ -5,6 +5,7 @@ import {
   getUserBalance,
 } from '../../helpers/telegramStars/'
 import { textToImageGenerationCost } from '../../helpers/telegramStars/calculateFinalPrice'
+import { sendGenerationErrorMessage } from '@/menu'
 
 export async function handleGenerateImage(
   ctx: MyContext,
@@ -43,11 +44,7 @@ export async function handleGenerateImage(
       return
     } catch (error) {
       console.error('Error generating image:', error)
-      await ctx.reply(
-        isRu
-          ? '❌ Произошла ошибка при генерации изображения. Пожалуйста, попробуйте позже.'
-          : '❌ An error occurred while generating the image. Please try again later.'
-      )
+      await sendGenerationErrorMessage(ctx, isRu)
     } finally {
       // Удаляем сообщение о генерации
       if (generatingMsg) {

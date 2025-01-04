@@ -2,6 +2,8 @@ import { getPrompt } from '../../core/supabase'
 import { upgradePrompt } from '../../core/openai'
 import { MyContext } from '../../interfaces'
 import { supabase } from '../../core/supabase'
+import { sendPromptImprovementMessage } from '@/menu/sendPromptImprovementMessage'
+import { sendPromptImprovementFailureMessage } from '@/menu/sendPromptImprovementFailureMessage'
 
 export async function handleImprove(
   ctx: MyContext,
@@ -30,17 +32,11 @@ export async function handleImprove(
       return
     }
 
-    await ctx.reply(
-      isRu
-        ? '⏳ Начинаю улучшение промпта...'
-        : '⏳ Starting prompt improvement...'
-    )
+    await sendPromptImprovementMessage(ctx, isRu)
 
     const improvedPrompt = await upgradePrompt(promptData.prompt)
     if (!improvedPrompt) {
-      await ctx.reply(
-        isRu ? 'Не удалось улучшить промпт' : 'Failed to improve prompt'
-      )
+      await sendPromptImprovementFailureMessage(ctx, isRu)
       return
     }
 

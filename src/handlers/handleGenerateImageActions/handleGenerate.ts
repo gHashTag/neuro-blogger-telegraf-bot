@@ -7,6 +7,7 @@ import {
   getUserBalance,
   textToImageGenerationCost,
 } from '../../helpers/telegramStars'
+import { sendGenerationErrorMessage } from '@/menu'
 
 export async function handleGenerate(
   ctx: MyContext,
@@ -54,11 +55,7 @@ export async function handleGenerate(
     return
   } catch (error) {
     console.error('Ошибка при генерации:', error)
-    await ctx.reply(
-      isRu
-        ? 'Произошла ошибка при генерации. Пожалуйста, попробуйте позже.'
-        : 'An error occurred during generation. Please try again later.'
-    )
+    await sendGenerationErrorMessage(ctx, isRu)
     throw error
   }
 }

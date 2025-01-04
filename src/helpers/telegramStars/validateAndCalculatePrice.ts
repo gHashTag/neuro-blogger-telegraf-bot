@@ -19,7 +19,9 @@ export async function validateAndCalculatePrice(
 
   const model = videoModel as VideoModel
   if (!(model in MODEL_PRICES)) {
-    await ctx.reply('Ошибка: неверная модель видео.')
+    await ctx.reply(
+      isRu ? 'Ошибка: неверная модель видео.' : 'Error: invalid video model.'
+    )
     return null
   }
 

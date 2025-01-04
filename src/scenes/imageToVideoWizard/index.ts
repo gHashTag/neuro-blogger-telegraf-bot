@@ -3,13 +3,14 @@ import {
   getUserBalance,
   sendBalanceMessage,
   validateAndCalculatePrice,
+  VideoModel,
 } from '../../helpers/telegramStars'
 import { generateImageToVideo } from '../../services/generateImageToVideo'
-import { VideoModel, MyContext, VIDEO_MODELS } from '../../interfaces'
+import { MyContext, VIDEO_MODELS } from '../../interfaces'
 import {
   cancelMenu,
-  mainMenu,
   sendGenerationCancelledMessage,
+  sendGenericErrorMessage,
   videoModelKeyboard,
 } from '../../menu'
 import { isRussian } from '../../helpers/language'
@@ -91,11 +92,7 @@ export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
       )
       return ctx.wizard.next()
     } else {
-      await ctx.reply(
-        isRu
-          ? 'Произошла ошибка при обработке запроса'
-          : 'An error occurred while processing the request'
-      )
+      await sendGenericErrorMessage(ctx, isRu)
       return ctx.scene.leave()
     }
   },

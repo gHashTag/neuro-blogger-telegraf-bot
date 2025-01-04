@@ -4,6 +4,9 @@ import { MyContext } from '../../interfaces'
 import { generateImage } from '../../services/generateReplicateImage'
 import { generateNeuroImage } from '../../services/generateNeuroImage'
 import { generateTextToVideo } from '../../services/generateTextToVideo'
+import { sendPromptImprovementMessage } from '@/menu/sendPromptImprovementMessage'
+import { sendPromptImprovementFailureMessage } from '@/menu/sendPromptImprovementFailureMessage'
+import { sendGenericErrorMessage } from '@/menu'
 
 const MAX_ATTEMPTS = 10
 
@@ -25,17 +28,11 @@ export const improvePromptWizard = new Scenes.WizardScene<MyContext>(
 
     ctx.session.attempts = 0 // Инициализируем счетчик попыток
 
-    await ctx.reply(
-      isRu
-        ? '⏳ Начинаю улучшение промпта...'
-        : '⏳ Starting prompt improvement...'
-    )
+    await sendPromptImprovementMessage(ctx, isRu)
 
     const improvedPrompt = await upgradePrompt(prompt)
     if (!improvedPrompt) {
-      await ctx.reply(
-        isRu ? 'Не удалось улучшить промпт' : 'Failed to improve prompt'
-      )
+      await sendPromptImprovementFailureMessage(ctx, isRu)
       return ctx.scene.leave()
     }
 
@@ -167,9 +164,7 @@ export const improvePromptWizard = new Scenes.WizardScene<MyContext>(
         )
         const improvedPrompt = await upgradePrompt(ctx.session.prompt)
         if (!improvedPrompt) {
-          await ctx.reply(
-            isRu ? 'Не удалось улучшить промпт' : 'Failed to improve prompt'
-          )
+          await sendPromptImprovementFailureMessage(ctx, isRu)
           return ctx.scene.leave()
         }
 
@@ -205,11 +200,8 @@ export const improvePromptWizard = new Scenes.WizardScene<MyContext>(
       }
     }
 
-    await ctx.reply(
-      isRu
-        ? 'Произошла ошибка при обработке запроса'
-        : 'An error occurred while processing the request'
-    )
+    await sendGenericErrorMessage(ctx, isRu)
+    throw new Error('improvePromptWizard: Unknown error')
     return ctx.scene.leave()
   }
 )

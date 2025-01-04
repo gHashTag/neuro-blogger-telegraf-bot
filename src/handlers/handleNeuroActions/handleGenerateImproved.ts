@@ -1,6 +1,8 @@
 import { generateNeuroImage } from '../../services/generateNeuroImage'
 
 import { MyContext } from '../../interfaces'
+import { sendPromptImprovementMessage } from '@/menu/sendPromptImprovementMessage'
+import { sendGenerationErrorMessage } from '@/menu'
 
 export async function handleGenerateNeuroImproved(
   ctx: MyContext,
@@ -25,11 +27,7 @@ export async function handleGenerateNeuroImproved(
       return
     }
 
-    await ctx.reply(
-      isRu
-        ? '⏳ Начинаю улучшение промпта...'
-        : '⏳ Starting prompt improvement...'
-    )
+    await sendPromptImprovementMessage(ctx, isRu)
 
     console.log('Generating neuro image...')
 
@@ -37,10 +35,6 @@ export async function handleGenerateNeuroImproved(
     return
   } catch (error) {
     console.error('Error in generate_improved_ handler:', error)
-    await ctx.reply(
-      isRu
-        ? 'Произошла ошибка при генерации улучшенного изображения. Пожалуйста, попробуйте позже.'
-        : 'An error occurred while generating improved image. Please try again later.'
-    )
+    await sendGenerationErrorMessage(ctx, isRu)
   }
 }

@@ -1,6 +1,7 @@
 import axios, { isAxiosError } from 'axios'
 import { isDev } from '../helpers'
 import { MyContext } from '../interfaces'
+import { sendGenericErrorMessage } from '@/menu'
 
 interface VoiceAvatarResponse {
   success: boolean
@@ -38,11 +39,7 @@ export async function generateVoiceAvatar(
   } catch (error) {
     if (isAxiosError(error)) {
       console.error('API Error:', error.response?.data || error.message)
-      throw new Error(
-        isRu
-          ? 'Произошла ошибка при создании голосового аватара'
-          : 'Error occurred while creating voice avatar'
-      )
+      await sendGenericErrorMessage(ctx, isRu, error)
     }
     console.error('Unexpected error:', error)
     throw error

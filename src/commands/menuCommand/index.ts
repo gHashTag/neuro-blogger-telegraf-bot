@@ -1,3 +1,4 @@
+import { sendGenericErrorMessage } from '@/menu'
 import { MyContext } from '../../interfaces'
 import { mainMenu } from '../../menu/mainMenu'
 
@@ -15,11 +16,7 @@ export async function menuCommand(ctx: MyContext) {
     return
   } catch (error) {
     console.error('Error in menu command:', error)
-    await ctx.reply(
-      isRu
-        ? '❌ Произошла ошибка. Пожалуйста, попробуйте позже.'
-        : '❌ An error occurred. Please try again later.'
-    )
+    await sendGenericErrorMessage(ctx, isRu, error)
     throw error
   }
 }

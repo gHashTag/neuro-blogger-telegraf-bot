@@ -7,6 +7,7 @@ import {
   imageNeuroGenerationCost,
   sendInsufficientStarsMessage,
 } from '../../helpers/telegramStars'
+import { sendGenerationErrorMessage } from '@/menu'
 
 export async function handleNeuroGenerate(
   ctx: MyContext,
@@ -70,10 +71,6 @@ export async function handleNeuroGenerate(
     }
   } catch (error) {
     console.error('Error in neuro_generate_ handler:', error)
-    await ctx.reply(
-      isRu
-        ? 'Произошла ошибка при генерации изображения. Пожалуйста, попробуйте озже.'
-        : 'An error occurred while generating the image. Please try again later.'
-    )
+    await sendGenerationErrorMessage(ctx, isRu)
   }
 }
