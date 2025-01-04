@@ -1,11 +1,7 @@
 import { Scenes, Markup } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import { getAvailableModels } from '../../commands/selectModelCommand/getAvailableModels'
-import {
-  mainMenu,
-  sendGenerationCancelledMessage,
-  sendGenericErrorMessage,
-} from '@/menu'
+import { mainMenu, sendGenericErrorMessage } from '@/menu'
 import { isRussian } from '@/helpers/language'
 
 export const selectModelWizard = new Scenes.WizardScene<MyContext>(

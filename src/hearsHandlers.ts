@@ -1,6 +1,5 @@
 import { Composer } from 'telegraf'
 import { MyContext } from './interfaces'
-import { selectModelCommand } from './commands/selectModelCommand'
 import { imageModelMenu } from './menu/imageModelMenu'
 
 import { topUpBalanceCommand } from './commands/topUpBalanceCommand'
@@ -46,14 +45,14 @@ myComposer.hears(['🎥 Изображение в видео', '🎥 Image to Vi
   await ctx.scene.enter('imageToVideoWizard')
 })
 
-myComposer.hears(['🔊 Текст в речь', '🔊 Text to Speech'], async ctx => {
-  console.log('CASE: Текст в речь')
-  await ctx.scene.enter('textToSpeechCommand')
+myComposer.hears(['🎙️ Текст в голос', '🎙️ Text to Voice'], async ctx => {
+  console.log('CASE: Текст в голос')
+  await ctx.scene.enter('textToSpeechWizard')
 })
 
 myComposer.hears(['🎤 Голос для аватара', '🎤 Voice for Avatar'], async ctx => {
   console.log('CASE: Голос для аватара')
-  await ctx.scene.enter('voiceCommand')
+  await ctx.scene.enter('voiceAvatarWizard')
 })
 
 myComposer.hears(
