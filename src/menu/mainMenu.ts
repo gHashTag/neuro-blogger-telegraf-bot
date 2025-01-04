@@ -29,6 +29,10 @@ export function mainMenu(isRu: boolean): Markup.Markup<ReplyKeyboardMarkup> {
         isRu ? '🔍 Описание из изображения' : '🔍 Image to Prompt'
       ),
     ],
-    [Markup.button.text(isRu ? '🎨 Обучить FLUX' : '🎨 Train FLUX')],
+    [
+      Markup.button.text(
+        isRu ? '🎨 Обучить FLUX для аватара' : '🎨 Train FLUX for avatar'
+      ),
+    ],
   ])
 }
