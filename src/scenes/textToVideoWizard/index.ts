@@ -60,15 +60,17 @@ export const textToVideoWizard = new Scenes.WizardScene<MyContext>(
     const message = ctx.message as { text?: string }
     if (!message.text)
       throw new Error(
-        isRu ? 'Не удалось определить модель' : 'Could not identify model'
+        isRu
+          ? 'textToVideoWizard: Не удалось определить модель'
+          : 'textToVideoWizard: Could not identify model'
       )
 
     if (message && 'text' in message) {
       if (!ctx.from)
         throw new Error(
           isRu
-            ? 'Не удалось определить пользователя'
-            : 'Could not identify user'
+            ? 'textToVideoWizard: Не удалось определить пользователя'
+            : 'textToVideoWizard: Could not identify user'
         )
       const videoModel = message.text?.toLowerCase()
       const availableModels: VideoModel[] = VIDEO_MODELS.map(

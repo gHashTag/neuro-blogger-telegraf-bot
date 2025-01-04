@@ -91,23 +91,27 @@ export const improvePromptWizard = new Scenes.WizardScene<MyContext>(
           )
         if (!ctx.session.videoModel)
           throw new Error(
-            isRu ? 'Не удалось определить модель' : 'Could not identify model'
+            isRu
+              ? 'improvePromptWizard: Не удалось определить модель'
+              : 'improvePromptWizard: Could not identify model'
           )
         if (!ctx.from.id)
           throw new Error(
             isRu
-              ? 'Не удалось определить telegram_id'
-              : 'Could not identify telegram_id'
+              ? 'improvePromptWizard: Не удалось определить telegram_id'
+              : 'improvePromptWizard: Could not identify telegram_id'
           )
         if (!ctx.from.username)
           throw new Error(
             isRu
-              ? 'Не удалось определить username'
-              : 'Could not identify username'
+              ? 'improvePromptWizard: Не удалось определить username'
+              : 'improvePromptWizard: Could not identify username'
           )
         if (!isRu)
           throw new Error(
-            isRu ? 'Не удалось определить isRu' : 'Could not identify isRu'
+            isRu
+              ? 'improvePromptWizard: Не удалось определить isRu'
+              : 'improvePromptWizard: Could not identify isRu'
           )
 
         if (mode === 'neuro_photo') {
@@ -136,7 +140,11 @@ export const improvePromptWizard = new Scenes.WizardScene<MyContext>(
             ctx
           )
         } else {
-          throw new Error(isRu ? 'Неизвестный режим' : 'Unknown mode')
+          throw new Error(
+            isRu
+              ? 'improvePromptWizard: Неизвестный режим'
+              : 'improvePromptWizard: Unknown mode'
+          )
         }
         return ctx.scene.leave()
       } else if (text === (isRu ? '🔄 Еще раз улучшить' : '🔄 Improve again')) {

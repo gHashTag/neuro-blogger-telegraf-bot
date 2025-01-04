@@ -6,7 +6,12 @@ import {
 } from '../../helpers/telegramStars'
 import { generateImageToVideo } from '../../services/generateImageToVideo'
 import { VideoModel, MyContext, VIDEO_MODELS } from '../../interfaces'
-import { cancelMenu, mainMenu, videoModelKeyboard } from '../../menu'
+import {
+  cancelMenu,
+  mainMenu,
+  sendGenerationCancelledMessage,
+  videoModelKeyboard,
+} from '../../menu'
 import { isRussian } from '../../helpers/language'
 
 export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
@@ -38,11 +43,7 @@ export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
       console.log('messageText', messageText)
 
       if (messageText === (isRu ? 'отмена' : 'cancel')) {
-        await ctx.reply(isRu ? 'Генерация отменена' : 'Generation cancelled', {
-          reply_markup: {
-            keyboard: mainMenu(isRu).reply_markup.keyboard,
-          },
-        })
+        await sendGenerationCancelledMessage(ctx, isRu)
         return ctx.scene.leave()
       }
 
@@ -137,7 +138,7 @@ export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
 
     if (message && 'text' in message) {
       if (message.text.toLowerCase() === (isRu ? 'отмена' : 'cancel')) {
-        await ctx.reply(isRu ? 'Генерация отменена' : 'Generation cancelled')
+        await sendGenerationCancelledMessage(ctx, isRu)
         return ctx.scene.leave()
       }
 

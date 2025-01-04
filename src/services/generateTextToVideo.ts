@@ -22,25 +22,33 @@ export async function generateTextToVideo(
 
     if (!prompt)
       throw new Error(
-        isRu ? 'Не удалось определить промпт' : 'Could not identify prompt'
+        isRu
+          ? 'generateTextToVideo: Не удалось определить промпт'
+          : 'generateTextToVideo: Could not identify prompt'
       )
     if (!videoModel)
       throw new Error(
-        isRu ? 'Не удалось определить модель' : 'Could not identify model'
+        isRu
+          ? 'generateTextToVideo: Не удалось определить модель'
+          : 'generateTextToVideo: Could not identify model'
       )
     if (!telegram_id)
       throw new Error(
         isRu
-          ? 'Не удалось определить telegram_id'
-          : 'Could not identify telegram_id'
+          ? 'generateTextToVideo: Не удалось определить telegram_id'
+          : 'generateTextToVideo: Could not identify telegram_id'
       )
     if (!username)
       throw new Error(
-        isRu ? 'Не удалось определить username' : 'Could not identify username'
+        isRu
+          ? 'generateTextToVideo: Не удалось определить username'
+          : 'generateTextToVideo: Could not identify username'
       )
     if (!isRu)
       throw new Error(
-        isRu ? 'Не удалось определить isRu' : 'Could not identify isRu'
+        isRu
+          ? 'generateTextToVideo: Не удалось определить isRu'
+          : 'generateTextToVideo: Could not identify isRu'
       )
 
     const response = await axios.post<TextToVideoResponse>(
@@ -67,8 +75,8 @@ export async function generateTextToVideo(
       console.error('API Error:', error.response?.data || error.message)
       throw new Error(
         isRu
-          ? 'Произошла ошибка при генерации видео'
-          : 'Error occurred while generating video'
+          ? 'generateTextToVideo: Произошла ошибка при генерации видео'
+          : 'generateTextToVideo: Error occurred while generating video'
       )
     }
     console.error('Unexpected error:', error)

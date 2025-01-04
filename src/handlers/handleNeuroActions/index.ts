@@ -1,3 +1,4 @@
+import { sendGenerationCancelledMessage } from '@/menu'
 import { MyContext } from '../../interfaces'
 import { handleNeuroGenerate } from './handleNeuroGenerate'
 import { handleNeuroImprove } from './handleNeuroImprove'
@@ -18,7 +19,7 @@ export async function handleNeuroActions(
     await handleNeuroImprove(ctx, data, isRu)
   } else if (data === 'neuro_cancel') {
     console.log('CASE: neuro_cancel')
-    await ctx.reply(isRu ? '❌ Генерация отменена' : '❌ Generation cancelled')
+    await sendGenerationCancelledMessage(ctx, isRu)
   } else if (data.startsWith('neuro_video_')) {
     console.log('CASE: neuro_video_')
     await handleNeuroVideo(ctx, data, isRu)

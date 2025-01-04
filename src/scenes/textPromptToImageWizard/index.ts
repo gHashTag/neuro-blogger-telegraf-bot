@@ -8,6 +8,7 @@ import {
 } from '../../helpers/telegramStars'
 import { isRussian } from '../../helpers/language'
 import { generateImage } from '../../services/generateReplicateImage'
+import { mainMenu, sendGenerationCancelledMessage } from '../../menu'
 
 export const textPromptToImageWizard = new Scenes.WizardScene<MyContext>(
   'textPromptToImageWizard',
@@ -60,9 +61,8 @@ export const textPromptToImageWizard = new Scenes.WizardScene<MyContext>(
 
       // Проверка на отмену генерации
       if (text === (isRu ? 'Отменить генерацию' : 'Cancel generation')) {
-        await ctx.reply(
-          isRu ? '❌ Генерация отменена' : '❌ Generation cancelled'
-        )
+        await sendGenerationCancelledMessage(ctx, isRu)
+
         return ctx.scene.leave()
       }
 

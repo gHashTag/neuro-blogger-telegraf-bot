@@ -87,7 +87,7 @@ export async function handleImprove(
     )
     return
   } catch (error) {
-    console.error('Ошибка при улучшении прмпта:', error)
+    console.error('handleImprove: Ошибка при улучшении прмпта:', error)
     await ctx.reply(
       isRu
         ? 'Произошла ошибка при улучшении промпта'

@@ -40,10 +40,11 @@ export const stepSelectionScene = new Scenes.WizardScene<MyContext>(
     }
 
     if (ctx.message && 'text' in ctx.message && ctx.message.text === 'Отмена') {
-      await ctx.reply(
-        isRu ? 'Отмена обучения модели' : 'Cancel model training',
-        mainMenu(isRu)
-      )
+      await ctx.reply(isRu ? '❌ Отмена' : '❌ Cancel', {
+        reply_markup: {
+          keyboard: mainMenu(isRu).reply_markup.keyboard,
+        },
+      })
       return ctx.scene.leave()
     }
 
