@@ -21,13 +21,6 @@ uploadTrainFluxModelScene.enter(async ctx => {
     await ensureSupabaseAuth()
 
     await ctx.reply(isRu ? '⏳ Загружаю архив...' : '⏳ Uploading archive...')
-    // const zipUrl = await uploadToSupabase(
-    //   zipPath,
-    //   ctx.session.targetUserId.toString(),
-    //   ctx.session.modelName,
-    //   ctx.session.triggerWord
-    // )
-    // console.log('ZIP uploaded to:', zipUrl)
 
     const triggerWord = `${ctx.session.username.toLocaleUpperCase()}`
     if (!triggerWord) {
@@ -50,7 +43,7 @@ uploadTrainFluxModelScene.enter(async ctx => {
       filePath: zipPath,
       triggerWord,
       modelName: ctx.session.modelName,
-      steps: 1000,
+      steps: ctx.session.steps,
       telegram_id: ctx.session.targetUserId.toString(),
       is_ru: isRu,
     })

@@ -21,6 +21,7 @@ export async function createModelTraining(
   requestData: ModelTrainingRequest
 ): Promise<ModelTrainingResponse> {
   try {
+    console.log('requestData', requestData)
     const url = `${
       isDev ? 'http://localhost:3000' : process.env.ELESTIO_URL
     }/generate/create-model-training`

@@ -20,6 +20,7 @@ import {
   cancelPredictionsWizard,
   trainFluxModelWizard,
   uploadTrainFluxModelScene,
+  stepSelectionScene,
 } from './scenes'
 // import { subscriptionMiddleware } from "./middleware/subscription"
 
@@ -70,6 +71,7 @@ export const stage = new Scenes.Stage<MyContext>([
   cancelPredictionsWizard,
   trainFluxModelWizard,
   uploadTrainFluxModelScene,
+  stepSelectionScene,
 ])
 
 export function registerCommands(bot: Telegraf<MyContext>) {
@@ -96,6 +98,7 @@ export function registerCommands(bot: Telegraf<MyContext>) {
         targetUserId: 0,
         username: '',
         triggerWord: '',
+        steps: 0,
       }),
     })
   )

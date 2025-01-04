@@ -13,7 +13,9 @@ import { BOT_TOKEN } from '@/core/bot'
 
 export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
   'trainFluxModelWizard',
+
   async ctx => {
+    console.log('CASE 2 ctx.session.steps', ctx.session.steps)
     const isRu = isRussian(ctx)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const message = ctx.message as any

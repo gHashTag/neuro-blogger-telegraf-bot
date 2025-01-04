@@ -1,6 +1,7 @@
 import { Markup } from 'telegraf'
+import { ReplyKeyboardMarkup } from 'telegraf/typings/core/types/typegram'
 
-export function mainMenu(isRu: boolean) {
+export function mainMenu(isRu: boolean): Markup.Markup<ReplyKeyboardMarkup> {
   console.log('CASE: mainMenu')
   return Markup.keyboard([
     [

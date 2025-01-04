@@ -40,7 +40,7 @@ export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
       if (messageText === (isRu ? 'отмена' : 'cancel')) {
         await ctx.reply(isRu ? 'Генерация отменена' : 'Generation cancelled', {
           reply_markup: {
-            keyboard: mainMenu(true).reply_markup.keyboard,
+            keyboard: mainMenu(isRu).reply_markup.keyboard,
           },
         })
         return ctx.scene.leave()

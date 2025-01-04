@@ -28,7 +28,7 @@ myComposer.hears(['🌟 Выбор модели ИИ', '🌟 Select AI Model'], 
 
 myComposer.hears(['🎨 Обучить FLUX', '🎨 Train FLUX'], async ctx => {
   console.log('CASE: Обучить FLUX')
-  await ctx.scene.enter('trainFluxModelWizard')
+  await ctx.scene.enter('stepSelectionScene')
 })
 
 myComposer.hears(['📸 Нейрофото', '📸 NeuroPhoto'], async ctx => {
@@ -108,7 +108,7 @@ myComposer.hears(['1️⃣', '2️⃣', '3️⃣', '4️⃣'], async ctx => {
   const isRu = isRussian(ctx)
   const prompt = ctx.session.prompt
   const userId = ctx.from.id
-  const numImages = parseInt(text[0]) // Извлекаем число из текста кнопки
+  const numImages = parseInt(text[0])
 
   const generate = async (num: number) => {
     if (ctx.session.mode === 'neuro_photo') {
@@ -226,7 +226,8 @@ myComposer.hears(['Отмена', 'Cancel'], async ctx => {
   if (ctx.session.mode === 'image_to_video') {
     await ctx.scene.enter('cancelPredictionsWizard')
   } else {
-    mainMenu(true).reply_markup.keyboard
+    const isRu = isRussian(ctx)
+    mainMenu(isRu)
   }
 })
 

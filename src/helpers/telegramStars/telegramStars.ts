@@ -27,7 +27,7 @@ export async function refundUser(ctx: MyContext, paymentAmount: number) {
         )} ⭐️`,
     {
       reply_markup: {
-        keyboard: mainMenu(true).reply_markup.keyboard,
+        keyboard: mainMenu(isRu).reply_markup.keyboard,
       },
     }
   )
