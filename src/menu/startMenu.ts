@@ -7,7 +7,7 @@ export async function startMenu(ctx: MyContext, isRu: boolean) {
       isRu ? 'Выберите действие в меню:' : 'Choose an action in the menu:',
       Markup.keyboard([
         [
-          Markup.button.text(isRu ? '🎮 Начать обучение' : '🎮 Start learning'),
+          // Markup.button.text(isRu ? '🎮 Начать обучение' : '🎮 Start learning'),
           Markup.button.text(isRu ? '🏠 Главное меню' : '🏠 Main menu'),
         ],
         [

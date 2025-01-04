@@ -1,5 +1,3 @@
-export type VideoModel = 'minimax' | 'haiper' | 'ray' | 'i2vgen-xl'
-
 export interface VideoModelConfig {
   name: VideoModel
   title: string

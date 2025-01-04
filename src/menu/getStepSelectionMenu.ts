@@ -20,5 +20,6 @@ export function getStepSelectionMenu(
       Markup.button.text(isRu ? '5500 шагов' : '5000 steps'),
       Markup.button.text(isRu ? '6000 шагов' : '6000 steps'),
     ],
+    [Markup.button.text(isRu ? 'Отмена' : 'Cancel')],
   ]).resize()
 }

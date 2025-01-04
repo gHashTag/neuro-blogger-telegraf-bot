@@ -2,9 +2,9 @@ import { Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import { createImagesZip } from '../../helpers/images/createImagesZip'
 import { ensureSupabaseAuth } from '../../core/supabase'
-import * as fs from 'fs/promises'
 import { createModelTraining } from '../../services'
 import { isRussian } from '@/helpers/language'
+import { deleteZipFile } from '@/helpers'
 
 export const uploadTrainFluxModelScene = new Scenes.BaseScene<MyContext>(
   'uploadTrainFluxModelScene'
@@ -31,12 +31,9 @@ uploadTrainFluxModelScene.enter(async ctx => {
     }
 
     await ctx.reply(
-      isRu ? '⏳ Начинаю обучение модели...' : '⏳ Starting model training...'
-    )
-    await ctx.reply(
       isRu
-        ? `✅ Обучение начато!\n\nВаша модель будет натренирована через 3-6 часов. После завершения вы сможете проверить её работу, используя Нейрофото в главном меню.`
-        : `✅ Training started!\n\nYour model will be trained in 3-6 hours. Once completed, you can check its performance using the Neurophoto in the main menu.`
+        ? `⏳ Начинаю обучение модели...\n\nВаша модель будет натренирована через 3-6 часов. После завершения вы сможете проверить её работу, используя раздел "Модели" в Нейрофото.`
+        : `⏳ Starting model training...\n\nYour model will be trained in 3-6 hours. Once completed, you can check its performance using the "Models" section in Neurophoto.`
     )
 
     await createModelTraining({
@@ -48,7 +45,7 @@ uploadTrainFluxModelScene.enter(async ctx => {
       is_ru: isRu,
     })
 
-    await fs.unlink(zipPath).catch(console.error)
+    await deleteZipFile(zipPath)
   } catch (error) {
     console.error('Error in uploadTrainFluxModelScene:', error)
     await ctx.reply(

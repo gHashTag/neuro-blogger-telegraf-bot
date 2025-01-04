@@ -1,6 +1,6 @@
 import { MyContext } from '../../interfaces'
 import {
-  trainingCostInStars,
+  calculateTrainingCostInStars,
   promptGenerationCost,
   textToImageGenerationCost,
   imageNeuroGenerationCost,
@@ -9,6 +9,7 @@ import {
   textToVideoCost,
   speechGenerationCost,
   starCost,
+  costPerStepInStars,
 } from '../../helpers/telegramStars'
 
 export async function priceCommand(ctx: MyContext) {
@@ -17,7 +18,7 @@ export async function priceCommand(ctx: MyContext) {
   const message = isRu
     ? `
     <b>💰 Стоимость всех услуг:</b>
-    - 🧠 Обучение модели: ${trainingCostInStars.toFixed(2)} ⭐️
+    - 🧠 Обучение модели за 1 шаг: ${costPerStepInStars.toFixed(2)} ⭐️
     - ✍️ Генерация промпта: ${promptGenerationCost.toFixed(2)} ⭐️
     - 🖼️ Генерация изображения из текста: ${textToImageGenerationCost.toFixed(
       2
@@ -33,7 +34,7 @@ export async function priceCommand(ctx: MyContext) {
     `
     : `
     <b>💰 Price of all services:</b>
-    - 🧠 Training model: ${trainingCostInStars.toFixed(2)} ⭐️
+    - 🧠 Training model: ${costPerStepInStars.toFixed(2)} ⭐️
     - ✍️ Prompt generation: ${promptGenerationCost.toFixed(2)} ⭐️
     - 🖼️ Text to image generation: ${textToImageGenerationCost.toFixed(2)} ⭐️
     - 🤖 Neuro-image generation: ${imageNeuroGenerationCost.toFixed(2)} ⭐️

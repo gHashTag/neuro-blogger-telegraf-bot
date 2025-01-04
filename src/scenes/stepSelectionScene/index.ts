@@ -2,6 +2,9 @@ import { Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import { getStepSelectionMenu } from '../../menu/getStepSelectionMenu'
 import { isRussian } from '@/helpers/language'
+import { handleTrainingCost } from '@/helpers/telegramStars'
+
+import { mainMenu } from '@/menu'
 
 export const stepSelectionScene = new Scenes.WizardScene<MyContext>(
   'stepSelectionScene',
@@ -9,8 +12,8 @@ export const stepSelectionScene = new Scenes.WizardScene<MyContext>(
     const isRu = isRussian(ctx)
     await ctx.reply(
       isRu
-        ? 'Выберите количество шагов для обучения модели (чем больше, тем лучше, но дороже) 1 шаг = 10 звезд:'
-        : 'Select the number of steps for model training (the more, the better, but more expensive) 1 step = 10 stars:',
+        ? 'Выберите количество шагов для обучения модели (чем больше, тем лучше, но дороже)'
+        : 'Select the number of steps for model training (the more, the better, but more expensive)',
       getStepSelectionMenu(isRu)
     )
     return ctx.wizard.next()
@@ -26,10 +29,7 @@ export const stepSelectionScene = new Scenes.WizardScene<MyContext>(
         const steps = parseInt(stepsMatch[0])
         ctx.session.steps = steps
         console.log('Parsed steps:', steps)
-
-        await ctx.reply(
-          isRu ? `Вы выбрали ${steps} шагов.` : `You selected ${steps} steps.`
-        )
+        await handleTrainingCost(ctx, steps, isRu)
 
         return ctx.scene.enter('trainFluxModelWizard')
       } else {
@@ -37,6 +37,14 @@ export const stepSelectionScene = new Scenes.WizardScene<MyContext>(
       }
     } else {
       console.log('Callback query does not contain data')
+    }
+
+    if (ctx.message && 'text' in ctx.message && ctx.message.text === 'Отмена') {
+      await ctx.reply(
+        isRu ? 'Отмена обучения модели' : 'Cancel model training',
+        mainMenu(isRu)
+      )
+      return ctx.scene.leave()
     }
 
     await ctx.reply(

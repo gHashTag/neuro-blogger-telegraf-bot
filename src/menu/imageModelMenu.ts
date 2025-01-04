@@ -7,6 +7,7 @@ export async function imageModelMenu(ctx: MyContext) {
     [Markup.button.text('Flux 1.1Pro Ultra'), Markup.button.text('SDXL')],
     [Markup.button.text('SD 3.5 Turbo'), Markup.button.text('Recraft v3')],
     [Markup.button.text('Photon')],
+    [Markup.button.text(isRu ? 'Отмена' : 'Cancel')],
     [Markup.button.text(isRu ? '🏠 Главное меню' : '🏠 Main menu')],
   ]).resize()
 

@@ -1,15 +1,14 @@
-import { Scenes } from 'telegraf'
+import { Markup, Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import {
   getUserBalance,
-  sendBalanceMessage,
   sendInsufficientStarsMessage,
-  updateUserBalance,
 } from '../../helpers/telegramStars/telegramStars'
-import { trainingCostInStars } from '../../helpers/telegramStars/calculateFinalPrice'
+
 import { isValidImage } from '../../helpers/images'
 import { isRussian } from '@/helpers/language'
 import { BOT_TOKEN } from '@/core/bot'
+import { calculateTrainingCostInStars } from '@/helpers/telegramStars/calculateFinalPrice'
 
 export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
   'trainFluxModelWizard',
@@ -63,16 +62,13 @@ export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
 
       const currentBalance = await getUserBalance(Number(targetUserId))
       console.log('Current balance:', currentBalance)
+      const trainingCostInStars = calculateTrainingCostInStars(
+        ctx.session.steps
+      )
       if (currentBalance < trainingCostInStars) {
         await sendInsufficientStarsMessage(ctx, isRu)
         return ctx.scene.leave()
       }
-
-      await sendBalanceMessage(currentBalance, trainingCostInStars, ctx, isRu)
-      await updateUserBalance(
-        Number(targetUserId),
-        currentBalance - trainingCostInStars
-      )
 
       ctx.session.images = []
       ctx.session.modelName = `${username.toLowerCase()}`
@@ -82,15 +78,14 @@ export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
 
       await ctx.reply(
         isRu
-          ? 'Пожалуйста, отправьте изображения для обучения модели (минимум 10 изображений). Отправьте /done когда закончите.'
-          : 'Please send images for model training (minimum 10 images). Send /done when finished.',
+          ? '📸 Пожалуйста, отправьте изображения для обучения модели (минимум 10 изображений). Отправьте /done когда закончите.'
+          : '📸 Please send images for model training (minimum 10 images). Send /done when finished.',
         {
           reply_markup: {
-            inline_keyboard: [
+            keyboard: [
               [
                 {
-                  text: isRu ? '❌ Отменить' : '❌ Cancel',
-                  callback_data: 'cancel_training',
+                  text: isRu ? 'Отменить' : 'Cancel',
                 },
               ],
             ],
@@ -106,14 +101,27 @@ export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
     console.log('Scene: IMAGES')
     const isRu = isRussian(ctx)
     const message = ctx.message
+    console.log('message', message)
+    if (
+      message &&
+      'text' in message &&
+      message.text === (isRu ? 'Отменить' : 'Cancel')
+    ) {
+      console.log('Received cancel command')
+      await ctx.reply(
+        isRu ? '❌ Обучение модели отменено' : '❌ Model training cancelled',
+        Markup.removeKeyboard()
+      )
+      return ctx.scene.leave()
+    }
 
     if (message && 'text' in message && message.text === '/done') {
       console.log('Received /done command')
       if (ctx.session.images.length < 10) {
         await ctx.reply(
           isRu
-            ? `Необходимо минимум 10 изображений. Сейчас: ${ctx.session.images.length}`
-            : `Minimum 10 images required. Current: ${ctx.session.images.length}`
+            ? `📸 Необходимо минимум 10 изображений. Сейчас: ${ctx.session.images.length}`
+            : `📸 Minimum 10 images required. Current: ${ctx.session.images.length}`
         )
         return
       }
