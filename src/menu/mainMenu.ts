@@ -11,15 +11,14 @@ export function mainMenu(isRu: boolean): Markup.Markup<ReplyKeyboardMarkup> {
     ],
     [
       Markup.button.text(isRu ? '🎨 Обучить FLUX' : '🎨 Train FLUX'),
-      Markup.button.text(isRu ? '📐 Изменить размер' : '📐 Change size'),
+      Markup.button.text(isRu ? '🎥 Изображение в видео' : '🎥 Image to Video'),
       Markup.button.text(
         isRu ? '🖼️ Изображение из текста' : '🖼️ Text to Image'
       ),
     ],
     [
       Markup.button.text(isRu ? '🌟 Выбор модели ИИ' : '🌟 Select AI Model'),
-
-      Markup.button.text(isRu ? '🎥 Изображение в видео' : '🎥 Image to Video'),
+      Markup.button.text(isRu ? '📐 Изменить размер' : '📐 Change size'),
       Markup.button.text(
         isRu ? '🔍 Описание из изображения' : '🔍 Image to Prompt'
       ),

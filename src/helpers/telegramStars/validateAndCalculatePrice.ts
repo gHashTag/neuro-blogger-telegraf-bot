@@ -1,5 +1,9 @@
-import { MyContext, VideoModel } from '../../interfaces'
-import { calculateFinalPrice, MODEL_PRICES } from '../../helpers/telegramStars/'
+import { MyContext } from '../../interfaces'
+import {
+  calculateFinalPrice,
+  MODEL_PRICES,
+  VideoModel,
+} from '../../helpers/telegramStars/'
 
 export async function validateAndCalculatePrice(
   videoModel: string,

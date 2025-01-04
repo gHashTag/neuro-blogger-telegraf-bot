@@ -7,7 +7,11 @@ import {
 } from '../../helpers/telegramStars/'
 import { generateTextToVideo } from '../../services/generateTextToVideo'
 import { isRussian } from '../../helpers/language'
-import { sendGenericErrorMessage, videoModelKeyboard } from '../../menu'
+import {
+  sendGenerationCancelledMessage,
+  sendGenericErrorMessage,
+  videoModelKeyboard,
+} from '../../menu'
 
 import { VideoModel, VIDEO_MODELS } from '../../interfaces'
 
@@ -77,6 +81,10 @@ export const textToVideoWizard = new Scenes.WizardScene<MyContext>(
         model => model.name
       )
       const currentBalance = await getUserBalance(ctx.from.id)
+      if (message.text === 'Отмена' || message.text === 'Cancel') {
+        await sendGenerationCancelledMessage(ctx, isRu)
+        return ctx.scene.leave()
+      }
 
       // Используем await для получения результата
       const price = await validateAndCalculatePrice(

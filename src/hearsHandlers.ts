@@ -23,7 +23,7 @@ myComposer.hears(['🆔 Создать аватар', '🆔 Create Avatar'], asy
 
 myComposer.hears(['🌟 Выбор модели ИИ', '🌟 Select AI Model'], async ctx => {
   console.log('CASE: Выбор модели ИИ')
-  await selectModelCommand(ctx)
+  await ctx.scene.enter('selectModelWizard')
 })
 
 myComposer.hears(['🎨 Обучить FLUX', '🎨 Train FLUX'], async ctx => {

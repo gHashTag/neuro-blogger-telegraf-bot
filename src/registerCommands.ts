@@ -21,6 +21,7 @@ import {
   trainFluxModelWizard,
   uploadTrainFluxModelScene,
   stepSelectionScene,
+  selectModelWizard,
 } from './scenes'
 // import { subscriptionMiddleware } from "./middleware/subscription"
 
@@ -72,6 +73,7 @@ export const stage = new Scenes.Stage<MyContext>([
   trainFluxModelWizard,
   uploadTrainFluxModelScene,
   stepSelectionScene,
+  selectModelWizard,
 ])
 
 export function registerCommands(bot: Telegraf<MyContext>) {

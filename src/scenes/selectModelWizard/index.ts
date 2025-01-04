@@ -1,7 +1,12 @@
 import { Scenes, Markup } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import { getAvailableModels } from '../../commands/selectModelCommand/getAvailableModels'
-import { sendGenericErrorMessage } from '@/menu'
+import {
+  mainMenu,
+  sendGenerationCancelledMessage,
+  sendGenericErrorMessage,
+} from '@/menu'
+import { isRussian } from '@/helpers/language'
 
 export const selectModelWizard = new Scenes.WizardScene<MyContext>(
   'selectModelWizard',
@@ -44,7 +49,7 @@ export const selectModelWizard = new Scenes.WizardScene<MyContext>(
         Markup.button.callback(isRu ? '❌ Отменить' : '❌ Cancel', 'cancel'),
       ])
 
-      const keyboard = Markup.inlineKeyboard(buttons)
+      const keyboard = Markup.keyboard(buttons)
 
       await ctx.reply(
         isRu ? '🧠 Выберите модель:' : '🧠 Select AI Model:',
@@ -63,28 +68,37 @@ export const selectModelWizard = new Scenes.WizardScene<MyContext>(
     }
   },
   async ctx => {
-    const isRu = ctx.from?.language_code === 'ru'
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const callbackQuery = ctx.callbackQuery as any
-    if (!callbackQuery || !callbackQuery.data) {
+    const isRu = isRussian(ctx)
+    const message = ctx.message
+
+    if (!message || !('text' in message)) {
       await sendGenericErrorMessage(ctx, isRu)
       return ctx.scene.leave()
     }
 
-    const data = callbackQuery.data
-    if (data === 'cancel') {
-      await ctx.reply(isRu ? '❌ Выбор отменен.' : '❌ Selection cancelled.')
+    const text = message.text
+    console.log('CASE: selectModelWizard', text)
+
+    if (text.toLowerCase() === (isRu ? '❌ отменить' : '❌ cancel')) {
+      await ctx.reply(
+        isRu ? '❌ Выбор модели отменен.' : '❌ Selection model cancelled.',
+        {
+          reply_markup: {
+            keyboard: mainMenu(isRu).reply_markup.keyboard,
+          },
+        }
+      )
       return ctx.scene.leave()
     }
 
-    if (data.startsWith('select_model_')) {
-      const selectedModel = data.replace('select_model_', '')
+    if (text.startsWith('select_model_')) {
+      const selectedModel = text.replace('select_model_', '')
+
       await ctx.reply(
         isRu
-          ? `Вы выбрали модель: ${selectedModel}`
-          : `You selected model: ${selectedModel}`
+          ? `🧠 Вы выбрали модель: ${selectedModel}`
+          : `🧠You selected model: ${selectedModel}`
       )
-      // Здесь можно добавить логику для обработки выбранной модели
     }
 
     return ctx.scene.leave()
