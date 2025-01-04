@@ -19,6 +19,7 @@ export interface SessionData {
   modelName: string
   targetUserId: number
   username: string
+  triggerWord: string
 }
 
 export interface MyWizardSession extends Scenes.WizardSessionData {
@@ -41,6 +42,7 @@ export interface MySession extends Scenes.WizardSession<MyWizardSession> {
   modelName: string
   targetUserId: number
   username: string
+  triggerWord: string
 }
 
 export interface MyContext extends Context {

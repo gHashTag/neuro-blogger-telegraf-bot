@@ -1,38 +1,40 @@
-import { supabase } from '.'
-import * as fs from 'fs/promises'
+import { supabaseAdmin } from '.'
 import { cleanupOldArchives } from './cleanupOldArchives'
-
+import { createModelTraining } from '../../services'
 export async function uploadToSupabase(
   zipPath: string,
-  userId: string
+  userId: string,
+  triggerWord: string,
+  modelName: string
 ): Promise<string> {
   try {
-    const zipBuffer = await fs.readFile(zipPath)
     const timestamp = Date.now()
     const filename = `training_images_${timestamp}.zip`
     const filePath = `training/${userId}/${filename}`
 
-    const { error } = await supabase.storage
+    const { data, error } = await supabaseAdmin.storage
       .from('ai-training')
-      .upload(filePath, zipBuffer, {
-        contentType: 'application/zip',
-        upsert: false,
-      })
+      .upload(filePath, zipPath)
 
     if (error) {
       console.error('Error uploading to Supabase:', error)
-      if (error.message.includes('row-level security policy')) {
-        throw new Error(
-          'Ошибка доступа к хранилищу. Пожалуйста, обратитесь к администратору.'
-        )
-      }
       throw error
     }
 
-    const { data: publicUrl } = supabase.storage
+    console.log('File uploaded:', data)
+    const { data: publicUrl } = supabaseAdmin.storage
       .from('ai-training')
       .getPublicUrl(filePath)
 
+    console.log('Public URL:', publicUrl)
+
+    await createModelTraining({
+      zipUrl: publicUrl.publicUrl,
+      triggerWord,
+      modelName,
+      telegram_id: userId,
+      is_ru: true,
+    })
     // Очищаем старые архивы
     await cleanupOldArchives(userId)
 

@@ -1,6 +1,5 @@
 import { Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
-import * as fs from 'fs/promises'
 import fetch from 'node-fetch'
 import {
   getUserBalance,
@@ -10,23 +9,23 @@ import {
 } from '../../helpers/telegramStars/telegramStars'
 import { trainingCostInStars } from '../../helpers/telegramStars/calculateFinalPrice'
 import { isValidImage } from '../../helpers/images'
-import { createImagesZip } from '../../helpers/images/createImagesZip'
-import { ensureSupabaseAuth } from '../../core/supabase'
-import { uploadToSupabase } from '../../core/supabase/uploadToSupabase'
-import { trainFluxModel } from '../../core/replicate/trainFluxModel'
+import { isRussian } from '@/helpers/language'
+import { BOT_TOKEN } from '@/core/bot'
 
 export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
   'trainFluxModelWizard',
   async ctx => {
-    const isRu = ctx.from?.language_code === 'ru'
+    const isRu = isRussian(ctx)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const message = ctx.message as any
+    console.log('CASE: trainFluxModelWizard', message)
     if (message && 'text' in message) {
       const args = message.text?.split(' ')
+      console.log('args', args)
       let targetUserId: string
       let username: string | undefined
 
-      if (args && args.length > 1) {
+      if (args && args.length > 1 && /^\d+$/.test(args[1])) {
         targetUserId = args[1]
         if (!/^\d+$/.test(targetUserId)) {
           await ctx.reply(
@@ -62,6 +61,7 @@ export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
       }
 
       const currentBalance = await getUserBalance(Number(targetUserId))
+      console.log('Current balance:', currentBalance)
       if (currentBalance < trainingCostInStars) {
         await sendInsufficientStarsMessage(ctx, isRu)
         return ctx.scene.leave()
@@ -77,6 +77,7 @@ export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
       ctx.session.modelName = `${username.toLowerCase()}`
       ctx.session.targetUserId = Number(targetUserId)
       ctx.session.username = username
+      ctx.session.triggerWord = `${username.toLowerCase()}`
 
       await ctx.reply(
         isRu
@@ -96,13 +97,17 @@ export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
         }
       )
     }
-    return ctx.wizard.next()
+    console.log('Proceeding to image upload step')
+    ctx.wizard.next()
+    return
   },
   async ctx => {
-    const isRu = ctx.from?.language_code === 'ru'
+    console.log('Scene: IMAGES')
+    const isRu = isRussian(ctx)
     const message = ctx.message
 
     if (message && 'text' in message && message.text === '/done') {
+      console.log('Received /done command')
       if (ctx.session.images.length < 10) {
         await ctx.reply(
           isRu
@@ -111,7 +116,10 @@ export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
         )
         return
       }
-      ctx.wizard.next()
+      console.log('Proceeding to next step')
+      ctx.scene.enter('uploadTrainFluxModelScene')
+      console.log('Moved to ZIP scene')
+      return
     }
 
     if (message && 'photo' in message) {
@@ -125,12 +133,20 @@ export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
         return
       }
 
+      console.log('File path:', file.file_path)
+
       const response = await fetch(
-        `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}/${file.file_path}`
+        `https://api.telegram.org/file/bot${BOT_TOKEN}/${file.file_path}`
       )
       const buffer = Buffer.from(await response.arrayBuffer())
 
-      if (!(await isValidImage(buffer))) {
+      console.log('Buffer length:', buffer.length)
+      console.log('Buffer content:', buffer.slice(0, 20)) // Вывод первых 20 байт
+
+      const isValid = await isValidImage(buffer)
+      console.log('Is valid image:', isValid)
+
+      if (!isValid) {
         await ctx.reply(
           isRu
             ? '❌ Файл не является корректным изображением. Пожалуйста, отправьте другое изображение.'
@@ -161,56 +177,7 @@ export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
           ? `✅ Изображение ${ctx.session.images.length} добавлено. Отправьте еще или /done для завершения`
           : `✅ Image ${ctx.session.images.length} added. Send more or /done to finish`
       )
-    }
-  },
-  async ctx => {
-    const isRu = ctx.from?.language_code === 'ru'
-    try {
-      await ctx.reply(isRu ? '⏳ Создаю архив...' : '⏳ Creating archive...')
-      const zipPath = await createImagesZip(ctx.session.images)
-
-      await ensureSupabaseAuth()
-
-      await ctx.reply(isRu ? '⏳ Загружаю архив...' : '⏳ Uploading archive...')
-      const zipUrl = await uploadToSupabase(
-        zipPath,
-        ctx.session.targetUserId.toString()
-      )
-
-      const triggerWord = `${ctx.session.username.toLocaleUpperCase()}`
-      if (!triggerWord) {
-        await ctx.reply(
-          isRu ? '❌ Некорректный trigger word' : '❌ Invalid trigger word'
-        )
-        return ctx.scene.leave()
-      }
-
-      await ctx.reply(
-        isRu ? '⏳ Начинаю обучение модели...' : '⏳ Starting model training...'
-      )
-      await ctx.reply(
-        isRu
-          ? `✅ Обучение начато!\n\nВаша модель будет натренирована через 3-6 часов. После завершения вы сможете проверить её работу, используя команду /neuro_photo.`
-          : `✅ Training started!\n\nYour model will be trained in 3-6 hours. Once completed, you can check its performance using the /neuro_photo command.`
-      )
-
-      await trainFluxModel(
-        zipUrl,
-        triggerWord,
-        ctx.session.modelName,
-        ctx.session.targetUserId.toString()
-      )
-
-      await fs.unlink(zipPath).catch(console.error)
-    } catch (error) {
-      console.error('Error in trainFluxModelWizard:', error)
-      await ctx.reply(
-        isRu
-          ? '❌ Произошла ошибка. Пожалуйста, попробуйте еще раз.'
-          : '❌ An error occurred. Please try again.'
-      )
-    } finally {
-      await ctx.scene.leave()
+      console.log(`Image ${ctx.session.images.length} added`)
     }
   }
 )

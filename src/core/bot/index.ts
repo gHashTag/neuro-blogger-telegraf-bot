@@ -15,9 +15,10 @@ if (!process.env.TELEGRAM_BOT_TOKEN_PROD) {
   throw new Error('TELEGRAM_BOT_TOKEN_PROD is not set')
 }
 
-const token = isDev
+export const BOT_TOKEN = isDev
   ? process.env.TELEGRAM_BOT_TOKEN_DEV
   : process.env.TELEGRAM_BOT_TOKEN_PROD
-const bot = new Telegraf<MyContext>(token)
+
+const bot = new Telegraf<MyContext>(BOT_TOKEN)
 
 export default bot

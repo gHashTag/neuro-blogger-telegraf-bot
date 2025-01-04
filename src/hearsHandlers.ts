@@ -28,7 +28,7 @@ myComposer.hears(['🌟 Выбор модели ИИ', '🌟 Select AI Model'], 
 
 myComposer.hears(['🎨 Обучить FLUX', '🎨 Train FLUX'], async ctx => {
   console.log('CASE: Обучить FLUX')
-  await ctx.scene.enter('trainFluxModelCommand')
+  await ctx.scene.enter('trainFluxModelWizard')
 })
 
 myComposer.hears(['📸 Нейрофото', '📸 NeuroPhoto'], async ctx => {

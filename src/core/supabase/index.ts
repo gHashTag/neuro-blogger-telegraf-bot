@@ -14,6 +14,11 @@ export const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY
 )
 
+export const supabaseAdmin = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+)
+
 export * from './checkSubscriptionByTelegramId'
 
 export * from './getAspectRatio'
@@ -33,7 +38,7 @@ export * from './updateUserVoice'
 export * from './getUserModel'
 export * from './getReferalsCount'
 export * from './cleanupOldArchives'
-export * from './createModelTraining'
+export * from './createModelSupabaseTraining'
 export * from './deleteFileFromSupabase'
 export * from './ensureSupabaseAuth'
 export * from './getLatestUserModel'
@@ -48,3 +53,4 @@ export * from './setModel'
 export * from './updateModelTraining'
 export * from './updateUserSoul'
 export * from './uploadToSupabase'
+export * from './createModelSupabaseTraining'
