@@ -1,6 +1,5 @@
 import { Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
-import fetch from 'node-fetch'
 import {
   getUserBalance,
   sendBalanceMessage,
