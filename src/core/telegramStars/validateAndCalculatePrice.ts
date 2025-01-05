@@ -1,9 +1,5 @@
 import { MyContext } from '../../interfaces'
-import {
-  calculateFinalPrice,
-  MODEL_PRICES,
-  VideoModel,
-} from '.'
+import { calculateFinalPrice, MODEL_PRICES, VideoModel } from '.'
 
 export async function validateAndCalculatePrice(
   videoModel: string,

@@ -28,7 +28,7 @@ export async function topUpBalanceCommand(ctx: MyContext) {
             ? `Купить ${starsFor1999}⭐️ за 1999 р`
             : `Buy ${starsFor1999}⭐️ for 1999 RUB`,
           web_app: {
-            url: `https://auth.robokassa.ru/merchant/Invoice/GI7GKaALEk6VRkvRNTP4rA`,
+            url: `https://auth.robokassa.ru/merchant/Invoice/mU8cKP2DlkWpXvrLJ5RDlQ`,
           },
         },
       ],
