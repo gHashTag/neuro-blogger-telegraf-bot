@@ -4,7 +4,7 @@ import {
   sendBalanceMessage,
   getUserBalance,
   validateAndCalculatePrice,
-} from '../../helpers/telegramStars/'
+} from '../../core/telegramStars'
 import { generateTextToVideo } from '../../services/generateTextToVideo'
 import { isRussian } from '../../helpers/language'
 import {

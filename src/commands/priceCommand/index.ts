@@ -10,7 +10,7 @@ import {
   speechGenerationCost,
   starCost,
   costPerStepInStars,
-} from '../../helpers/telegramStars'
+} from '../../core/telegramStars'
 
 export async function priceCommand(ctx: MyContext) {
   console.log('CASE: priceCommand')

@@ -3,8 +3,8 @@ import { MyContext } from '../../interfaces'
 import {
   sendInsufficientStarsMessage,
   getUserBalance,
-} from '../../helpers/telegramStars/'
-import { textToImageGenerationCost } from '../../helpers/telegramStars/calculateFinalPrice'
+} from '../../core/telegramStars'
+import { textToImageGenerationCost } from '../../core/telegramStars/calculateFinalPrice'
 import { sendGenerationErrorMessage } from '@/menu'
 
 export async function handleGenerateImage(

@@ -6,8 +6,8 @@ import {
   sendInsufficientStarsMessage,
   getUserBalance,
   sendBalanceMessage,
-} from '../../helpers/telegramStars/'
-import { voiceConversationCost } from '../../helpers/telegramStars/calculateFinalPrice'
+} from '../../core/telegramStars'
+import { voiceConversationCost } from '../../core/telegramStars/calculateFinalPrice'
 
 export const voiceAvatarWizard = new Scenes.WizardScene<MyContext>(
   'voiceAvatarWizard',

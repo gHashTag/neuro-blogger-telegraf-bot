@@ -6,7 +6,7 @@ import {
   imageNeuroGenerationCost,
   sendInsufficientStarsMessage,
   sendBalanceMessage,
-} from '../../helpers/telegramStars'
+} from '../../core/telegramStars'
 import { generateNeuroImage } from '../../services/generateNeuroImage'
 import { getLatestUserModel } from '../../core/supabase'
 import {

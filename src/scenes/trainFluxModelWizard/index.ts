@@ -3,12 +3,12 @@ import { MyContext } from '../../interfaces'
 import {
   getUserBalance,
   sendInsufficientStarsMessage,
-} from '../../helpers/telegramStars/telegramStars'
+} from '../../core/telegramStars/telegramStars'
 
 import { isValidImage } from '../../helpers/images'
 import { isRussian } from '@/helpers/language'
 import { BOT_TOKEN } from '@/core/bot'
-import { calculateTrainingCostInStars } from '@/helpers/telegramStars/calculateFinalPrice'
+import { calculateTrainingCostInStars } from '@/core/telegramStars/calculateFinalPrice'
 
 export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
   'trainFluxModelWizard',

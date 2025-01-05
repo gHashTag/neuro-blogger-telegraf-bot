@@ -1,4 +1,17 @@
+import {
+  rubToUsdRate,
+  starCost,
+} from '@/core/telegramStars/calculateFinalPrice'
 import { MyContext } from '../../interfaces'
+
+function calculateStars(rubAmount: number): number {
+  const usdAmount = rubAmount / rubToUsdRate
+  return Math.floor(usdAmount / starCost)
+}
+
+const starsFor1999 = calculateStars(1999)
+const starsFor5000 = calculateStars(5000)
+const starsFor10000 = calculateStars(10000)
 
 export async function topUpBalanceCommand(ctx: MyContext) {
   try {
@@ -15,16 +28,28 @@ You can now top up your balance with any number of stars and use them for variou
             [
               {
                 text: isRu
-                  ? 'Купить 3040 ⭐️ за 5000 р'
-                  : 'Buy 3040 ⭐️ for 5000 RUB',
+                  ? `Купить ${starsFor1999}⭐️ за 1999 р`
+                  : `Buy ${starsFor1999}⭐️ for 1999 RUB`,
+                web_app: {
+                  url: `https://auth.robokassa.ru/merchant/Invoice/GI7GKaALEk6VRkvRNTP4rA`,
+                },
+              },
+            ],
+            [
+              {
+                text: isRu
+                  ? `Купить ${starsFor5000}⭐️ за 5000 р`
+                  : `Buy ${starsFor5000}⭐️ for 5000 RUB`,
                 web_app: {
                   url: `https://auth.robokassa.ru/merchant/Invoice/lm8bmBTG0Eet_kh7ITXp-w`,
                 },
               },
+            ],
+            [
               {
                 text: isRu
-                  ? 'Купить 6080 ⭐️ за 10000 р'
-                  : 'Buy 6080 ⭐️ for 10000 RUB',
+                  ? `Купить ${starsFor10000}⭐️ за 10000 р`
+                  : `Buy ${starsFor10000}⭐️ for 10000 RUB`,
                 web_app: {
                   url: `https://auth.robokassa.ru/merchant/Invoice/I3IwAR8z-E67RwCPE-ag6Q`,
                 },

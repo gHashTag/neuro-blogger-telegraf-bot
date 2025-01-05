@@ -1,4 +1,4 @@
-import { getUserBalance } from '../../helpers/telegramStars'
+import { getUserBalance } from '../../core/telegramStars'
 import { MyContext } from '../../interfaces'
 
 export async function balanceCommand(ctx: MyContext) {

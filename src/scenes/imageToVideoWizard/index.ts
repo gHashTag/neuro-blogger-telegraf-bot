@@ -4,7 +4,7 @@ import {
   sendBalanceMessage,
   validateAndCalculatePrice,
   VideoModel,
-} from '../../helpers/telegramStars'
+} from '../../core/telegramStars'
 import { generateImageToVideo } from '../../services/generateImageToVideo'
 import { MyContext, VIDEO_MODELS } from '../../interfaces'
 import {

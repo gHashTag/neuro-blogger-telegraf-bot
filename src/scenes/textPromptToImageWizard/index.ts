@@ -5,7 +5,7 @@ import {
   sendBalanceMessage,
   sendInsufficientStarsMessage,
   textToImageGenerationCost,
-} from '../../helpers/telegramStars'
+} from '../../core/telegramStars'
 import { isRussian } from '../../helpers/language'
 import { generateImage } from '../../services/generateReplicateImage'
 import {

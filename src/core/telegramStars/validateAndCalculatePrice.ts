@@ -3,7 +3,7 @@ import {
   calculateFinalPrice,
   MODEL_PRICES,
   VideoModel,
-} from '../../helpers/telegramStars/'
+} from '.'
 
 export async function validateAndCalculatePrice(
   videoModel: string,

@@ -1,7 +1,8 @@
 export type VideoModel = 'minimax' | 'haiper' | 'ray' | 'i2vgen-xl'
 
 // Стоимость одной звезды
-export const starCost = 0.016
+export const starCost = 0.016 // USD
+export const rubToUsdRate = 100 // 100 RUB = 1 USD
 
 // Определяем базовую стоимость для каждой модели
 export const MODEL_PRICES: Record<VideoModel, number> = {

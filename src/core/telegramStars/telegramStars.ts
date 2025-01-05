@@ -1,5 +1,5 @@
 import { mainMenu } from '../../menu'
-import { supabase } from '../../core/supabase'
+import { supabase } from '../supabase'
 import { MyContext } from '../../interfaces'
 
 export async function refundUser(ctx: MyContext, paymentAmount: number) {

@@ -4,7 +4,7 @@ import {
   getUserBalance,
   imageToPromptCost,
   sendBalanceMessage,
-} from '../../helpers/telegramStars'
+} from '../../core/telegramStars'
 import { generateImageToPrompt } from '../../services/generateImageToPrompt'
 
 if (!process.env.HUGGINGFACE_TOKEN) {

@@ -6,7 +6,7 @@ import {
   getUserBalance,
   imageNeuroGenerationCost,
   sendInsufficientStarsMessage,
-} from '../../helpers/telegramStars'
+} from '../../core/telegramStars'
 import { sendGenerationErrorMessage } from '@/menu'
 
 export async function handleNeuroGenerate(

@@ -6,7 +6,7 @@ import {
   sendBalanceMessage,
   sendInsufficientStarsMessage,
   getUserBalance,
-} from '../../helpers/telegramStars/'
+} from '../../core/telegramStars'
 import { generateTextToSpeech } from '../../services/generateTextToSpeech'
 import { isRussian } from '@/helpers'
 
