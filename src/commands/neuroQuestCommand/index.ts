@@ -45,6 +45,8 @@ export async function neuroQuestCommand(ctx: MyContext) {
 
 💡 Каждый уровень даст вам навыки для создания профессионального контента.
 
+🎁 На ваш баланс начислено 100⭐️ звезд для пользования ботом.
+
 Готовы стать профи в создании контента?`
         : `👋 Hi! I'm NeuroBlogger - your personal assistant for social media content creation.
 
@@ -79,6 +81,8 @@ export async function neuroQuestCommand(ctx: MyContext) {
 • Generating sales copy
 
 💡 Each level will give you skills for creating professional content.
+
+🎁 100⭐️ stars have been credited to your balance for using the bot.
 
 Ready to become a content creation pro?`,
     }

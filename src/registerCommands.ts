@@ -119,13 +119,13 @@ export function registerCommands(bot: Telegraf<MyContext>) {
     await neuroQuestCommand(ctx)
   })
 
-  startScene.on('message', ctx => {
-    console.log('CASE: startScene', ctx.message)
-  })
+  // startScene.on('message', ctx => {
+  //   console.log('CASE: startScene', ctx.message)
+  // })
 
-  neuroQuestScene.on('message', ctx => {
-    console.log('CASE: neuroQuestScene', ctx.message)
-  })
+  // neuroQuestScene.on('message', ctx => {
+  //   console.log('CASE: neuroQuestScene', ctx.message)
+  // })
 
   myComposer.command('menu', async ctx => {
     console.log('CASE: myComposer.command menu')

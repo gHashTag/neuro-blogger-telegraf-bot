@@ -117,9 +117,13 @@ export const subscriptionMiddleware = async (
           telegram_id: inviterTelegramId.toString(),
           amount: 100,
         })
-        // await pulse(ctx, 'createUser', 'invite', 'invite')
       }
     }
+    await bot.telegram.sendMessage(
+      '@neuro_coder_privat',
+      `💵 Новый пользователь зарегистрировался в боте: @${finalUsername}.️`
+    )
+
     await next()
   } catch (error) {
     console.error('Critical error in subscriptionMiddleware:', error)

@@ -1,14 +1,13 @@
-import express from 'express'
-import { Telegraf } from 'telegraf'
+import express, { Application } from 'express'
 import { supabase } from './core/supabase'
+import bot from './core/bot'
 
 if (!process.env.BOT_TOKEN) {
   throw new Error('BOT_TOKEN is not set')
 }
 // Create a new bot instance
-const bot = new Telegraf(process.env.BOT_TOKEN)
 
-const app = express()
+const app = express() as Application
 const port = process.env.PORT || 3000
 
 app.use(express.json())

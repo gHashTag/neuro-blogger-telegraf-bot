@@ -1,6 +1,8 @@
+import bot from '@/core/bot'
 import { answerAi } from '../../core/openai/requests'
 import { getUserModel, getUserData } from '../../core/supabase'
 import { MyTextMessageContext } from '../../interfaces'
+import { isRussian } from '@/helpers'
 
 export async function handleTextMessage(ctx: MyTextMessageContext) {
   console.log('CASE: handleTextMessage')
@@ -31,6 +33,7 @@ export async function handleTextMessage(ctx: MyTextMessageContext) {
       )
       return
     }
+    await bot.telegram.sendChatAction(ctx.chat.id, 'typing')
 
     const response = await answerAi(
       userModel,
