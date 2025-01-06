@@ -17,6 +17,7 @@ export const answerAi = async (
   const systemPrompt = `Respond in the language: ${languageCode} You communicate with: ${JSON.stringify(
     userData
   )}`
+
   const response = await openai.chat.completions.create({
     model: model,
     messages: [

@@ -6,7 +6,7 @@ import { isRussian } from '@/helpers'
 
 export async function handleTextMessage(ctx: MyTextMessageContext) {
   console.log('CASE: handleTextMessage')
-
+  const isRu = isRussian(ctx)
   if (ctx.message?.text?.startsWith('/')) {
     console.log('SKIP')
     return
@@ -18,7 +18,7 @@ export async function handleTextMessage(ctx: MyTextMessageContext) {
 
     if (!userData) {
       await ctx.reply(
-        ctx.from?.language_code === 'ru'
+        isRu
           ? 'Не удалось получить данные пользователя'
           : 'Failed to get user data'
       )
@@ -27,7 +27,7 @@ export async function handleTextMessage(ctx: MyTextMessageContext) {
 
     if (!ctx.message?.text) {
       await ctx.reply(
-        ctx.from?.language_code === 'ru'
+        isRu
           ? 'Не удалось получить текст сообщения'
           : 'Failed to get message text'
       )
@@ -39,12 +39,12 @@ export async function handleTextMessage(ctx: MyTextMessageContext) {
       userModel,
       userData,
       ctx.message.text,
-      ctx.from?.language_code || 'en'
+      isRu ? 'ru' : 'en'
     )
 
     if (!response) {
       await ctx.reply(
-        ctx.from?.language_code === 'ru'
+        isRu
           ? 'Не удалось получить ответ от GPT. Пожалуйста, попробуйте позже.'
           : 'Failed to get response from GPT. Please try again later.'
       )
@@ -56,7 +56,7 @@ export async function handleTextMessage(ctx: MyTextMessageContext) {
   } catch (error) {
     console.error('Error in GPT response:', error)
     await ctx.reply(
-      ctx.from?.language_code === 'ru'
+      isRu
         ? 'Произошла ошибка при обработке запроса'
         : 'An error occurred while processing your request'
     )
