@@ -1,5 +1,10 @@
 import { Markup } from 'telegraf'
-import { createUser, getTelegramIdByUserId, getUid } from '@/core/supabase'
+import {
+  createUser,
+  getTelegramIdByUserId,
+  getUid,
+  getUserByTelegramId,
+} from '@/core/supabase'
 import { MyContext } from '@/interfaces' // Удален MyTextMessageContext
 import bot from '@/core/bot'
 import { getUserBalance, incrementBalance } from '@/helpers'
@@ -79,6 +84,13 @@ export const subscriptionMiddleware = async (
           ),
         ]).reply_markup,
       })
+      return
+    }
+
+    // Проверяем, существует ли пользователь
+    const existingUser = await getUserByTelegramId(telegram_id.toString())
+    if (existingUser) {
+      console.log('User already registered:', telegram_id)
       return
     }
 
