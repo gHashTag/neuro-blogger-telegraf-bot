@@ -27,9 +27,7 @@ export async function topUpBalanceCommand(ctx: MyContext) {
           text: isRu
             ? `Купить ${starsFor1999}⭐️ за 1999 р`
             : `Buy ${starsFor1999}⭐️ for 1999 RUB`,
-          web_app: {
-            url: `https://auth.robokassa.ru/merchant/Invoice/aGuNEDxGvEmFhI9CFLQ-AQ`,
-          },
+          url: `https://auth.robokassa.ru/merchant/Invoice/aGuNEDxGvEmFhI9CFLQ-AQ`,
         },
       ],
       [
@@ -37,9 +35,7 @@ export async function topUpBalanceCommand(ctx: MyContext) {
           text: isRu
             ? `Купить ${starsFor5000}⭐️ за 5000 р`
             : `Buy ${starsFor5000}⭐️ for 5000 RUB`,
-          web_app: {
-            url: `https://auth.robokassa.ru/merchant/Invoice/tmejnivH6kuGz-ZPSs0DKg`,
-          },
+          url: `https://auth.robokassa.ru/merchant/Invoice/tmejnivH6kuGz-ZPSs0DKg`,
         },
       ],
       [
@@ -47,9 +43,7 @@ export async function topUpBalanceCommand(ctx: MyContext) {
           text: isRu
             ? `Купить ${starsFor10000}⭐️ за 10000 р`
             : `Buy ${starsFor10000}⭐️ for 10000 RUB`,
-          web_app: {
-            url: `https://auth.robokassa.ru/merchant/Invoice/cESGr7zzsUGqlRm5u8dPlQ`,
-          },
+          url: `https://auth.robokassa.ru/merchant/Invoice/cESGr7zzsUGqlRm5u8dPlQ`,
         },
       ],
     ]
@@ -60,9 +54,7 @@ export async function topUpBalanceCommand(ctx: MyContext) {
           text: isRu
             ? `Купить ${starsFor10}⭐️ за 10 р`
             : `Buy ${starsFor10}⭐️ for 10 RUB`,
-          web_app: {
-            url: 'https://auth.robokassa.ru/merchant/Invoice/R2Gm8t1jU0WcBqcrAwbj4Q',
-          },
+          url: 'https://auth.robokassa.ru/merchant/Invoice/R2Gm8t1jU0WcBqcrAwbj4Q',
         },
       ])
     }
@@ -70,11 +62,9 @@ export async function topUpBalanceCommand(ctx: MyContext) {
     inlineKeyboard.push([
       {
         text: isRu ? 'Что такое звезды❓' : 'What are stars❓',
-        web_app: {
-          url: `https://telegram.org/blog/telegram-stars/${
-            isRu ? 'ru' : 'en'
-          }?ln=a`,
-        },
+        url: `https://telegram.org/blog/telegram-stars/${
+          isRu ? 'ru' : 'en'
+        }?ln=a`,
       },
     ])
 
