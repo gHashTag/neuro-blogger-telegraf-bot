@@ -28,7 +28,7 @@ export async function topUpBalanceCommand(ctx: MyContext) {
             ? `Купить ${starsFor1999}⭐️ за 1999 р`
             : `Buy ${starsFor1999}⭐️ for 1999 RUB`,
           web_app: {
-            url: `https://auth.robokassa.ru/merchant/Invoice/mU8cKP2DlkWpXvrLJ5RDlQ`,
+            url: `https://auth.robokassa.ru/merchant/Invoice/aGuNEDxGvEmFhI9CFLQ-AQ`,
           },
         },
       ],
@@ -38,7 +38,7 @@ export async function topUpBalanceCommand(ctx: MyContext) {
             ? `Купить ${starsFor5000}⭐️ за 5000 р`
             : `Buy ${starsFor5000}⭐️ for 5000 RUB`,
           web_app: {
-            url: `https://auth.robokassa.ru/merchant/Invoice/lm8bmBTG0Eet_kh7ITXp-w`,
+            url: `https://auth.robokassa.ru/merchant/Invoice/tmejnivH6kuGz-ZPSs0DKg`,
           },
         },
       ],
@@ -48,7 +48,7 @@ export async function topUpBalanceCommand(ctx: MyContext) {
             ? `Купить ${starsFor10000}⭐️ за 10000 р`
             : `Buy ${starsFor10000}⭐️ for 10000 RUB`,
           web_app: {
-            url: `https://auth.robokassa.ru/merchant/Invoice/I3IwAR8z-E67RwCPE-ag6Q`,
+            url: `https://auth.robokassa.ru/merchant/Invoice/cESGr7zzsUGqlRm5u8dPlQ`,
           },
         },
       ],

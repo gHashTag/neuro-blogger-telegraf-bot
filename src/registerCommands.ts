@@ -1,4 +1,4 @@
-import { Telegraf, Scenes, session } from 'telegraf'
+import { Telegraf, Scenes, session, Middleware } from 'telegraf'
 import { MyContext, MySession } from './interfaces'
 
 import { startCommand } from './commands/startCommand'
@@ -25,7 +25,7 @@ import {
   voiceAvatarWizard,
   textToSpeechWizard,
 } from './scenes'
-// import { subscriptionMiddleware } from "./middleware/subscription"
+import { subscriptionMiddleware } from './middlewares/subscription'
 
 import { setupLevelHandlers } from './handlers/setupLevelHandlers'
 import { menuCommand } from './commands/menuCommand'
@@ -109,7 +109,7 @@ export function registerCommands(bot: Telegraf<MyContext>) {
     })
   )
 
-  // bot.use(subscriptionMiddleware as Middleware<MyContext>)
+  bot.use(subscriptionMiddleware as Middleware<MyContext>)
 
   setupLevelHandlers(bot as Telegraf<MyContext>)
 
