@@ -117,7 +117,7 @@ export const subscriptionMiddleware = async (
           telegram_id: inviterTelegramId.toString(),
           amount: 100,
         })
-        await pulse(ctx, 'createUser', 'invite', 'invite')
+        // await pulse(ctx, 'createUser', 'invite', 'invite')
       }
     }
     await next()
