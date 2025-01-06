@@ -3,6 +3,7 @@ import { answerAi } from '../../core/openai/requests'
 import { getUserModel, getUserData } from '../../core/supabase'
 import { MyTextMessageContext } from '../../interfaces'
 import { isRussian } from '@/helpers'
+import { Markup } from 'telegraf'
 
 export async function handleTextMessage(ctx: MyTextMessageContext) {
   console.log('CASE: handleTextMessage')
@@ -51,7 +52,7 @@ export async function handleTextMessage(ctx: MyTextMessageContext) {
       return
     }
 
-    await ctx.reply(response)
+    await ctx.reply(response, Markup.removeKeyboard())
     return
   } catch (error) {
     console.error('Error in GPT response:', error)
