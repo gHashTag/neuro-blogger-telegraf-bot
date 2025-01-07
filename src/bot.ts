@@ -65,6 +65,7 @@ bot.command('buy', async ctx => {
 
 bot.action(/top_up_\d+/, async ctx => {
   const data = ctx.match[0]
+  console.log('data', data)
   const isRu = ctx.from?.language_code === 'ru'
   await handleBuy({ ctx, data, isRu })
 })
@@ -96,12 +97,12 @@ bot.on('successful_payment', async ctx => {
 
   await ctx.reply(
     isRu
-      ? `💫 Ваш баланс пополнен на ${stars} звезд! (Стоимость звезды: $${starCost})`
-      : `💫 Your balance has been replenished by ${stars} stars! (Cost per star: $${starCost})`
+      ? `💫 Ваш баланс пополнен на ${stars} звезд!`
+      : `💫 Your balance has been replenished by ${stars} stars!`
   )
   await ctx.telegram.sendMessage(
     '-1001978334539',
-    `💫 Пользователь @${ctx.from.username} (ID: ${ctx.from.id}) пополнил баланс на ${stars} звезд! (Стоимость звезды: $${starCost})`
+    `💫 Пользователь @${ctx.from.username} (ID: ${ctx.from.id}) пополнил баланс на ${stars} звезд!`
   )
 })
 

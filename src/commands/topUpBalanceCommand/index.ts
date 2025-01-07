@@ -4,6 +4,8 @@ import {
   starCost,
 } from '@/core/telegramStars/calculateFinalPrice'
 
+export const starAmounts = [10, 50, 100, 500, 1000, 2000, 5000, 10000, 20000]
+
 function calculateStars(rubAmount: number): number {
   const usdAmount = rubAmount / rubToUsdRate
   return Math.floor(usdAmount / starCost)

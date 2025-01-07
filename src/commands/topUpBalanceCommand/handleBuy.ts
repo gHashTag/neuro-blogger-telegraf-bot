@@ -1,4 +1,5 @@
 import { Context } from 'telegraf'
+import { starAmounts } from '.'
 
 interface BuyParams {
   ctx: Context
@@ -8,13 +9,6 @@ interface BuyParams {
 
 export async function handleBuy({ ctx, data, isRu }: BuyParams) {
   try {
-    const starAmounts = [
-      10, 50, 100, 500, 1000, 2000, 5000, 10000, 20000, 50000,
-    ]
-
-    console.log('data', data)
-    console.log('starAmounts', starAmounts)
-
     for (const amount of starAmounts) {
       if (data.endsWith(`top_up_${amount}`)) {
         await ctx.replyWithInvoice({

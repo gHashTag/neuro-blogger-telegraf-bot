@@ -50,7 +50,11 @@ async function incrementBalance({
     throw new Error('Не удалось получить текущий баланс')
   }
 
-  const newBalance = data.balance + amount
+  console.log('data', data)
+
+  const newBalance = data.balance + Number(amount)
+
+  console.log('newBalance', newBalance)
 
   const { error: updateError } = await supabase
     .from('users')
