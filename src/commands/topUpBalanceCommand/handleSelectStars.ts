@@ -1,4 +1,5 @@
 import { Context } from 'telegraf'
+import { starAmounts } from '.'
 
 interface BuyParams {
   ctx: Context
@@ -7,18 +8,31 @@ interface BuyParams {
 
 export async function handleSelectStars({ ctx, isRu }: BuyParams) {
   try {
-    const starAmounts = [
-      10, 50, 100, 500, 1000, 2000, 5000, 10000, 20000, 50000,
-    ]
-
-    const inlineKeyboard = starAmounts.map(amount => {
-      return [
+    const inlineKeyboard = []
+    for (let i = 0; i < starAmounts.length; i += 3) {
+      const row = [
         {
-          text: isRu ? `Купить ${amount}⭐️` : `Buy ${amount}⭐️`,
-          callback_data: `top_up_${amount}`,
+          text: isRu ? `${starAmounts[i]}⭐️` : `${starAmounts[i]}⭐️`,
+          callback_data: `top_up_${starAmounts[i]}`,
         },
       ]
-    })
+
+      if (starAmounts[i + 1] !== undefined) {
+        row.push({
+          text: isRu ? `${starAmounts[i + 1]}⭐️` : `${starAmounts[i + 1]}⭐️`,
+          callback_data: `top_up_${starAmounts[i + 1]}`,
+        })
+      }
+
+      if (starAmounts[i + 2] !== undefined) {
+        row.push({
+          text: isRu ? `${starAmounts[i + 2]}⭐️` : `${starAmounts[i + 2]}⭐️`,
+          callback_data: `top_up_${starAmounts[i + 2]}`,
+        })
+      }
+
+      inlineKeyboard.push(row)
+    }
 
     await ctx.reply(
       isRu
