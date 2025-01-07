@@ -1,4 +1,4 @@
-import { Scenes } from 'telegraf'
+import { Scenes, Markup } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import { updateUserSoul } from '../../core/supabase'
 import { isRussian } from '../../helpers/language'
@@ -15,18 +15,35 @@ export const avatarWizard = new Scenes.WizardScene<MyContext>(
     await ctx.reply(
       isRu
         ? '👋 Привет, как называется ваша компания?'
-        : '👋 Hello, what is your company name?'
+        : '👋 Hello, what is your company name?',
+      Markup.keyboard([isRu ? 'Отмена' : 'Cancel'])
+        .oneTime()
+        .resize()
     )
     return ctx.wizard.next()
   },
 
   async ctx => {
     if (ctx.message && 'text' in ctx.message) {
+      if (
+        ctx.message.text.toLowerCase() ===
+        (isRussian(ctx) ? 'отмена' : 'cancel')
+      ) {
+        await ctx.reply(
+          isRussian(ctx) ? 'Процесс отменён.' : 'Process cancelled.'
+        )
+        return ctx.scene.leave()
+      }
       ;(ctx.wizard.state as WizardSessionData).company = ctx.message.text
       await ctx.reply(
         ctx.from?.language_code === 'ru'
           ? '💼 Какая у вас должность?'
-          : '💼 What is your position?'
+          : '💼 What is your position?',
+        Markup.keyboard([
+          ctx.from?.language_code === 'ru' ? 'Отмена' : 'Cancel',
+        ])
+          .oneTime()
+          .resize()
       )
       return ctx.wizard.next()
     }
@@ -39,11 +56,25 @@ export const avatarWizard = new Scenes.WizardScene<MyContext>(
   },
   async ctx => {
     if (ctx.message && 'text' in ctx.message) {
+      if (
+        ctx.message.text.toLowerCase() ===
+        (isRussian(ctx) ? 'отмена' : 'cancel')
+      ) {
+        await ctx.reply(
+          isRussian(ctx) ? 'Процесс отменён.' : 'Process cancelled.'
+        )
+        return ctx.scene.leave()
+      }
       ;(ctx.wizard.state as WizardSessionData).position = ctx.message.text
       await ctx.reply(
         ctx.from?.language_code === 'ru'
           ? '🛠️ Какие у тебя навыки?'
-          : '🛠️ What are your skills?'
+          : '🛠️ What are your skills?',
+        Markup.keyboard([
+          ctx.from?.language_code === 'ru' ? 'Отмена' : 'Cancel',
+        ])
+          .oneTime()
+          .resize()
       )
       return ctx.wizard.next()
     }
@@ -56,6 +87,15 @@ export const avatarWizard = new Scenes.WizardScene<MyContext>(
   },
   async ctx => {
     if (ctx.message && 'text' in ctx.message) {
+      if (
+        ctx.message.text.toLowerCase() ===
+        (isRussian(ctx) ? 'отмена' : 'cancel')
+      ) {
+        await ctx.reply(
+          isRussian(ctx) ? '❌ Процесс отменён.' : '❌Process cancelled.'
+        )
+        return ctx.scene.leave()
+      }
       const isRu = isRussian(ctx)
       const skills = ctx.message.text
       const { company, position } = ctx.wizard.state as WizardSessionData
@@ -71,7 +111,6 @@ export const avatarWizard = new Scenes.WizardScene<MyContext>(
           }
         )
       } else {
-        const isRu = isRussian(ctx)
         await ctx.reply(
           isRu
             ? '❌ Ошибка: не удалось отправить информацию аватару'

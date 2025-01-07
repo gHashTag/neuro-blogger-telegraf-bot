@@ -8,7 +8,7 @@ import {
 import { MyContext } from '@/interfaces' // Удален MyTextMessageContext
 import bot from '@/core/bot'
 import { getUserBalance, incrementBalance } from '@/helpers'
-import { pulse } from '@/helpers/pulse'
+
 import { isRussian } from '@/helpers/language'
 
 // Проверка подписки с использованием chat-members

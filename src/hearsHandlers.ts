@@ -15,7 +15,7 @@ import { mainMenu } from './menu'
 
 const myComposer = new Composer<MyContext>()
 
-myComposer.hears(['🆔 Создать аватар', '🆔 Create Avatar'], async ctx => {
+myComposer.hears(['🧠 Мозг аватара', '🧠 Avatar Brain'], async ctx => {
   console.log('CASE: Создать аватар')
   await ctx.scene.enter('avatarWizard')
 })
@@ -26,9 +26,9 @@ myComposer.hears(['🌟 Выбор модели ИИ', '🌟 Select AI Model'], 
 })
 
 myComposer.hears(
-  ['🎨 Обучить FLUX для аватара', '🎨 Train FLUX for avatar'],
+  ['🤖 Цифровое тело аватара', '🤖 Digital Avatar Body'],
   async ctx => {
-    console.log('CASE: Обучить FLUX')
+    console.log('CASE: Цифровое тело аватара')
     await ctx.scene.enter('stepSelectionScene')
   }
 )
