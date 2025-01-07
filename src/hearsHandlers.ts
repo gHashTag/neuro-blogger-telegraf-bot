@@ -208,8 +208,14 @@ myComposer.hears(
     ctx.session.selectedModel = model
 
     await ctx.reply(
-      isRu ? `Вы выбрали модель: ${model}` : `You selected model: ${model}`
+      isRu ? `Вы выбрали модель: ${model}` : `You selected model: ${model}`,
+      {
+        reply_markup: {
+          remove_keyboard: true,
+        },
+      }
     )
+
     await ctx.scene.enter('textPromptToImageWizard')
   }
 )
