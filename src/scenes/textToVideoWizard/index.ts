@@ -4,6 +4,7 @@ import {
   sendBalanceMessage,
   getUserBalance,
   validateAndCalculatePrice,
+  VideoModel,
 } from '../../core/telegramStars'
 import { generateTextToVideo } from '../../services/generateTextToVideo'
 import { isRussian } from '../../helpers/language'
@@ -13,7 +14,7 @@ import {
   videoModelKeyboard,
 } from '../../menu'
 
-import { VideoModel, VIDEO_MODELS } from '../../interfaces'
+import { VIDEO_MODELS } from '../../interfaces'
 
 export const textToVideoWizard = new Scenes.WizardScene<MyContext>(
   'textToVideoWizard',
@@ -77,9 +78,7 @@ export const textToVideoWizard = new Scenes.WizardScene<MyContext>(
             : 'textToVideoWizard: Could not identify user'
         )
       const videoModel = message.text?.toLowerCase()
-      const availableModels: VideoModel[] = VIDEO_MODELS.map(
-        model => model.name
-      )
+      const availableModels = VIDEO_MODELS.map(model => model.name)
       const currentBalance = await getUserBalance(ctx.from.id)
       if (message.text === 'Отмена' || message.text === 'Cancel') {
         await sendGenerationCancelledMessage(ctx, isRu)
@@ -106,10 +105,7 @@ export const textToVideoWizard = new Scenes.WizardScene<MyContext>(
       await ctx.reply(
         isRu
           ? 'Пожалуйста, отправьте текстовое описание'
-          : 'Please send a text description',
-        {
-          reply_markup: { force_reply: true },
-        }
+          : 'Please send a text description'
       )
       return ctx.wizard.next()
     } else {

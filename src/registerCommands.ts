@@ -1,5 +1,5 @@
 import { Telegraf, Scenes, session, Middleware } from 'telegraf'
-import { MyContext, MySession } from './interfaces'
+import { MyContext } from './interfaces'
 
 import { startCommand } from './commands/startCommand'
 import { neuroQuestCommand } from './commands/neuroQuestCommand'
@@ -33,6 +33,8 @@ import { inviteCommand } from './commands/inviteCommand'
 
 import { priceCommand } from './commands/priceCommand'
 import myComposer from './hearsHandlers'
+import { handleBuy } from './commands/topUpBalanceCommand/handleBuy'
+import { defaultSession } from './store'
 
 export const startScene = new Scenes.WizardScene<MyContext>(
   'startCommand',
@@ -81,33 +83,7 @@ export const stage = new Scenes.Stage<MyContext>([
 ])
 
 export function registerCommands(bot: Telegraf<MyContext>) {
-  bot.use(
-    session({
-      defaultSession: (): MySession => ({
-        selectedModel: '',
-        prompt: '',
-        selectedSize: '9:16',
-        userModel: {
-          model_name: '',
-          trigger_word: '',
-          model_url: 'i/i:i',
-        },
-        numImages: 1,
-        telegram_id: 0,
-        mode: 'text_to_image',
-        attempts: 0,
-        videoModel: '',
-        imageUrl: '',
-        paymentAmount: 0,
-        images: [],
-        modelName: '',
-        targetUserId: 0,
-        username: '',
-        triggerWord: '',
-        steps: 0,
-      }),
-    })
-  )
+  bot.use(session({ defaultSession }))
 
   bot.use(subscriptionMiddleware as Middleware<MyContext>)
 
@@ -126,6 +102,13 @@ export function registerCommands(bot: Telegraf<MyContext>) {
   // neuroQuestScene.on('message', ctx => {
   //   console.log('CASE: neuroQuestScene', ctx.message)
   // })
+
+  bot.command('buystars', async ctx => {
+    const isRu = ctx.from?.language_code === 'ru'
+    const data = 'top_up_5000'
+
+    await handleBuy({ ctx, data, isRu })
+  })
 
   myComposer.command('menu', async ctx => {
     console.log('CASE: myComposer.command menu')

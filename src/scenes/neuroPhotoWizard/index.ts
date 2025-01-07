@@ -63,7 +63,7 @@ export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
 
     ctx.session.mode = 'neuro_photo'
 
-    await sendPhotoDescriptionRequest(ctx, isRu)
+    await sendPhotoDescriptionRequest(ctx, isRu, 'neuro_photo')
 
     return ctx.wizard.next()
   },

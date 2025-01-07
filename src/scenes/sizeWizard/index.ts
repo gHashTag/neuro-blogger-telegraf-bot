@@ -1,6 +1,7 @@
 import { Markup, Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import { isRussian } from '../../helpers/language'
+import { handleSizeSelection } from '../../handlers'
 
 export const sizeWizard = new Scenes.WizardScene<MyContext>(
   'sizeWizard',
@@ -11,7 +12,9 @@ export const sizeWizard = new Scenes.WizardScene<MyContext>(
       ['4:3', '5:4', '1:1'],
       ['4:5', '3:4', '2:3'],
       ['9:16', '9:21'],
-    ]).resize()
+    ])
+      .resize()
+      .oneTime()
 
     // Отправляем сообщение с клавиатурой
     await ctx.reply(
@@ -22,5 +25,12 @@ export const sizeWizard = new Scenes.WizardScene<MyContext>(
     )
 
     return ctx.wizard.next()
+  },
+  async ctx => {
+    if (!ctx.message || !('text' in ctx.message)) {
+      return ctx.scene.leave()
+    }
+    const size = ctx.message.text
+    await handleSizeSelection(ctx, size)
   }
 )

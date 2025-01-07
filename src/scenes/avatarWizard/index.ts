@@ -30,7 +30,7 @@ export const avatarWizard = new Scenes.WizardScene<MyContext>(
         (isRussian(ctx) ? 'отмена' : 'cancel')
       ) {
         await ctx.reply(
-          isRussian(ctx) ? 'Процесс отменён.' : 'Process cancelled.'
+          isRussian(ctx) ? '❌ Процесс отменён.' : '❌ Process cancelled.'
         )
         return ctx.scene.leave()
       }

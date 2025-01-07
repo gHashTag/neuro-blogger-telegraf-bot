@@ -3,6 +3,7 @@ import { MyContext } from '../../interfaces'
 import { getAvailableModels } from '../../commands/selectModelCommand/getAvailableModels'
 import { mainMenu, sendGenericErrorMessage } from '@/menu'
 import { isRussian } from '@/helpers/language'
+import { setModel } from '@/core/supabase'
 
 export const selectModelWizard = new Scenes.WizardScene<MyContext>(
   'selectModelWizard',
@@ -72,10 +73,10 @@ export const selectModelWizard = new Scenes.WizardScene<MyContext>(
       return ctx.scene.leave()
     }
 
-    const text = message.text
-    console.log('CASE: selectModelWizard', text)
+    const model = message.text
+    console.log('CASE: selectModelWizard', model)
 
-    if (text.toLowerCase() === (isRu ? '❌ отменить' : '❌ cancel')) {
+    if (model.toLowerCase() === (isRu ? '❌ отменить' : '❌ cancel')) {
       await ctx.reply(
         isRu ? '❌ Выбор модели отменен.' : '❌ Selection model cancelled.',
         {
@@ -87,15 +88,18 @@ export const selectModelWizard = new Scenes.WizardScene<MyContext>(
       return ctx.scene.leave()
     }
 
-    if (text.startsWith('select_model_')) {
-      const selectedModel = text.replace('select_model_', '')
+    await setModel(ctx.from.id.toString(), model)
 
-      await ctx.reply(
-        isRu
-          ? `🧠 Вы выбрали модель: ${selectedModel}`
-          : `🧠You selected model: ${selectedModel}`
-      )
-    }
+    await ctx.reply(
+      isRu
+        ? `✅ Модель успешно изменена на ${model}`
+        : `✅ Model successfully changed to ${model}`,
+      {
+        reply_markup: {
+          remove_keyboard: true,
+        },
+      }
+    )
 
     return ctx.scene.leave()
   }

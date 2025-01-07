@@ -2,6 +2,7 @@ import { Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import { saveUserEmail } from '../../core/supabase'
 import { topUpBalanceCommand } from '../../commands/topUpBalanceCommand'
+import { mainMenu } from '@/menu/mainMenu'
 
 export const emailWizard = new Scenes.WizardScene<MyContext>(
   'emailWizard',
@@ -14,8 +15,20 @@ export const emailWizard = new Scenes.WizardScene<MyContext>(
     await ctx.reply(
       isRu
         ? '👉 Для формирования счета напишите ваш E-mail.'
-        : '👉 To generate an invoice, please provide your E-mail.'
+        : '👉 To generate an invoice, please provide your E-mail.',
+      {
+        reply_markup: {
+          keyboard: [
+            [
+              {
+                text: isRu ? 'Отмена' : 'Cancel',
+              },
+            ],
+          ],
+        },
+      }
     )
+
     return ctx.wizard.next()
   },
   async ctx => {
@@ -24,6 +37,19 @@ export const emailWizard = new Scenes.WizardScene<MyContext>(
 
     if (msg && 'text' in msg) {
       const email = msg.text
+
+      if (email.toLowerCase() === (isRu ? 'отмена' : 'cancel')) {
+        await ctx.reply(
+          isRu ? '❌ Выбор e-mail отменен.' : '❌ Selection e-mail cancelled.',
+          {
+            reply_markup: {
+              keyboard: mainMenu(isRu).reply_markup.keyboard,
+            },
+          }
+        )
+        return ctx.scene.leave()
+      }
+
       if (email.includes('@')) {
         try {
           if (!ctx.from) {

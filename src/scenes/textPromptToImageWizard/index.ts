@@ -40,7 +40,7 @@ export const textPromptToImageWizard = new Scenes.WizardScene<MyContext>(
       isRu
     )
 
-    await sendPhotoDescriptionRequest(ctx, isRu)
+    await sendPhotoDescriptionRequest(ctx, isRu, 'text_to_image')
 
     return ctx.wizard.next()
   },
