@@ -2,5 +2,26 @@ import { config } from 'dotenv'
 config({ path: `.env.${process.env.NODE_ENV || 'development'}.local` })
 
 export const CREDENTIALS = process.env.CREDENTIALS === 'true'
-export const { NODE_ENV, PORT, SECRET_KEY, LOG_FORMAT, LOG_DIR, ORIGIN } =
-  process.env
+export const {
+  NODE_ENV,
+  PORT,
+  SECRET_KEY,
+  LOG_FORMAT,
+  LOG_DIR,
+  ORIGIN,
+  BOT_TOKEN,
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY,
+  SUPABASE_SERVICE_ROLE_KEY,
+  SUPABASE_STORAGE_BUCKET,
+  SUPABASE_SERVICE_KEY,
+  RUNWAY_API_KEY,
+  ELEVENLABS_API_KEY,
+  ELESTIO_URL,
+  NGROK,
+  PIXEL_API_KEY,
+  HUGGINGFACE_TOKEN,
+  WEBHOOK_URL,
+  ADMIN_IDS,
+  OPENAI_API_KEY,
+} = process.env

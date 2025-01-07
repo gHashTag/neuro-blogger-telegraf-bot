@@ -14,6 +14,7 @@ import {
   videoModelKeyboard,
 } from '../../menu'
 import { isRussian } from '../../helpers/language'
+import { BOT_TOKEN } from '@/core'
 
 export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
   'imageToVideoWizard',
@@ -112,7 +113,7 @@ export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
         return ctx.scene.leave()
       }
 
-      ctx.session.imageUrl = `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}/${filePath}`
+      ctx.session.imageUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`
       await ctx.reply(
         isRu
           ? 'Теперь опишите желаемое движение в видео'

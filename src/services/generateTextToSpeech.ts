@@ -39,7 +39,6 @@ export async function generateTextToSpeech(
         text,
         voice_id,
         telegram_id,
-        username,
         is_ru: isRu,
       },
       {

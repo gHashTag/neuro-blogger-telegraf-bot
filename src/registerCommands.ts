@@ -33,7 +33,7 @@ import { inviteCommand } from './commands/inviteCommand'
 
 import { priceCommand } from './commands/priceCommand'
 import myComposer from './hearsHandlers'
-import { handleBuy } from './commands/topUpBalanceCommand/handleBuy'
+
 import { defaultSession } from './store'
 
 export const startScene = new Scenes.WizardScene<MyContext>(
@@ -103,12 +103,12 @@ export function registerCommands(bot: Telegraf<MyContext>) {
   //   console.log('CASE: neuroQuestScene', ctx.message)
   // })
 
-  bot.command('buystars', async ctx => {
-    const isRu = ctx.from?.language_code === 'ru'
-    const data = 'top_up_5000'
+  // bot.command('buystars', async ctx => {
+  //   const isRu = ctx.from?.language_code === 'ru'
+  //   const data = 'top_up_5000'
 
-    await handleBuy({ ctx, data, isRu })
-  })
+  //   await handleBuy({ ctx, data, isRu })
+  // })
 
   myComposer.command('menu', async ctx => {
     console.log('CASE: myComposer.command menu')
@@ -120,9 +120,9 @@ export function registerCommands(bot: Telegraf<MyContext>) {
     await inviteCommand(ctx)
   })
 
-  myComposer.command('buy', async ctx => {
-    await ctx.scene.enter('emailWizard')
-  })
+  // myComposer.command('buy', async ctx => {
+  //   await ctx.scene.enter('emailWizard')
+  // })
 
   myComposer.command('balance', ctx => balanceCommand(ctx))
 

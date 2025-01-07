@@ -27,7 +27,9 @@ export async function topUpBalanceCommand(ctx: MyContext) {
           text: isRu
             ? `Купить ${starsFor1999}⭐️ за 1999 р`
             : `Buy ${starsFor1999}⭐️ for 1999 RUB`,
-          url: `https://auth.robokassa.ru/merchant/Invoice/aGuNEDxGvEmFhI9CFLQ-AQ`,
+          web_app: {
+            url: `https://auth.robokassa.ru/merchant/Invoice/aGuNEDxGvEmFhI9CFLQ-AQ`,
+          },
         },
       ],
       [
@@ -35,7 +37,9 @@ export async function topUpBalanceCommand(ctx: MyContext) {
           text: isRu
             ? `Купить ${starsFor5000}⭐️ за 5000 р`
             : `Buy ${starsFor5000}⭐️ for 5000 RUB`,
-          url: `https://auth.robokassa.ru/merchant/Invoice/tmejnivH6kuGz-ZPSs0DKg`,
+          web_app: {
+            url: `https://auth.robokassa.ru/merchant/Invoice/tmejnivH6kuGz-ZPSs0DKg`,
+          },
         },
       ],
       [
@@ -43,7 +47,17 @@ export async function topUpBalanceCommand(ctx: MyContext) {
           text: isRu
             ? `Купить ${starsFor10000}⭐️ за 10000 р`
             : `Buy ${starsFor10000}⭐️ for 10000 RUB`,
-          url: `https://auth.robokassa.ru/merchant/Invoice/cESGr7zzsUGqlRm5u8dPlQ`,
+          web_app: {
+            url: `https://auth.robokassa.ru/merchant/Invoice/cESGr7zzsUGqlRm5u8dPlQ`,
+          },
+        },
+      ],
+      [
+        {
+          text: isRu
+            ? 'Информация о платежах и политике'
+            : 'Payment and Policy Info',
+          callback_data: 'payment_policy_info',
         },
       ],
     ]
@@ -54,7 +68,9 @@ export async function topUpBalanceCommand(ctx: MyContext) {
           text: isRu
             ? `Купить ${starsFor10}⭐️ за 10 р`
             : `Buy ${starsFor10}⭐️ for 10 RUB`,
-          url: 'https://auth.robokassa.ru/merchant/Invoice/R2Gm8t1jU0WcBqcrAwbj4Q',
+          web_app: {
+            url: 'https://auth.robokassa.ru/merchant/Invoice/R2Gm8t1jU0WcBqcrAwbj4Q',
+          },
         },
       ])
     }
@@ -62,9 +78,11 @@ export async function topUpBalanceCommand(ctx: MyContext) {
     inlineKeyboard.push([
       {
         text: isRu ? 'Что такое звезды❓' : 'What are stars❓',
-        url: `https://telegram.org/blog/telegram-stars/${
-          isRu ? 'ru' : 'en'
-        }?ln=a`,
+        web_app: {
+          url: `https://telegram.org/blog/telegram-stars/${
+            isRu ? 'ru' : 'en'
+          }?ln=a`,
+        },
       },
     ])
 
