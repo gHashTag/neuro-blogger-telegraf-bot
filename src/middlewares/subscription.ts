@@ -4,10 +4,11 @@ import {
   getTelegramIdByUserId,
   getUid,
   getUserByTelegramId,
+  getUserBalance,
+  incrementBalance,
 } from '@/core/supabase'
 import { MyContext } from '@/interfaces'
 import bot from '@/core/bot'
-import { getUserBalance, incrementBalance } from '@/price'
 
 import { isRussian } from '@/helpers/language'
 

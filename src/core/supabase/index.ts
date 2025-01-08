@@ -13,6 +13,7 @@ export const supabaseAdmin = createClient(
   SUPABASE_SERVICE_ROLE_KEY
 )
 
+export * from './createUser'
 export * from './createModelTraining'
 export * from './checkSubscriptionByTelegramId'
 export * from './updateUserBalance'
