@@ -25,8 +25,9 @@ export async function createVoiceSyncLabs({
       data: body,
     })
 
-    if (response.ok) {
-      const result = (await response.json()) as { id: string }
+    if (response.status === 200) {
+      // Изменено с response.ok на response.status === 200
+      const result = response.data as { id: string } // Изменено с await response.json() на response.data
       console.log(result, 'result')
       return result.id
     } else {

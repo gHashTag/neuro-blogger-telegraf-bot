@@ -1,5 +1,5 @@
 import axios, { isAxiosError } from 'axios'
-import { isDev } from '../helpers'
+import { isDev } from '@/config'
 
 interface TextToSpeechResponse {
   success: boolean

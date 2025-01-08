@@ -1,13 +1,12 @@
 import { generateNeuroImage } from '../../services/generateNeuroImage'
 import { getPrompt } from '../../core/supabase'
-
 import { MyContext } from '../../interfaces'
 import {
   sendInsufficientStarsMessage,
   getUserBalance,
-  textToImageGenerationCost,
-} from '../../core/telegramStars'
-import { sendGenerationErrorMessage } from '@/menu'
+  imageModelPrices,
+} from '../../price'
+import { sendGenerationErrorMessage } from '../../menu'
 
 export async function handleGenerate(
   ctx: MyContext,
@@ -38,9 +37,9 @@ export async function handleGenerate(
     console.log('numImages', numImages)
 
     const currentBalance = await getUserBalance(ctx.from.id)
-    const price = textToImageGenerationCost
+    const price = imageModelPrices[promptData.model_type].costPerImage
     if (currentBalance < price) {
-      await sendInsufficientStarsMessage(ctx, isRu)
+      await sendInsufficientStarsMessage(ctx, currentBalance, isRu)
       return
     } else {
       await generateNeuroImage(

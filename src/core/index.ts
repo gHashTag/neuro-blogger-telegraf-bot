@@ -1,4 +1,3 @@
-export * from './telegramStars'
 export * from './bot'
 export * from './elevenlabs'
 export * from './openai'

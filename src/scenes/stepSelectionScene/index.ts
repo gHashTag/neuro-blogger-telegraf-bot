@@ -2,7 +2,7 @@ import { Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import { getStepSelectionMenu } from '../../menu/getStepSelectionMenu'
 import { isRussian } from '@/helpers/language'
-import { handleTrainingCost } from '@/core/telegramStars'
+import { handleTrainingCost } from '@/price'
 
 import { mainMenu } from '@/menu'
 

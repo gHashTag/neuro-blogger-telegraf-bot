@@ -2,7 +2,6 @@ import { Composer } from 'telegraf'
 import { MyContext } from './interfaces'
 import { imageModelMenu } from './menu/imageModelMenu'
 
-import { topUpBalanceCommand } from './commands/topUpBalanceCommand'
 import { balanceCommand } from './commands/balanceCommand'
 import { menuCommand } from './commands/menuCommand'
 import { generateImage } from './services/generateReplicateImage'
@@ -14,6 +13,8 @@ import { handleLevelQuest } from './handlers/handleLevelQuest'
 import { mainMenu } from './menu'
 
 import { handleSizeSelection } from './handlers'
+import { imageModelPrices } from './price/imageModelPrices'
+import { handleSelectStars } from './commands/topUpBalanceCommand/handleSelectStars'
 
 const myComposer = new Composer<MyContext>()
 
@@ -64,6 +65,7 @@ myComposer.hears(
   ['🖼️ Изображение из текста', '🖼️ Text to Image'],
   async ctx => {
     console.log('CASE: Изображение из текста')
+    ctx.session.mode = 'text_to_image'
     await imageModelMenu(ctx)
   }
 )
@@ -93,7 +95,7 @@ myComposer.hears(['🎮 Начать обучение', '🎮 Start learning'], 
 
 myComposer.hears(['💎 Пополнить баланс', '💎 Top up balance'], async ctx => {
   console.log('CASE: Пополнить баланс')
-  await topUpBalanceCommand(ctx)
+  await handleSelectStars({ ctx, isRu: isRussian(ctx) })
 })
 
 myComposer.hears(['🤑 Баланс', '🤑 Balance'], async ctx => {
@@ -190,21 +192,15 @@ myComposer.hears(
 )
 
 myComposer.hears(
-  ['Flux 1.1Pro Ultra', 'SDXL', 'SD 3.5 Turbo', 'Recraft v3', 'Photon'],
+  Object.values(imageModelPrices).map(model => model.shortName),
   async ctx => {
-    console.log(
-      'CASE: Flux 1.1Pro Ultra',
-      'SDXL',
-      'SD 3.5 Turbo',
-      'Recraft v3',
-      'Photon'
-    )
+    console.log('CASE: Выбор модели')
     if (!ctx.message) {
       throw new Error('No message')
     }
-    const isRu = ctx.from?.language_code === 'ru'
+    const isRu = isRussian(ctx)
     const model = ctx.message.text
-
+    console.log(model, 'model')
     ctx.session.selectedModel = model
 
     await ctx.reply(
@@ -216,7 +212,7 @@ myComposer.hears(
       }
     )
 
-    await ctx.scene.enter('textPromptToImageWizard')
+    await ctx.scene.enter('textToImageWizard')
   }
 )
 

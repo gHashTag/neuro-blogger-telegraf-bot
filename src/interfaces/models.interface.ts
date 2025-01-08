@@ -18,3 +18,5 @@ export interface UserModel {
   model_url: ModelUrl
   model_key?: ModelUrl
 }
+
+export type VideoModel = 'minimax' | 'haiper' | 'ray' | 'i2vgen-xl'

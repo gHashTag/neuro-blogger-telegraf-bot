@@ -1,8 +1,8 @@
 import axios, { isAxiosError } from 'axios'
 
-import { isDev } from '../helpers'
-import { isRussian } from '../helpers/language'
-import { MyContext, ModelUrl } from '../interfaces'
+import { isDev } from '@/config'
+import { isRussian } from '@/helpers/language'
+import { MyContext, ModelUrl } from '@/interfaces'
 
 export async function generateNeuroImage(
   prompt: string,

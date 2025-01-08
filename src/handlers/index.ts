@@ -1,6 +1,6 @@
 export * from './handleNeuroActions'
 export * from './handleLevelQuest'
-export * from './handleGenerateImageActions'
+
 export * from './handleModelCallback'
 
 export * from './handleTextMessage'

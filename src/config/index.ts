@@ -25,3 +25,5 @@ export const {
   ADMIN_IDS,
   OPENAI_API_KEY,
 } = process.env
+
+export const isDev = process.env.NODE_ENV === 'development'

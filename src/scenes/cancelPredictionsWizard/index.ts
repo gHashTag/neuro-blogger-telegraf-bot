@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios'
-import { MyContext } from '../../interfaces'
-import { refundUser } from '../../core/telegramStars'
+import { MyContext } from '@/interfaces'
+import { refundUser } from '@/price'
 import { Scenes } from 'telegraf'
-import { isRussian } from '../../helpers/language'
+import { isRussian } from '@/helpers/language'
 import { sendGenericErrorMessage } from '@/menu'
 
 interface Prediction {

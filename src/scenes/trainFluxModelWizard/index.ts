@@ -1,14 +1,14 @@
 import { Markup, Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
-import {
-  getUserBalance,
-  sendInsufficientStarsMessage,
-} from '../../core/telegramStars/telegramStars'
 
 import { isValidImage } from '../../helpers/images'
 import { isRussian } from '@/helpers/language'
 import { BOT_TOKEN } from '@/core/bot'
-import { calculateTrainingCostInStars } from '@/core/telegramStars/calculateFinalPrice'
+import {
+  calculateTrainingCostInStars,
+  getUserBalance,
+  sendInsufficientStarsMessage,
+} from '@/price'
 
 export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
   'trainFluxModelWizard',
@@ -65,8 +65,9 @@ export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
       const trainingCostInStars = calculateTrainingCostInStars(
         ctx.session.steps
       )
+      console.log('Training cost in stars:', trainingCostInStars)
       if (currentBalance < trainingCostInStars) {
-        await sendInsufficientStarsMessage(ctx, isRu)
+        await sendInsufficientStarsMessage(ctx, currentBalance, isRu)
         return ctx.scene.leave()
       }
 

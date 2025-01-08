@@ -20,5 +20,5 @@ export async function sendPaymentInfo(
   }
 
   console.log('Payment info sent successfully:', data)
-  return data
+  return data as Payment[]
 }

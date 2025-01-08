@@ -6,9 +6,9 @@ import {
   imageNeuroGenerationCost,
   sendInsufficientStarsMessage,
   sendBalanceMessage,
-} from '../../core/telegramStars'
-import { generateNeuroImage } from '../../services/generateNeuroImage'
-import { getLatestUserModel } from '../../core/supabase'
+} from '@/price'
+import { generateNeuroImage } from '@/services/generateNeuroImage'
+import { getLatestUserModel } from '@/core/supabase'
 import {
   sendGenerationCancelledMessage,
   sendPhotoDescriptionRequest,
@@ -33,7 +33,7 @@ export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
     const currentBalance = await getUserBalance(userId)
 
     if (currentBalance < imageNeuroGenerationCost) {
-      await sendInsufficientStarsMessage(ctx, isRu)
+      await sendInsufficientStarsMessage(ctx, currentBalance, isRu)
       return ctx.scene.leave()
     }
 

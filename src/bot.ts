@@ -14,7 +14,7 @@ import myComposer from './hearsHandlers'
 import { NODE_ENV } from './config'
 import { handleBuy } from './commands/topUpBalanceCommand/handleBuy'
 import { handleSelectStars } from './commands/topUpBalanceCommand/handleSelectStars'
-import { incrementBalance } from './core/telegramStars/telegramStars'
+import { incrementBalance } from './price'
 import { isRussian } from './helpers/language'
 import { getUid } from './core/supabase/getUid'
 

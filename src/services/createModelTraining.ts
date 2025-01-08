@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
 import FormData from 'form-data'
 import fs from 'fs'
-import { isDev } from '../helpers'
+import { isDev } from '@/config'
 
 interface ModelTrainingRequest {
   filePath: string

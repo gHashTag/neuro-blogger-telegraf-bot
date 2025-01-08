@@ -1,6 +1,6 @@
 import axios, { isAxiosError } from 'axios'
-import { isDev, VideoModel } from '../helpers'
-import { ImageToVideoResponse } from '../interfaces'
+import { isDev } from '@/config'
+import { ImageToVideoResponse, VideoModel } from '@/interfaces'
 
 export async function generateImageToVideo(
   imageUrl: string,

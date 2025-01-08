@@ -13,7 +13,7 @@ export async function handleSizeSelection(ctx: MyContext, size: string) {
   if (mode === 'neuro_photo') {
     await ctx.scene.enter('neuroPhotoWizard')
   } else if (mode === 'text_to_image') {
-    await ctx.scene.enter('textPromptToImageWizard')
+    await ctx.scene.enter('textToImageWizard')
   } else {
     console.log('CASE: Неизвестный режим')
   }

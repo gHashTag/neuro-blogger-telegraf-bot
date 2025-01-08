@@ -15,7 +15,7 @@ import {
   imageToPromptWizard,
   improvePromptWizard,
   sizeWizard,
-  textPromptToImageWizard,
+  textToImageWizard,
   imageToVideoWizard,
   cancelPredictionsWizard,
   trainFluxModelWizard,
@@ -25,7 +25,7 @@ import {
   voiceAvatarWizard,
   textToSpeechWizard,
 } from './scenes'
-import { subscriptionMiddleware } from './middlewares/subscription'
+import { subscriptionMiddleware } from '@/middlewares/subscription'
 
 import { setupLevelHandlers } from './handlers/setupLevelHandlers'
 import { menuCommand } from './commands/menuCommand'
@@ -66,7 +66,7 @@ export const stage = new Scenes.Stage<MyContext>([
   avatarWizard,
   imageToPromptWizard,
   emailWizard,
-  textPromptToImageWizard,
+  textToImageWizard,
   menuScene,
   improvePromptWizard,
   sizeWizard,

@@ -1,5 +1,5 @@
-import { getUserBalance } from '../../core/telegramStars'
-import { MyContext } from '../../interfaces'
+import { getUserBalance } from '@/price'
+import { MyContext } from '@/interfaces'
 
 export async function balanceCommand(ctx: MyContext) {
   try {

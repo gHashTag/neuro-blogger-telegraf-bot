@@ -1,8 +1,8 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 
-async function fetchWithAxios(url: string) {
-  const response = await axios.get(url)
-  return response.data
+export async function fetchWithAxios(
+  url: string,
+  options: AxiosRequestConfig
+): Promise<AxiosResponse> {
+  return axios({ url, ...options })
 }
-
-export default fetchWithAxios

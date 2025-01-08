@@ -1,6 +1,6 @@
-import { mainMenu } from '../../menu'
-import { supabase } from '../supabase'
-import { MyContext } from '../../interfaces'
+import { mainMenu } from '../menu'
+import { supabase } from '../core/supabase'
+import { MyContext } from '../interfaces'
 
 export async function refundUser(ctx: MyContext, paymentAmount: number) {
   if (!ctx.from) {
@@ -106,10 +106,14 @@ function calculateStars(paymentAmount: number, starCost: number): number {
   return Math.floor(paymentAmount / starCost)
 }
 
-async function sendInsufficientStarsMessage(ctx: MyContext, isRu: boolean) {
+async function sendInsufficientStarsMessage(
+  ctx: MyContext,
+  balance: number,
+  isRu: boolean
+) {
   const message = isRu
-    ? 'Недостаточно звезд для генерации изображения. Пополните баланс вызвав команду /buy.'
-    : 'Insufficient stars for image generation. Top up your balance by calling the /buy command.'
+    ? `Недостаточно звезд для генерации изображения\nВаш баланс: ${balance} ⭐️\nПополните баланс вызвав команду /buy.`
+    : `Insufficient stars for image generation\nYour balance: ${balance} ⭐️\nTop up your balance by calling the /buy command.`
 
   await ctx.reply(message)
 }

@@ -6,7 +6,7 @@ import {
   sendBalanceMessage,
   sendInsufficientStarsMessage,
   getUserBalance,
-} from '../../core/telegramStars'
+} from '@/price'
 import { generateTextToSpeech } from '../../services/generateTextToSpeech'
 import { isRussian } from '@/helpers'
 
@@ -24,7 +24,7 @@ export const textToSpeechWizard = new Scenes.WizardScene<MyContext>(
     const currentBalance = await getUserBalance(ctx.from.id)
     const price = textToSpeechCost
     if (currentBalance < price) {
-      await sendInsufficientStarsMessage(ctx, isRu)
+      await sendInsufficientStarsMessage(ctx, currentBalance, isRu)
       return ctx.scene.leave()
     }
 

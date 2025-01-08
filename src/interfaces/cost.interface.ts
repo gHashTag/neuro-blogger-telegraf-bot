@@ -1,4 +1,4 @@
-import { VideoModel } from '@/helpers'
+import { VideoModel } from '@/interfaces'
 
 export interface VideoModelConfig {
   name: VideoModel

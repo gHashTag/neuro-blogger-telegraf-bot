@@ -1,11 +1,7 @@
 import { Scenes } from 'telegraf'
-import { MyContext } from '../../interfaces'
-import {
-  getUserBalance,
-  imageToPromptCost,
-  sendBalanceMessage,
-} from '../../core/telegramStars'
-import { generateImageToPrompt } from '../../services/generateImageToPrompt'
+import { MyContext } from '@/interfaces'
+import { getUserBalance, imageToPromptCost, sendBalanceMessage } from '@/price'
+import { generateImageToPrompt } from '@/services/generateImageToPrompt'
 import { BOT_TOKEN } from '@/core/bot'
 import { mainMenu } from '@/menu/mainMenu'
 import { cancelMenu } from '@/menu/cancelMenu'

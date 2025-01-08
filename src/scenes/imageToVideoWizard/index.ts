@@ -3,18 +3,17 @@ import {
   getUserBalance,
   sendBalanceMessage,
   validateAndCalculatePrice,
-  VideoModel,
-} from '../../core/telegramStars'
-import { generateImageToVideo } from '../../services/generateImageToVideo'
-import { MyContext, VIDEO_MODELS } from '../../interfaces'
+} from '@/price'
+import { generateImageToVideo } from '@/services/generateImageToVideo'
+import { MyContext, VIDEO_MODELS, VideoModel } from '@/interfaces'
 import {
   cancelMenu,
   sendGenerationCancelledMessage,
   sendGenericErrorMessage,
   videoModelKeyboard,
-} from '../../menu'
-import { isRussian } from '../../helpers/language'
-import { BOT_TOKEN } from '@/core'
+} from '@/menu'
+import { isRussian } from '@/helpers/language'
+import { BOT_TOKEN } from '@/core/bot'
 
 export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
   'imageToVideoWizard',

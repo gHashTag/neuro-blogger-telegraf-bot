@@ -6,8 +6,8 @@ import {
   sendInsufficientStarsMessage,
   getUserBalance,
   sendBalanceMessage,
-} from '../../core/telegramStars'
-import { voiceConversationCost } from '../../core/telegramStars/calculateFinalPrice'
+  voiceConversationCost,
+} from '@/price'
 
 export const voiceAvatarWizard = new Scenes.WizardScene<MyContext>(
   'voiceAvatarWizard',
@@ -23,7 +23,7 @@ export const voiceAvatarWizard = new Scenes.WizardScene<MyContext>(
     const currentBalance = await getUserBalance(ctx.from.id)
     const price = voiceConversationCost
     if (currentBalance < price) {
-      await sendInsufficientStarsMessage(ctx, isRu)
+      await sendInsufficientStarsMessage(ctx, currentBalance, isRu)
       return ctx.scene.leave()
     }
 

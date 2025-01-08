@@ -1,7 +1,7 @@
 import axios, { isAxiosError } from 'axios'
 
-import { isDev } from '../helpers'
-import { MyContext } from '../interfaces'
+import { isDev } from '@/config'
+import { MyContext } from '@/interfaces'
 
 if (!process.env.ELESTIO_URL) {
   throw new Error('ELESTIO_URL is not set')

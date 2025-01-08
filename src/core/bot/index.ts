@@ -4,8 +4,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 import { Telegraf } from 'telegraf'
 import { MyContext } from '@/interfaces'
-
-export const isDev = process.env.NODE_ENV === 'development'
+import { isDev } from '@/config'
 
 if (!process.env.TELEGRAM_BOT_TOKEN_DEV) {
   throw new Error('TELEGRAM_BOT_TOKEN_DEV is not set')

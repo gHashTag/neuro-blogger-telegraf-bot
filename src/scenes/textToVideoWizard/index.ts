@@ -1,20 +1,19 @@
 import { Scenes } from 'telegraf'
-import type { MyContext } from '../../interfaces'
+import { MyContext, VideoModel } from '@/interfaces'
 import {
   sendBalanceMessage,
   getUserBalance,
   validateAndCalculatePrice,
-  VideoModel,
-} from '../../core/telegramStars'
-import { generateTextToVideo } from '../../services/generateTextToVideo'
-import { isRussian } from '../../helpers/language'
+} from '@/price'
+import { generateTextToVideo } from '@/services/generateTextToVideo'
+import { isRussian } from '@/helpers/language'
 import {
   sendGenerationCancelledMessage,
   sendGenericErrorMessage,
   videoModelKeyboard,
-} from '../../menu'
+} from '@/menu'
 
-import { VIDEO_MODELS } from '../../interfaces'
+import { VIDEO_MODELS } from '@/interfaces'
 
 export const textToVideoWizard = new Scenes.WizardScene<MyContext>(
   'textToVideoWizard',

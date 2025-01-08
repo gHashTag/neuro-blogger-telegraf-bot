@@ -1,4 +1,4 @@
-export type VideoModel = 'minimax' | 'haiper' | 'ray' | 'i2vgen-xl'
+import { VideoModel } from '@/interfaces'
 
 // Стоимость одной звезды
 export const starCost = 0.016 // USD
@@ -13,7 +13,7 @@ export const MODEL_PRICES: Record<VideoModel, number> = {
 }
 
 // Процент наценки
-const interestRate = 0.5 // 50% наценка
+export const interestRate = 0.5 // 50% наценка
 
 // Функция для расчета окончательной стоимости модели
 export function calculateFinalPrice(model: VideoModel): number {
@@ -51,7 +51,6 @@ export function calculateTrainingCostInRub(steps: number): number {
 }
 
 export const promptGenerationCost = calculateCostInStars(0.048)
-export const textToImageGenerationCost = calculateCostInStars(0.12)
 export const imageNeuroGenerationCost = calculateCostInStars(0.12)
 export const textToVideoGenerationCost = calculateCostInStars(0.99)
 export const textToVideoCost = calculateCostInStars(0.99)

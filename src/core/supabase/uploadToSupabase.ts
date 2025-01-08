@@ -1,6 +1,7 @@
 import { supabaseAdmin } from '.'
 import { cleanupOldArchives } from './cleanupOldArchives'
 import { createModelTraining } from '../../services'
+
 export async function uploadToSupabase(
   zipPath: string,
   userId: string,
@@ -29,11 +30,12 @@ export async function uploadToSupabase(
     console.log('Public URL:', publicUrl)
 
     await createModelTraining({
-      zipUrl: publicUrl.publicUrl,
+      filePath: publicUrl.publicUrl,
       triggerWord,
       modelName,
       telegram_id: userId,
       is_ru: true,
+      steps: 1000,
     })
     // Очищаем старые архивы
     await cleanupOldArchives(userId)
