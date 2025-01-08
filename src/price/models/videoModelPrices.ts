@@ -1,7 +1,7 @@
 import { VideoModel } from '@/interfaces'
 
 // Определяем базовую стоимость для каждой модели
-export const VideoModelPrices: Record<VideoModel, number> = {
+export const videoModelPrices: Record<VideoModel, number> = {
   minimax: 0.5,
   haiper: 0.05,
   ray: 0.45,

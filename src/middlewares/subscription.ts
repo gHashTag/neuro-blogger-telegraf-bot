@@ -7,7 +7,7 @@ import {
   getUserBalance,
   incrementBalance,
 } from '@/core/supabase'
-import { MyContext } from '@/interfaces'
+import { CreateUserData, MyContext } from '@/interfaces'
 import bot from '@/core/bot'
 
 import { isRussian } from '@/helpers/language'
@@ -92,7 +92,7 @@ export const subscriptionMiddleware = async (
     const existingUser = await getUserByTelegramId(telegram_id.toString())
     if (existingUser) {
       console.log('User already registered:', telegram_id)
-      await next()
+      return await next()
     }
 
     // Создаем пользователя с inviter из start параметра
@@ -113,7 +113,7 @@ export const subscriptionMiddleware = async (
       inviter,
     }
 
-    await createUser(userData)
+    await createUser(userData as CreateUserData)
 
     if (inviter) {
       const inviterTelegramId = await getTelegramIdByUserId(inviter)

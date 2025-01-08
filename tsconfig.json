@@ -3,7 +3,7 @@
   "compilerOptions": {
     "target": "es2017",
     "lib": ["esnext", "dom"],
-    "typeRoots": ["node_modules/@types"],
+   
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -36,6 +36,8 @@
       "@axios/*": ["axios/*"],
       "@price/*": ["price/*"],
       "@store/*": ["store/*"],
+      "@handlers/*": ["handlers/*"],
+      "@helpers/*": ["helpers/*"],
     }
   },
   "include": ["src/**/*.ts", "src/**/*.json", ".env"],

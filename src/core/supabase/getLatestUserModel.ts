@@ -1,5 +1,5 @@
 import { supabase } from '.'
-import { ModelTraining } from '../../interfaces/supabase.interface'
+import { ModelTraining } from '@/interfaces'
 
 export async function getLatestUserModel(
   userId: number

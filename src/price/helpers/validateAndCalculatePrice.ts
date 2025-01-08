@@ -1,6 +1,7 @@
 import { MyContext } from '@/interfaces'
-import { calculateFinalPrice, MODEL_PRICES } from '@/price'
+import { videoModelPrices } from '@/price/models/videoModelPrices'
 import { VideoModel } from '@/interfaces'
+import { calculateFinalPrice } from '@/price/helpers'
 
 export async function validateAndCalculatePrice(
   videoModel: string,
@@ -19,7 +20,7 @@ export async function validateAndCalculatePrice(
   }
 
   const model = videoModel as VideoModel
-  if (!(model in MODEL_PRICES)) {
+  if (!(model in videoModelPrices)) {
     await ctx.reply(
       isRu ? 'Ошибка: неверная модель видео.' : 'Error: invalid video model.'
     )

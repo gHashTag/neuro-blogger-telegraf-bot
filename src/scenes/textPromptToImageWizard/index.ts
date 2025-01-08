@@ -1,18 +1,18 @@
 import { Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
+import { getUserBalance } from '@/core/supabase'
 import {
-  getUserBalance,
   sendBalanceMessage,
   sendInsufficientStarsMessage,
   textToImageGenerationCost,
-} from '../../core/telegramStars'
-import { isRussian } from '../../helpers/language'
-import { generateImage } from '../../services/generateReplicateImage'
+} from '@/price/helpers'
+import { isRussian } from '@/helpers/language'
+import { generateImage } from '@/services/generateReplicateImage'
 import {
   sendGenerationCancelledMessage,
   sendPhotoDescriptionRequest,
   sendGenericErrorMessage,
-} from '../../menu'
+} from '@/menu'
 
 export const textPromptToImageWizard = new Scenes.WizardScene<MyContext>(
   'textPromptToImageWizard',
@@ -29,14 +29,14 @@ export const textPromptToImageWizard = new Scenes.WizardScene<MyContext>(
     const currentBalance = await getUserBalance(ctx.from.id)
     const price = textToImageGenerationCost
     if (currentBalance < price) {
-      await sendInsufficientStarsMessage(ctx, isRu)
+      await sendInsufficientStarsMessage(ctx.from.id, currentBalance, isRu)
       return ctx.scene.leave()
     }
 
     await sendBalanceMessage(
       currentBalance,
       textToImageGenerationCost,
-      ctx,
+      ctx.from.id,
       isRu
     )
 
