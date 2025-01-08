@@ -2,13 +2,12 @@ import { Scenes } from 'telegraf'
 import { ModelUrl, MyContext, UserModel } from '../../interfaces'
 
 import {
-  getUserBalance,
   imageNeuroGenerationCost,
   sendInsufficientStarsMessage,
   sendBalanceMessage,
-} from '@/price'
+} from '@/price/helpers'
 import { generateNeuroImage } from '@/services/generateNeuroImage'
-import { getLatestUserModel } from '@/core/supabase'
+import { getLatestUserModel, getUserBalance } from '@/core/supabase'
 import {
   sendGenerationCancelledMessage,
   sendPhotoDescriptionRequest,
@@ -33,14 +32,14 @@ export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
     const currentBalance = await getUserBalance(userId)
 
     if (currentBalance < imageNeuroGenerationCost) {
-      await sendInsufficientStarsMessage(ctx, currentBalance, isRu)
+      await sendInsufficientStarsMessage(userId, currentBalance, isRu)
       return ctx.scene.leave()
     }
 
     await sendBalanceMessage(
+      userId,
       currentBalance,
       imageNeuroGenerationCost,
-      ctx,
       isRu
     )
 

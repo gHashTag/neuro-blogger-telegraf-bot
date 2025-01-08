@@ -1,12 +1,11 @@
 import { Markup, Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
-import { getVoiceId } from '../../core/supabase'
+import { getUserBalance, getVoiceId } from '../../core/supabase'
 import {
   textToSpeechCost,
   sendBalanceMessage,
   sendInsufficientStarsMessage,
-  getUserBalance,
-} from '@/price'
+} from '@/price/helpers'
 import { generateTextToSpeech } from '../../services/generateTextToSpeech'
 import { isRussian } from '@/helpers'
 
@@ -24,11 +23,11 @@ export const textToSpeechWizard = new Scenes.WizardScene<MyContext>(
     const currentBalance = await getUserBalance(ctx.from.id)
     const price = textToSpeechCost
     if (currentBalance < price) {
-      await sendInsufficientStarsMessage(ctx, currentBalance, isRu)
+      await sendInsufficientStarsMessage(ctx.from.id, currentBalance, isRu)
       return ctx.scene.leave()
     }
 
-    await sendBalanceMessage(currentBalance, price, ctx, isRu)
+    await sendBalanceMessage(ctx.from.id, currentBalance, price, isRu)
 
     await ctx.reply(
       isRu

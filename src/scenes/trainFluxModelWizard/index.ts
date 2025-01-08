@@ -6,10 +6,9 @@ import { isRussian } from '@/helpers/language'
 import { BOT_TOKEN } from '@/core/bot'
 import {
   calculateTrainingCostInStars,
-  getUserBalance,
   sendInsufficientStarsMessage,
-} from '@/price'
-
+} from '@/price/helpers'
+import { getUserBalance } from '@/core/supabase'
 export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
   'trainFluxModelWizard',
 
@@ -67,7 +66,7 @@ export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
       )
       console.log('Training cost in stars:', trainingCostInStars)
       if (currentBalance < trainingCostInStars) {
-        await sendInsufficientStarsMessage(ctx, currentBalance, isRu)
+        await sendInsufficientStarsMessage(ctx.from.id, currentBalance, isRu)
         return ctx.scene.leave()
       }
 

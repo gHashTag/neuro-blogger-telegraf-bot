@@ -1,4 +1,4 @@
-import { getUserBalance } from '@/price'
+import { getUserBalance } from '@/core/supabase'
 import { MyContext } from '@/interfaces'
 
 export async function balanceCommand(ctx: MyContext) {

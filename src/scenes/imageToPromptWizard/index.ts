@@ -1,10 +1,11 @@
 import { Scenes } from 'telegraf'
 import { MyContext } from '@/interfaces'
-import { getUserBalance, imageToPromptCost, sendBalanceMessage } from '@/price'
+import { imageToPromptCost, sendBalanceMessage } from '@/price/helpers'
 import { generateImageToPrompt } from '@/services/generateImageToPrompt'
 import { BOT_TOKEN } from '@/core/bot'
 import { mainMenu } from '@/menu/mainMenu'
 import { cancelMenu } from '@/menu/cancelMenu'
+import { getUserBalance } from '@/core/supabase'
 
 if (!process.env.HUGGINGFACE_TOKEN) {
   throw new Error('HUGGINGFACE_TOKEN is not set')
@@ -23,7 +24,7 @@ export const imageToPromptWizard = new Scenes.WizardScene<MyContext>(
     const userId = ctx.from.id
     const currentBalance = await getUserBalance(userId)
 
-    await sendBalanceMessage(currentBalance, imageToPromptCost, ctx, isRu)
+    await sendBalanceMessage(userId, currentBalance, imageToPromptCost, isRu)
 
     await ctx.reply(
       isRu

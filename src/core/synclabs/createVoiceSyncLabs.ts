@@ -1,4 +1,4 @@
-import { fetchWithAxios } from '@/core/axios'
+import { fetchWithAxios } from '@/core/axios/fetchWithAxios'
 
 export async function createVoiceSyncLabs({
   fileUrl,

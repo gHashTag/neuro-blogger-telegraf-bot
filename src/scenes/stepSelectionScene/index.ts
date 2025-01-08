@@ -2,8 +2,7 @@ import { Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import { getStepSelectionMenu } from '../../menu/getStepSelectionMenu'
 import { isRussian } from '@/helpers/language'
-import { handleTrainingCost } from '@/price'
-
+import { handleTrainingCost } from '@/price/helpers'
 import { mainMenu } from '@/menu'
 
 export const stepSelectionScene = new Scenes.WizardScene<MyContext>(

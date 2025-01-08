@@ -15,8 +15,8 @@ export const starCost = 0.016 // USD
 export const imageModelPrices: Record<string, ModelInfo> = {
   'black-forest-labs/flux-1.1-pro': {
     shortName: 'FLUX1.1 [pro]',
-    description_en: `FLUX1.1 [pro] generates images six times faster than its predecessor, with improved quality and diversity. It offers a balance between speed and image quality. Price: $0.04 per image.`,
-    description_ru: `FLUX1.1 [pro] генерирует изображения в шесть раз быстрее, чем его предшественник, с улучшенным качеством и разнообразием. Предлагает баланс между скоростью и качеством изображения. Цена: 0,04 долл. США за изображение.`,
+    description_en: `FLUX1.1 [pro] generates images six times faster than its predecessor, with improved quality and diversity. It offers a balance between speed and image quality.`,
+    description_ru: `FLUX1.1 [pro] генерирует изображения в шесть раз быстрее, чем его предшественник, с улучшенным качеством и разнообразием. Предлагает баланс между скоростью и качеством изображения.`,
     previewImage:
       'https://replicate.delivery/czjl/XetPfMnnBtnyLUNiNcnl2Hneyeo8AsfsOl2AG5Znql5f3VK9E/tmpuv7lgrx7.jpg',
     costPerImage: calculateFinalImageCostInStars(0.04),
@@ -24,8 +24,8 @@ export const imageModelPrices: Record<string, ModelInfo> = {
   },
   'black-forest-labs/flux-1.1-pro-ultra': {
     shortName: 'FLUX1.1 [pro] Ultra',
-    description_en: `FLUX1.1 [pro] Ultra supports 4x higher resolutions (up to 4MP) with fast generation times of 10 seconds per image. It offers high resolution without speed compromise and includes a raw mode for more natural aesthetics. Price: $0.06 per image.`,
-    description_ru: `FLUX1.1 [pro] Ultra поддерживает разрешение в 4 раза выше (до 4 МП) с быстрым временем генерации 10 секунд на изображение. Высокое разрешение без потери скорости, режим raw для более естественной эстетики. Цена: 0,06 долл. США за изображение.`,
+    description_en: `FLUX1.1 [pro] Ultra supports 4x higher resolutions (up to 4MP) with fast generation times of 10 seconds per image. It offers high resolution without speed compromise and includes a raw mode for more natural aesthetics`,
+    description_ru: `FLUX1.1 [pro] Ultra поддерживает разрешение в 4 раза выше (до 4 МП) с быстрым временем генерации 10 секунд на изображение. Высокое разрешение без потери скорости, режим raw для более естественной эстетики`,
     previewImage:
       'https://replicate.delivery/czjl/jqtNvxYHcnLELpszvkVf0APhMkBnwzrdo205RaVB7MttqU6JA/tmppokfymld.jpg',
     costPerImage: calculateFinalImageCostInStars(0.06),

@@ -1,9 +1,5 @@
 import { Scenes } from 'telegraf'
-import {
-  getUserBalance,
-  sendBalanceMessage,
-  validateAndCalculatePrice,
-} from '@/price'
+import { sendBalanceMessage, validateAndCalculatePrice } from '@/price/helpers'
 import { generateImageToVideo } from '@/services/generateImageToVideo'
 import { MyContext, VIDEO_MODELS, VideoModel } from '@/interfaces'
 import {
@@ -14,7 +10,7 @@ import {
 } from '@/menu'
 import { isRussian } from '@/helpers/language'
 import { BOT_TOKEN } from '@/core/bot'
-
+import { getUserBalance } from '@/core/supabase'
 export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
   'imageToVideoWizard',
   async ctx => {
@@ -76,7 +72,7 @@ export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
       ctx.session.videoModel = videoModel as VideoModel
       console.log('ctx.session.videoModel', ctx.session.videoModel)
 
-      await sendBalanceMessage(currentBalance, price, ctx, isRu)
+      await sendBalanceMessage(ctx.from.id, currentBalance, price, isRu)
 
       await ctx.reply(
         isRu

@@ -1,10 +1,9 @@
 import { Scenes } from 'telegraf'
 import { MyContext } from '@/interfaces'
 import {
-  getUserBalance,
   sendBalanceMessage,
   sendInsufficientStarsMessage,
-} from '@/price'
+} from '@/price/helpers'
 import { isRussian } from '@/helpers/language'
 import { generateImage } from '@/services/generateReplicateImage'
 import {
@@ -14,6 +13,7 @@ import {
 } from '@/menu'
 import { errorMessageAdmin } from '@/helpers/error'
 import { imageModelPrices } from '@/price'
+import { getUserBalance } from '@/core/supabase'
 
 export const textToImageWizard = new Scenes.WizardScene<MyContext>(
   'textToImageWizard',
@@ -64,11 +64,11 @@ export const textToImageWizard = new Scenes.WizardScene<MyContext>(
       console.log(price, 'price')
       console.log(currentBalance, 'currentBalance')
       if (currentBalance < price) {
-        await sendInsufficientStarsMessage(ctx, currentBalance, isRu)
+        await sendInsufficientStarsMessage(ctx.from.id, currentBalance, isRu)
         return ctx.scene.leave()
       }
 
-      await sendBalanceMessage(currentBalance, price, ctx, isRu)
+      await sendBalanceMessage(ctx.from.id, currentBalance, price, isRu)
 
       // Отправляем информацию о модели
       await ctx.replyWithPhoto(selectedModelInfo.previewImage, {

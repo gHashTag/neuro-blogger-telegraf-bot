@@ -1,4 +1,3 @@
-export * from './handleNeuroActions'
 export * from './handleLevelQuest'
 
 export * from './handleModelCallback'

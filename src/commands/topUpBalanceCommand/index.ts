@@ -1,6 +1,6 @@
 import { MyContext } from '@/interfaces'
-import { rubToUsdRate, starCost } from '@/price'
-
+import { starCost } from '@/price'
+export const rubToUsdRate = 100
 export const starAmounts = [10, 50, 100, 500, 1000, 2000, 5000, 10000, 20000]
 
 function calculateStars(rubAmount: number): number {

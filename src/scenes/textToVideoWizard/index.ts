@@ -1,10 +1,6 @@
 import { Scenes } from 'telegraf'
 import { MyContext, VideoModel } from '@/interfaces'
-import {
-  sendBalanceMessage,
-  getUserBalance,
-  validateAndCalculatePrice,
-} from '@/price'
+import { sendBalanceMessage, validateAndCalculatePrice } from '@/price/helpers'
 import { generateTextToVideo } from '@/services/generateTextToVideo'
 import { isRussian } from '@/helpers/language'
 import {
@@ -12,7 +8,7 @@ import {
   sendGenericErrorMessage,
   videoModelKeyboard,
 } from '@/menu'
-
+import { getUserBalance } from '@/core/supabase'
 import { VIDEO_MODELS } from '@/interfaces'
 
 export const textToVideoWizard = new Scenes.WizardScene<MyContext>(
@@ -99,7 +95,7 @@ export const textToVideoWizard = new Scenes.WizardScene<MyContext>(
       // Устанавливаем videoModel в сессии
       ctx.session.videoModel = videoModel as VideoModel
 
-      await sendBalanceMessage(currentBalance, price, ctx, isRu)
+      await sendBalanceMessage(ctx.from.id, currentBalance, price, isRu)
 
       await ctx.reply(
         isRu

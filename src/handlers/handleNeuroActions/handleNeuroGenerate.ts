@@ -1,11 +1,10 @@
-import { getPrompt } from '@/core/supabase'
+import { getPrompt, getUserBalance } from '@/core/supabase'
 import { generateNeuroImage } from '@/services/generateNeuroImage'
 import { MyContext } from '@/interfaces'
 import {
-  getUserBalance,
   imageNeuroGenerationCost,
   sendInsufficientStarsMessage,
-} from '@/price'
+} from '@/price/helpers'
 import { sendGenerationErrorMessage } from '@/menu'
 
 export async function handleNeuroGenerate(
@@ -27,7 +26,7 @@ export async function handleNeuroGenerate(
 
     const currentBalance = await getUserBalance(userId)
     if (currentBalance < imageNeuroGenerationCost) {
-      await sendInsufficientStarsMessage(ctx, currentBalance, isRu)
+      await sendInsufficientStarsMessage(userId, currentBalance, isRu)
       return
     }
 

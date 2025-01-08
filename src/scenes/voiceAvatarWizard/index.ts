@@ -1,13 +1,13 @@
 import { Markup, Scenes } from 'telegraf'
-import { MyContext } from '../../interfaces'
-import { generateVoiceAvatar } from '../../services/generateVoiceAvatar'
-import { isRussian } from '@/helpers'
+import { MyContext } from '@/interfaces'
+import { generateVoiceAvatar } from '@/services/generateVoiceAvatar'
+import { isRussian } from '@/helpers/language'
+import { getUserBalance } from '@/core/supabase'
 import {
   sendInsufficientStarsMessage,
-  getUserBalance,
   sendBalanceMessage,
   voiceConversationCost,
-} from '@/price'
+} from '@/price/helpers'
 
 export const voiceAvatarWizard = new Scenes.WizardScene<MyContext>(
   'voiceAvatarWizard',
@@ -23,11 +23,11 @@ export const voiceAvatarWizard = new Scenes.WizardScene<MyContext>(
     const currentBalance = await getUserBalance(ctx.from.id)
     const price = voiceConversationCost
     if (currentBalance < price) {
-      await sendInsufficientStarsMessage(ctx, currentBalance, isRu)
+      await sendInsufficientStarsMessage(ctx.from.id, currentBalance, isRu)
       return ctx.scene.leave()
     }
 
-    await sendBalanceMessage(currentBalance, price, ctx, isRu)
+    await sendBalanceMessage(ctx.from.id, currentBalance, price, isRu)
 
     await ctx.reply(
       isRu

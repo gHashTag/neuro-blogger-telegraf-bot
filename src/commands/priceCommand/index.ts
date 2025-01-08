@@ -1,3 +1,4 @@
+import { imageModelPrices, starCost } from '@/price/models'
 import { MyContext } from '../../interfaces'
 import {
   promptGenerationCost,
@@ -6,10 +7,8 @@ import {
   textToSpeechCost,
   textToVideoCost,
   speechGenerationCost,
-  starCost,
   costPerStepInStars,
-  imageModelPrices,
-} from '../../price'
+} from '@/price/helpers'
 
 export async function priceCommand(ctx: MyContext) {
   console.log('CASE: priceCommand')
