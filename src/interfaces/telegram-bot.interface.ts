@@ -1,7 +1,8 @@
 import { Context, NarrowedContext, Scenes } from 'telegraf'
-import { ModelUrl, UserModel, Mode } from './index'
+import { ModelUrl, UserModel } from './index'
 import type { Update, Message } from 'telegraf/typings/core/types/typegram'
 import { Buffer } from 'buffer'
+import { Mode } from './cost.interface'
 
 export type BufferType = { buffer: Buffer; filename: string }[]
 

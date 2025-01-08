@@ -1,6 +1,4 @@
-import { interestRate } from './calculateFinalPrice'
-
-import { starCost } from './calculateFinalPrice'
+import { starCost, interestRate } from '..'
 
 // Функция для расчета окончательной стоимости изображения в звездах
 export function calculateFinalImageCostInStars(baseCost: number): number {

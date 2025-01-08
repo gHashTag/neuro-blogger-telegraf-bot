@@ -1,6 +1,6 @@
 import { Markup } from 'telegraf'
 import { MyContext } from '@/interfaces'
-import { imageModelPrices } from '@/price'
+import { imageModelPrices } from '@/price/models'
 
 export async function imageModelMenu(ctx: MyContext) {
   const isRu = ctx.from?.language_code === 'ru'

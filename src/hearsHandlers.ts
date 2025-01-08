@@ -13,7 +13,7 @@ import { handleLevelQuest } from './handlers/handleLevelQuest'
 import { mainMenu } from './menu'
 
 import { handleSizeSelection } from './handlers'
-import { imageModelPrices } from './price/imageModelPrices'
+import { imageModelPrices } from './price/models'
 import { handleSelectStars } from './commands/topUpBalanceCommand/handleSelectStars'
 
 const myComposer = new Composer<MyContext>()

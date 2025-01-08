@@ -1,4 +1,4 @@
-import bot from '../core/bot'
+import bot from '@/core/bot'
 
 export const sendPaymentNotification = async (
   amount: number,
