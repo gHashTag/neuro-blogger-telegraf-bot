@@ -6,7 +6,7 @@ interface ModelInfo {
   description_ru: string
   costPerImage: number
   previewImage: string
-  inputType: ('text' | 'image')[]
+  inputType: ('text' | 'image' | 'dev')[]
 }
 
 // Стоимость одной звезды
@@ -56,7 +56,7 @@ export const imageModelPrices: Record<string, ModelInfo> = {
     previewImage:
       'https://replicate.delivery/xezq/JnlhyMG4GD6uEpGsfoXVG7wc8pIvQ3UtfRRhyef2aXkQQfZeE/out-0.webp',
     costPerImage: calculateFinalImageCostInStars(0.025),
-    inputType: ['text', 'image'],
+    inputType: ['text', 'image', 'dev'],
   },
   'black-forest-labs/flux-depth-pro': {
     shortName: 'FLUX1.1 [pro] Depth',
@@ -65,7 +65,7 @@ export const imageModelPrices: Record<string, ModelInfo> = {
     previewImage:
       'https://replicate.delivery/czjl/YmnJr3uJFwaLHpyE2YQZEsGD6DsN3h6opElksQJ4UUzUJz8E/tmp_zp5p3b2.jpg',
     costPerImage: calculateFinalImageCostInStars(0.05),
-    inputType: ['text', 'image'],
+    inputType: ['text', 'image', 'dev'],
   },
   'black-forest-labs/flux-dev': {
     shortName: 'FLUX1.1 [dev]',
@@ -92,7 +92,7 @@ export const imageModelPrices: Record<string, ModelInfo> = {
     previewImage:
       'https://replicate.delivery/xezq/XAOCdYKsGYZ9FNTeeEQPbl8DM9eoDf050jLfSAZMuWVYJdZeE/out-0.webp',
     costPerImage: calculateFinalImageCostInStars(0.04),
-    inputType: ['text', 'image'],
+    inputType: ['text', 'image', 'dev'],
   },
   'black-forest-labs/flux-fill-pro': {
     shortName: 'FLUX1.1 [pro] Fill',
@@ -101,7 +101,7 @@ export const imageModelPrices: Record<string, ModelInfo> = {
     previewImage:
       'https://replicate.delivery/xezq/XAOCdYKsGYZ9FNTeeEQPbl8DM9eoDf050jLfSAZMuWVYJdZeE/out-0.webp',
     costPerImage: calculateFinalImageCostInStars(0.05),
-    inputType: ['text', 'image'],
+    inputType: ['text', 'image', 'dev'],
   },
   'black-forest-labs/flux-pro': {
     shortName: 'FLUX1.1 [pro]',
@@ -119,7 +119,7 @@ export const imageModelPrices: Record<string, ModelInfo> = {
     previewImage:
       'https://replicate.delivery/xezq/Oaex1FdP2ayjUSrbBrYA1WXnGJlu2ESnk71anWxs4OGWEo5JA/out-0.webp',
     costPerImage: calculateFinalImageCostInStars(0.025),
-    inputType: ['image'],
+    inputType: ['image', 'dev'],
   },
   'black-forest-labs/flux-redux-schnell': {
     shortName: 'FLUX1.1 [dev] Redux schnell',
@@ -128,7 +128,7 @@ export const imageModelPrices: Record<string, ModelInfo> = {
     previewImage:
       'https://replicate.delivery/xezq/EXqL6e5mFnSxcS5cebdKDEbKfAfArVBY0aJpf1V8iZoeHem5JA/out-0.webp',
     costPerImage: calculateFinalImageCostInStars(0.003),
-    inputType: ['image'],
+    inputType: ['image', 'dev'],
   },
   'black-forest-labs/flux-schnell': {
     shortName: 'FLUX1.1 [dev] Schnell',
@@ -137,7 +137,7 @@ export const imageModelPrices: Record<string, ModelInfo> = {
     previewImage:
       'https://replicate.delivery/yhqm/hcDDSNf633zeDUz9sWkKfaftcfJLWIvuhn9vfCFWmufxelmemA/out-0.webp',
     costPerImage: calculateFinalImageCostInStars(0.003),
-    inputType: ['image'],
+    inputType: ['text'],
   },
   'black-forest-labs/flux-schnell-lora': {
     shortName: 'FLUX1.1 [dev] Schnell lora',
@@ -146,7 +146,7 @@ export const imageModelPrices: Record<string, ModelInfo> = {
     previewImage:
       'https://replicate.delivery/xezq/T7gLEVc07aqvBdrWweJanOmMebAX97jUTfQrsLmXPQOvsahnA/out-0.webp',
     costPerImage: calculateFinalImageCostInStars(0.02),
-    inputType: ['image', 'image'],
+    inputType: ['text'],
   },
   'ideogram-ai/ideogram-v2': {
     shortName: 'Ideogram',
@@ -200,7 +200,7 @@ export const imageModelPrices: Record<string, ModelInfo> = {
     previewImage:
       'https://yuukfqcsdhkyxegfwlcb.supabase.co/storage/v1/object/public/images/bot/Screenshot%202568-01-08%20at%2015.23.03.png',
     costPerImage: calculateFinalImageCostInStars(0.044),
-    inputType: ['text'],
+    inputType: ['text', 'dev'],
   },
   'recraft-ai/recraft-v3': {
     shortName: 'Recraft V3',
@@ -218,7 +218,7 @@ export const imageModelPrices: Record<string, ModelInfo> = {
     previewImage:
       'https://yuukfqcsdhkyxegfwlcb.supabase.co/storage/v1/object/public/images/bot/Screenshot%202568-01-08%20at%2015.24.41.png',
     costPerImage: calculateFinalImageCostInStars(0.08),
-    inputType: ['text'],
+    inputType: ['text', 'dev'],
   },
   'stability-ai/stable-diffusion-3': {
     shortName: 'Stable Diffusion 3',

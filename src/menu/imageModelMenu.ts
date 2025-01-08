@@ -5,20 +5,17 @@ import { imageModelPrices } from '@/price/models'
 export async function imageModelMenu(ctx: MyContext) {
   const isRu = ctx.from?.language_code === 'ru'
 
-  // Фильтруем модели, исключая те, у которых есть 'dev' или 'image' в inputType
+  // Фильтруем модели, исключая те, у которых есть 'dev' в inputType
+  // и оставляем только те, у которых есть 'text' или 'text' и 'image'
   const filteredModels = Object.values(imageModelPrices).filter(
     model =>
-      !model.inputType.includes('dev') && model.inputType.includes('image')
+      !model.inputType.includes('dev') &&
+      (model.inputType.includes('text') ||
+        (model.inputType.includes('text') && model.inputType.includes('image')))
   )
 
-  // Если режим 'text_to_image', фильтруем модели, которые поддерживают 'text'
-  const modelsForMenu =
-    ctx.session.mode === 'text_to_image'
-      ? filteredModels.filter(model => model.inputType.includes('text'))
-      : filteredModels
-
   // Создаем массив кнопок на основе shortName отфильтрованных моделей
-  const modelButtons = modelsForMenu.map(model =>
+  const modelButtons = filteredModels.map(model =>
     Markup.button.text(model.shortName)
   )
 
