@@ -12,9 +12,8 @@ import { generateNeuroImage } from './services/generateNeuroImage'
 import { handleLevelQuest } from './handlers/handleLevelQuest'
 import { mainMenu } from './menu'
 
-import { handleSizeSelection } from './handlers'
+import { handleSelectStars, handleSizeSelection } from './handlers'
 import { imageModelPrices } from './price/models'
-import { handleSelectStars } from './commands/topUpBalanceCommand/handleSelectStars'
 
 const myComposer = new Composer<MyContext>()
 
@@ -95,7 +94,7 @@ myComposer.hears(['🎮 Начать обучение', '🎮 Start learning'], 
 
 myComposer.hears(['💎 Пополнить баланс', '💎 Top up balance'], async ctx => {
   console.log('CASE: Пополнить баланс')
-  await handleSelectStars({ ctx, isRu: isRussian(ctx) })
+  await ctx.scene.enter('paymentScene')
 })
 
 myComposer.hears(['🤑 Баланс', '🤑 Balance'], async ctx => {

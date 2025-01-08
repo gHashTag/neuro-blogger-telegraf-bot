@@ -10,7 +10,6 @@ interface ModelInfo {
 }
 
 // Стоимость одной звезды
-export const starCost = 0.016 // USD
 
 export const imageModelPrices: Record<string, ModelInfo> = {
   'black-forest-labs/flux-1.1-pro': {

@@ -7,7 +7,7 @@ import {
   calculateTrainingCostInRub,
   calculateTrainingCostInStars,
 } from './calculateTrainingCost'
-import { starCost } from '../models'
+import { starCost } from '@/price'
 
 export async function handleTrainingCost(
   ctx: MyContext,

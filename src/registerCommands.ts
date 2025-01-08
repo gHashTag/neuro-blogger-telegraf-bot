@@ -4,7 +4,7 @@ import { MyContext } from './interfaces'
 import { startCommand } from './commands/startCommand'
 import { neuroQuestCommand } from './commands/neuroQuestCommand'
 
-import { topUpBalanceCommand } from './commands/topUpBalanceCommand'
+// import { topUpBalanceCommand } from './commands/topUpBalanceCommand'
 import { balanceCommand } from './commands/balanceCommand'
 
 import {
@@ -24,6 +24,7 @@ import {
   selectModelWizard,
   voiceAvatarWizard,
   textToSpeechWizard,
+  paymentScene,
 } from './scenes'
 import { subscriptionMiddleware } from '@/middlewares/subscription'
 
@@ -52,17 +53,17 @@ export const balanceScene = new Scenes.WizardScene<MyContext>(
   'balanceCommand',
   balanceCommand
 )
-export const topUpBalanceScene = new Scenes.WizardScene<MyContext>(
-  'topUpBalanceCommand',
-  topUpBalanceCommand
-)
+// export const topUpBalanceScene = new Scenes.WizardScene<MyContext>(
+//   'topUpBalanceCommand',
+//   topUpBalanceCommand
+// )
 
 export const stage = new Scenes.Stage<MyContext>([
   startScene,
   neuroQuestScene,
   menuScene,
   balanceScene,
-  topUpBalanceScene,
+  // topUpBalanceScene,
   avatarWizard,
   imageToPromptWizard,
   emailWizard,
@@ -80,6 +81,7 @@ export const stage = new Scenes.Stage<MyContext>([
   selectModelWizard,
   voiceAvatarWizard,
   textToSpeechWizard,
+  paymentScene,
 ])
 
 export function registerCommands(bot: Telegraf<MyContext>) {
@@ -95,20 +97,10 @@ export function registerCommands(bot: Telegraf<MyContext>) {
     await neuroQuestCommand(ctx)
   })
 
-  // startScene.on('message', ctx => {
-  //   console.log('CASE: startScene', ctx.message)
-  // })
-
-  // neuroQuestScene.on('message', ctx => {
-  //   console.log('CASE: neuroQuestScene', ctx.message)
-  // })
-
-  // bot.command('buystars', async ctx => {
-  //   const isRu = ctx.from?.language_code === 'ru'
-  //   const data = 'top_up_5000'
-
-  //   await handleBuy({ ctx, data, isRu })
-  // })
+  myComposer.command('buy', async ctx => {
+    console.log('CASE: buy')
+    await ctx.scene.enter('paymentScene')
+  })
 
   myComposer.command('menu', async ctx => {
     console.log('CASE: myComposer.command menu')
@@ -119,10 +111,6 @@ export function registerCommands(bot: Telegraf<MyContext>) {
     console.log('CASE: invite')
     await inviteCommand(ctx)
   })
-
-  // myComposer.command('buy', async ctx => {
-  //   await ctx.scene.enter('emailWizard')
-  // })
 
   myComposer.command('balance', ctx => balanceCommand(ctx))
 

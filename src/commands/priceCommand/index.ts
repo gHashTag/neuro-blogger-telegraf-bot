@@ -1,4 +1,5 @@
-import { imageModelPrices, starCost } from '@/price/models'
+import { imageModelPrices } from '@/price/models'
+import { starCost } from '@/price'
 import { MyContext } from '../../interfaces'
 import {
   promptGenerationCost,

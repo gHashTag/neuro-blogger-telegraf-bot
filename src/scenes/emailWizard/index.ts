@@ -1,8 +1,9 @@
 import { Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import { saveUserEmail } from '../../core/supabase'
-import { topUpBalanceCommand } from '../../commands/topUpBalanceCommand'
+
 import { mainMenu } from '@/menu/mainMenu'
+import { handleBuyRobokassa } from '@/handlers'
 
 export const emailWizard = new Scenes.WizardScene<MyContext>(
   'emailWizard',
@@ -61,7 +62,7 @@ export const emailWizard = new Scenes.WizardScene<MyContext>(
               ? 'Ваш e-mail успешно сохранен. Теперь вы можете продолжить оплату.'
               : 'Your e-mail has been successfully saved. You can now proceed with the payment.'
           )
-          await topUpBalanceCommand(ctx)
+          await handleBuyRobokassa({ ctx, isRu })
         } catch (error) {
           await ctx.reply(
             isRu

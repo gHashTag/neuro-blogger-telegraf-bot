@@ -1,5 +1,5 @@
 import { Context } from 'telegraf'
-import { starAmounts } from '.'
+import { starAmounts } from '@/price/helpers/starAmounts'
 
 interface BuyParams {
   ctx: Context
