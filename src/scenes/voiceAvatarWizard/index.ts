@@ -1,4 +1,4 @@
-import { Markup, Scenes } from 'telegraf'
+import { Scenes } from 'telegraf'
 import { MyContext } from '@/interfaces'
 import { generateVoiceAvatar } from '@/services/generateVoiceAvatar'
 import { isRussian } from '@/helpers/language'
@@ -8,6 +8,8 @@ import {
   sendBalanceMessage,
   voiceConversationCost,
 } from '@/price/helpers'
+import { createHelpCancelKeyboard } from '@/menu'
+import { handleHelpCancel } from '@/handlers'
 
 export const voiceAvatarWizard = new Scenes.WizardScene<MyContext>(
   'voiceAvatarWizard',
@@ -33,7 +35,7 @@ export const voiceAvatarWizard = new Scenes.WizardScene<MyContext>(
       isRu
         ? '🎙️ Пожалуйста, отправьте голосовое сообщение для создания голосового аватара'
         : '🎙️ Please send a voice message to create your voice avatar',
-      Markup.keyboard([[Markup.button.text(isRu ? 'Отменить' : 'Cancel')]])
+      createHelpCancelKeyboard(isRu)
     )
 
     return ctx.wizard.next()
@@ -54,44 +56,44 @@ export const voiceAvatarWizard = new Scenes.WizardScene<MyContext>(
       return
     }
 
-    if ('text' in message && message.text === (isRu ? 'Отменить' : 'Cancel')) {
-      await ctx.reply(isRu ? '❌ Обучение отменено' : '❌ Training cancelled')
+    const isCancel = await handleHelpCancel(ctx)
+    if (isCancel) {
       return ctx.scene.leave()
-    }
-
-    const fileId =
-      'voice' in message
-        ? message.voice.file_id
-        : 'audio' in message
-        ? message.audio.file_id
-        : undefined
-    if (!fileId) {
-      await ctx.reply(
-        isRu
-          ? 'Ошибка: не удалось получить идентификатор файла'
-          : 'Error: could not retrieve file ID'
-      )
-      return ctx.scene.leave()
-    }
-
-    try {
-      const file = await ctx.telegram.getFile(fileId)
-      if (!file.file_path) {
-        throw new Error('File path not found')
+    } else {
+      const fileId =
+        'voice' in message
+          ? message.voice.file_id
+          : 'audio' in message
+          ? message.audio.file_id
+          : undefined
+      if (!fileId) {
+        await ctx.reply(
+          isRu
+            ? 'Ошибка: не удалось получить идентификатор файла'
+            : 'Error: could not retrieve file ID'
+        )
+        return ctx.scene.leave()
       }
 
-      const fileUrl = `https://api.telegram.org/file/bot${ctx.telegram.token}/${file.file_path}`
-      await generateVoiceAvatar(fileUrl, ctx.from.id, ctx, isRu)
-    } catch (error) {
-      console.error('Error in handleVoiceMessage:', error)
-      await ctx.reply(
-        isRu
-          ? '❌ Произошла ошибка при создании голосового аватара. Пожалуйста, попробуйте позже.'
-          : '❌ An error occurred while creating the voice avatar. Please try again later.'
-      )
-    }
+      try {
+        const file = await ctx.telegram.getFile(fileId)
+        if (!file.file_path) {
+          throw new Error('File path not found')
+        }
 
-    return ctx.scene.leave()
+        const fileUrl = `https://api.telegram.org/file/bot${ctx.telegram.token}/${file.file_path}`
+        await generateVoiceAvatar(fileUrl, ctx.from.id, ctx, isRu)
+      } catch (error) {
+        console.error('Error in handleVoiceMessage:', error)
+        await ctx.reply(
+          isRu
+            ? '❌ Произошла ошибка при создании голосового аватара. Пожалуйста, попробуйте позже.'
+            : '❌ An error occurred while creating the voice avatar. Please try again later.'
+        )
+      }
+
+      return ctx.scene.leave()
+    }
   }
 )
 
