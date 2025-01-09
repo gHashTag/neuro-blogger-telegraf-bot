@@ -1,4 +1,4 @@
-import { Composer, Markup } from 'telegraf'
+import { Composer } from 'telegraf'
 import { MyContext } from './interfaces'
 import { imageModelMenu } from './menu/imageModelMenu'
 

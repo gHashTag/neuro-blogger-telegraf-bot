@@ -8,11 +8,8 @@ import {
 } from '@/price/helpers'
 import { generateNeuroImage } from '@/services/generateNeuroImage'
 import { getLatestUserModel, getUserBalance } from '@/core/supabase'
-import {
-  mainMenu,
-  sendGenerationCancelledMessage,
-  sendPhotoDescriptionRequest,
-} from '@/menu'
+import { mainMenu, sendPhotoDescriptionRequest } from '@/menu'
+import { handleHelpCancel } from '@/handlers/handleHelpCancel'
 
 export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
   'neuroPhotoWizard',
@@ -79,29 +76,31 @@ export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
     if (promptMsg && 'text' in promptMsg) {
       const promptText = promptMsg.text
 
-      if (promptText === (isRu ? 'Отменить генерацию' : 'Cancel generation')) {
-        await sendGenerationCancelledMessage(ctx, isRu)
+      const isCancel = await handleHelpCancel(ctx)
+
+      if (isCancel) {
         return ctx.scene.leave()
-      }
-
-      console.log(promptText, 'promptText')
-      console.log(ctx.session.userModel, 'ctx.session.userModel')
-      ctx.session.prompt = promptText
-      const model_url = ctx.session.userModel.model_url as ModelUrl
-      const trigger_word = ctx.session.userModel.trigger_word as string
-
-      // Добавляем trigger word к промпту
-      const userId = ctx.from?.id
-
-      if (model_url && trigger_word) {
-        console.log(model_url, 'model_url')
-        const fullPrompt = `Fashionable ${trigger_word}, ${promptText}`
-        await generateNeuroImage(fullPrompt, model_url, 1, userId || 0, ctx)
       } else {
-        await ctx.reply(isRu ? '❌ Некорректный промпт' : '❌ Invalid prompt')
-      }
-    }
+        console.log(promptText, 'promptText')
+        console.log(promptText, 'promptText')
+        console.log(ctx.session.userModel, 'ctx.session.userModel')
+        ctx.session.prompt = promptText
+        const model_url = ctx.session.userModel.model_url as ModelUrl
+        const trigger_word = ctx.session.userModel.trigger_word as string
 
-    return ctx.scene.leave()
+        // Добавляем trigger word к промпту
+        const userId = ctx.from?.id
+
+        if (model_url && trigger_word) {
+          console.log(model_url, 'model_url')
+          const fullPrompt = `Fashionable ${trigger_word}, ${promptText}`
+          await generateNeuroImage(fullPrompt, model_url, 1, userId || 0, ctx)
+        } else {
+          await ctx.reply(isRu ? '❌ Некорректный промпт' : '❌ Invalid prompt')
+        }
+      }
+
+      return ctx.scene.leave()
+    }
   }
 )

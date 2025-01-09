@@ -1,6 +1,5 @@
 import { MyContext } from '../interfaces'
-
-import { cancelMenu } from './cancelMenu'
+import { createHelpCancelKeyboard } from '@/menu/'
 
 export const sendPhotoDescriptionRequest = async (
   ctx: MyContext,
@@ -13,6 +12,6 @@ export const sendPhotoDescriptionRequest = async (
     : `📸 Describe what kind of ${type} you want to generate in English.`
 
   await ctx.reply(message, {
-    reply_markup: cancelMenu(isRu).reply_markup,
+    reply_markup: createHelpCancelKeyboard(isRu).reply_markup,
   })
 }
