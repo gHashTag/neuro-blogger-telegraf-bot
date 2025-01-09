@@ -1,4 +1,4 @@
-import { Scenes } from 'telegraf'
+import { Markup, Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import { getStepSelectionMenu } from '../../menu/getStepSelectionMenu'
 import { isRussian } from '@/helpers/language'
@@ -11,8 +11,8 @@ export const stepSelectionScene = new Scenes.WizardScene<MyContext>(
     const isRu = isRussian(ctx)
     await ctx.reply(
       isRu
-        ? 'Выберите количество шагов для обучения модели (чем больше, тем лучше, но дороже)'
-        : 'Select the number of steps for model training (the more, the better, but more expensive)',
+        ? '🔢 Пожалуйста, выберите количество шагов для обучения модели.\n\n📈 Чем больше шагов, тем лучше качество, но это будет стоить дороже. 💰'
+        : '🔢 Please select the number of steps for model training.\n\n📈 The more steps, the better the quality, but it will be more expensive. 💰',
       getStepSelectionMenu(isRu)
     )
     return ctx.wizard.next()
@@ -28,14 +28,21 @@ export const stepSelectionScene = new Scenes.WizardScene<MyContext>(
         const steps = parseInt(stepsMatch[0])
         ctx.session.steps = steps
         console.log('Parsed steps:', steps)
-        await handleTrainingCost(ctx, steps, isRu)
+        const { leaveScene, trainingCostInStars, currentBalance } =
+          await handleTrainingCost(ctx, steps, isRu)
+        if (leaveScene) {
+          return ctx.scene.leave()
+        } else {
+          const message = isRu
+            ? `✅ Вы выбрали ${steps} шагов стоимостью ${trainingCostInStars}⭐️ звезд\n\nВаш баланс: ${currentBalance} ⭐️`
+            : `✅ You selected ${steps} steps costing ${trainingCostInStars}⭐️ stars\n\nYour balance: ${currentBalance} ⭐️`
 
-        return ctx.scene.enter('trainFluxModelWizard')
-      } else {
-        console.log('No steps found in callback data')
+          await ctx.reply(message, Markup.removeKeyboard())
+          return ctx.scene.enter('trainFluxModelWizard')
+        }
       }
     } else {
-      console.log('Callback query does not contain data')
+      console.error('Callback query does not contain data')
     }
 
     if (ctx.message && 'text' in ctx.message && ctx.message.text === 'Отмена') {
@@ -49,8 +56,8 @@ export const stepSelectionScene = new Scenes.WizardScene<MyContext>(
 
     await ctx.reply(
       isRu
-        ? 'Пожалуйста, выберите количество шагов.'
-        : 'Please select the number of steps.'
+        ? '🔢 Пожалуйста, выберите количество шагов для продолжения обучения модели.'
+        : '🔢 Please select the number of steps to proceed with model training.'
     )
   }
 )

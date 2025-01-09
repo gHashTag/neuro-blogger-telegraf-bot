@@ -3,11 +3,8 @@ import { MyContext } from '../../interfaces'
 
 import { isValidImage } from '../../helpers/images'
 import { isRussian } from '@/helpers/language'
-import { BOT_TOKEN } from '@/core/bot'
-import {
-  calculateTrainingCostInStars,
-  sendInsufficientStarsMessage,
-} from '@/price/helpers'
+import bot, { BOT_TOKEN } from '@/core/bot'
+import { calculateTrainingCostInStars } from '@/price/helpers'
 import { getUserBalance } from '@/core/supabase'
 export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
   'trainFluxModelWizard',
@@ -56,17 +53,6 @@ export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
             ? '❌ Для обучения модели необходимо указать username в настройках Telegram'
             : '❌ You need to set a username in Telegram settings to train a model'
         )
-        return ctx.scene.leave()
-      }
-
-      const currentBalance = await getUserBalance(Number(targetUserId))
-      console.log('Current balance:', currentBalance)
-      const trainingCostInStars = calculateTrainingCostInStars(
-        ctx.session.steps
-      )
-      console.log('Training cost in stars:', trainingCostInStars)
-      if (currentBalance < trainingCostInStars) {
-        await sendInsufficientStarsMessage(ctx.from.id, currentBalance, isRu)
         return ctx.scene.leave()
       }
 

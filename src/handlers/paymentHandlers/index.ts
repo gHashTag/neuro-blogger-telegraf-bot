@@ -43,8 +43,8 @@ export async function handleSuccessfulPayment(ctx) {
 
   await ctx.reply(
     isRu
-      ? `💫 Ваш баланс пополнен на ${stars} звезд!`
-      : `💫 Your balance has been replenished by ${stars} stars!`
+      ? `💫 Ваш баланс пополнен на ${stars}⭐️ звезд!`
+      : `💫 Your balance has been replenished by ${stars}⭐️ stars!`
   )
   await ctx.telegram.sendMessage(
     '-1001978334539',

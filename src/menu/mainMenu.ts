@@ -32,6 +32,9 @@ export function mainMenu(isRu: boolean): Markup.Markup<ReplyKeyboardMarkup> {
         isRu ? '🔍 Описание из изображения' : '🔍 Image to Prompt'
       ),
     ],
-    [Markup.button.text(isRu ? '📐 Изменить размер' : '📐 Change size')],
+    [
+      Markup.button.text(isRu ? '📐 Изменить размер' : '📐 Change size'),
+      Markup.button.text(isRu ? '💎 Пополнить баланс' : '💎 Top up balance'),
+    ],
   ]).resize()
 }
