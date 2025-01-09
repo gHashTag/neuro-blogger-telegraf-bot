@@ -26,12 +26,15 @@ export async function imageModelMenu(ctx: MyContext) {
   }
 
   // Добавляем кнопки "Отмена" и "Главное меню"
-  keyboardButtons.push([
-    Markup.button.text(isRu ? 'Отмена' : 'Cancel'),
-    Markup.button.text(isRu ? '🏠 Главное меню' : '🏠 Main menu'),
-  ])
+  keyboardButtons.push(
+    [
+      Markup.button.text(isRu ? 'Отмена' : 'Cancel'),
+      Markup.button.text(isRu ? 'Справка по команде' : 'Help for the command'),
+    ],
+    [Markup.button.text(isRu ? '🏠 Главное меню' : '🏠 Main menu')]
+  )
 
-  const keyboard = Markup.keyboard(keyboardButtons).resize()
+  const keyboard = Markup.keyboard(keyboardButtons).resize().oneTime()
 
   await ctx.reply(
     isRu

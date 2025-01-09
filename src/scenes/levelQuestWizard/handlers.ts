@@ -521,47 +521,63 @@ export async function handleLevel10(ctx: MyContext) {
     const isRu = ctx.from?.language_code === 'ru'
     const message = isRu
       ? `🖼️ <b>Команда: Изображение из текста (Text to Image)</b> 🌟\n\n
-Эта функция позволяет вам воплотить ваши идеи в визуальную форму, используя всего лишь текстовое описание. Это невероятно мощный инструмент, который открывает множество возможностей для творчества и самовыражения. 🎨\n\n
-При использовании функции "Изображение из текста" у вас есть возможность выбрать одну из нескольких моделей, каждая из которых обладает уникальными характеристиками и стилем генерации изображений. Это позволяет вам адаптировать процесс создания изображений под ваши конкретные нужды и предпочтения. Рассмотрим доступные модели на момент записи этого видео:\n\n
-1️⃣ <b>Flux 1.1Pro Ultra</b>\n
-   - <b>Описание:</b> Эта модель известна своей способностью создавать изображения с высокой детализацией и реализмом. Она идеально подходит для сложных и детализированных описаний, где важны точность и качество.\n
-   - <b>Применение:</b> Используйте Flux 1.1Pro Ultra для создания изображений, требующих высокой степени детализации, таких как архитектурные сцены или портреты.\n\n
-2️⃣ <b>SDXL</b>\n
-   - <b>Описание:</b> SDXL специализируется на создании изображений с яркими цветами и контрастами. Она отлично подходит для художественных и креативных проектов, где важна выразительность.\n
-   - <b>Применение:</b> Выбирайте SDXL для создания ярких и насыщенных изображений, таких как пейзажи или абстрактные композиции.\n\n
-3️⃣ <b>SD 3.5 Turbo</b>\n
-   - <b>Описание:</b> Эта модель оптимизирована для быстрого создания изображений, сохраняя при этом хорошее качество. Она подходит для проектов, где важна скорость генерации.\n
-   - <b>Применение:</b> Используйте SD 3.5 Turbo, когда вам нужно быстро получить изображение, например, для социальных сетей или презентаций.\n\n
-4️⃣ <b>Recraft v3</b>\n
-   - <b>Описание:</b> Recraft v3 известна своей способностью к стилизации изображений, добавляя уникальные художественные эффекты. Она подходит для создания изображений с особым стилем и атмосферой.\n
-   - <b>Применение:</b> Выбирайте Recraft v3 для создания изображений с уникальным художественным стилем, таких как иллюстрации или концепт-арт.\n\n
-5️⃣ <b>Photon</b>\n
-   - <b>Описание:</b> Photon фокусируется на создании изображений с реалистичным освещением и тенями. Она идеально подходит для сцен, где важна игра света и тени.\n
-   - <b>Применение:</b> Используйте Photon для создания изображений, где освещение играет ключевую роль, таких как закаты или ночные сцены.\n\n
-Выбор модели зависит от ваших целей и предпочтений. Экспериментируйте с различными моделями, чтобы найти ту, которая лучше всего подходит для вашего проекта. Это позволит вам максимально эффективно использовать функцию "Изображение из текста" и создавать уникальные визуальные образы, которые точно отражают ваши идеи.\n\n
-Представьте себе, что вы хотите создать изображение, которое передает атмосферу заката над океаном. Вы просто вводите текст 'закат над океаном', и наш бот начинает работать. Он анализирует ваше описание и создает изображение, которое максимально точно отражает вашу задумку. Это изображение может включать в себя яркие оранжевые и розовые оттенки неба, отражающиеся в спокойных водах океана, создавая ощущение умиротворения и красоты.\n\n
-Но это только начало. Вы можете экспериментировать с различными описаниями, чтобы увидеть, как они воплощаются в жизнь. Например, попробуйте ввести 'заснеженные горы под звездным небом' или 'городская улица в дождливый день'. Каждый раз вы будете получать уникальное изображение, которое можно использовать для различных целей — от личных проектов до профессиональных презентаций. 🚀`
+Эта функция позволяет вам воплотить ваши идеи в визуальную форму, используя всего лишь текстовое описание. Это невероятно мощный инструмент, который открывает множество возможностей для творчества и самовыражения. 🎨✨\n\n
+При использовании функции "Изображение из текста" у вас есть возможность выбрать одну из нескольких моделей, каждая из которых обладает уникальными характеристиками и стилем генерации изображений. Это позволяет вам адаптировать процесс создания изображений под ваши конкретные нужды и предпочтения. Рассмотрим доступные модели от различных производителей:\n\n
+<b>🌲 Black Forest Labs</b>\n
+- <b>⚡ FLUX1.1 [pro]</b>: Быстрая генерация изображений с улучшенным качеством и разнообразием.\n
+- <b>🔍 FLUX1.1 [pro] Ultra</b>: Поддерживает высокое разрешение и быструю генерацию.\n
+- <b>✏️ FLUX1.1 [dev] Canny</b>: Генерация изображений с использованием эскизов или карт краев.\n
+- <b>🖼️ FLUX1.1 [pro] Canny</b>: Сохраняет структуру и композицию при генерации изображений.\n
+- <b>🌌 FLUX1.1 [dev] Depth</b>: Глубинно-ориентированное создание изображений.\n\n
+
+<b>💡 Ideogram AI</b>\n
+- <b>🎨 Ideogram</b>: Превращает идеи в потрясающие изображения за несколько секунд.\n
+- <b>🚀 Ideogram Turbo</b>: Быстрая генерация изображений для идеации.\n\n
+
+<b>🔆 Luma</b>\n
+- <b>🌟 Luma Photon</b>: Высокое качество и экономичность для креативных профессионалов.\n
+- <b>⚡ Luma Photon Flash</b>: Быстрая и качественная генерация изображений.\n\n
+
+<b>🛠️ Recraft AI</b>\n
+- <b>🖌️ Recraft 20b</b>: Модель для генерации изображений из текстовых описаний.\n
+- <b>🎭 Recraft V3</b>: Способность к стилизации изображений с уникальными эффектами.\n\n
+
+<b>🔬 Stability AI</b>\n
+- <b>📸 Stable Diffusion 3</b>: Превосходит в фотореализме и типографике.\n
+- <b>🔍 Stable Diffusion 3.5 Large</b>: Улучшенное качество изображений и сложных промптов.\n\n
+
+Выбор модели зависит от ваших целей и предпочтений. Экспериментируйте с различными моделями, чтобы найти ту, которая лучше всего подходит для вашего проекта. Это позволит вам максимально эффективно использовать функцию "Изображение из текста" и создавать уникальные визуальные образы, которые точно отражают ваши идеи. 🌈🖌️\n\n
+Представьте себе, что вы хотите создать изображение, которое передает атмосферу заката над океаном. Вы просто вводите текст 'закат над океаном', и наш бот начинает работать. Он анализирует ваше описание и создает изображение, которое максимально точно отражает вашу задумку. Это изображение может включать в себя яркие оранжевые и розовые оттенки неба, отражающиеся в спокойных водах океана, создавая ощущение умиротворения и красоты. 🌅🌊\n\n
+Но это только начало. Вы можете экспериментировать с различными описаниями, чтобы увидеть, как они воплощаются в жизнь. Например, попробуйте ввести 'заснеженные горы под звездным небом' или 'городская улица в дождливый день'. Каждый раз вы будете получать уникальное изображение, которое можно использовать для различных целей — от личных проектов до профессиональных презентаций. 🚀🎨`
       : `🖼️ <b>Command: Text to Image</b> 🌟\n\n
-This function allows you to bring your ideas to life in visual form using just a text description. It's an incredibly powerful tool that opens up many possibilities for creativity and self-expression. 🎨\n\n
-When using the "Text to Image" function, you have the option to choose from several models, each with unique characteristics and image generation styles. This allows you to tailor the image creation process to your specific needs and preferences. Let's look at the available models at the time of this recording:\n\n
-1️⃣ <b>Flux 1.1Pro Ultra</b>\n
-   - <b>Description:</b> This model is known for its ability to create highly detailed and realistic images. It is ideal for complex and detailed descriptions where accuracy and quality are important.\n
-   - <b>Application:</b> Use Flux 1.1Pro Ultra for creating images that require a high degree of detail, such as architectural scenes or portraits.\n\n
-2️⃣ <b>SDXL</b>\n
-   - <b>Description:</b> SDXL specializes in creating images with vibrant colors and contrasts. It is perfect for artistic and creative projects where expressiveness is important.\n
-   - <b>Application:</b> Choose SDXL for creating bright and saturated images, such as landscapes or abstract compositions.\n\n
-3️⃣ <b>SD 3.5 Turbo</b>\n
-   - <b>Description:</b> This model is optimized for fast image creation while maintaining good quality. It is suitable for projects where generation speed is important.\n
-   - <b>Application:</b> Use SD 3.5 Turbo when you need to quickly get an image, for example, for social media or presentations.\n\n
-4️⃣ <b>Recraft v3</b>\n
-   - <b>Description:</b> Recraft v3 is known for its ability to stylize images, adding unique artistic effects. It is suitable for creating images with a special style and atmosphere.\n
-   - <b>Application:</b> Choose Recraft v3 for creating images with a unique artistic style, such as illustrations or concept art.\n\n
-5️⃣ <b>Photon</b>\n
-   - <b>Description:</b> Photon focuses on creating images with realistic lighting and shadows. It is ideal for scenes where the play of light and shadow is important.\n
-   - <b>Application:</b> Use Photon for creating images where lighting plays a key role, such as sunsets or night scenes.\n\n
-The choice of model depends on your goals and preferences. Experiment with different models to find the one that best suits your project. This will allow you to make the most of the "Text to Image" function and create unique visual images that accurately reflect your ideas.\n\n
-Imagine you want to create an image that conveys the atmosphere of a sunset over the ocean. You simply enter the text 'sunset over the ocean', and our bot gets to work. It analyzes your description and creates an image that most accurately reflects your idea. This image may include bright orange and pink hues of the sky reflected in the calm waters of the ocean, creating a sense of tranquility and beauty.\n\n
-But this is just the beginning. You can experiment with different descriptions to see how they come to life. For example, try entering 'snow-capped mountains under a starry sky' or 'city street on a rainy day'. Each time you will receive a unique image that can be used for various purposes — from personal projects to professional presentations. 🚀`
+This function allows you to bring your ideas to life in visual form using just a text description. It's an incredibly powerful tool that opens up many possibilities for creativity and self-expression. 🎨✨\n\n
+When using the "Text to Image" function, you have the option to choose from several models, each with unique characteristics and image generation styles. This allows you to tailor the image creation process to your specific needs and preferences. Let's look at the available models from different manufacturers:\n\n
+<b>🌲 Black Forest Labs</b>\n
+- <b>⚡ FLUX1.1 [pro]</b>: Fast image generation with improved quality and diversity.\n
+- <b>🔍 FLUX1.1 [pro] Ultra</b>: Supports high resolution and fast generation.\n
+- <b>✏️ FLUX1.1 [dev] Canny</b>: Image generation using sketches or edge maps.\n
+- <b>🖼️ FLUX1.1 [pro] Canny</b>: Preserves structure and composition in image generation.\n
+- <b>🌌 FLUX1.1 [dev] Depth</b>: Depth-aware image creation.\n\n
+
+<b>💡 Ideogram AI</b>\n
+- <b>🎨 Ideogram</b>: Turns ideas into stunning images in seconds.\n
+- <b>🚀 Ideogram Turbo</b>: Fast image generation for ideation.\n\n
+
+<b>🔆 Luma</b>\n
+- <b>🌟 Luma Photon</b>: High quality and cost efficiency for creative professionals.\n
+- <b>⚡ Luma Photon Flash</b>: Fast and quality image generation.\n\n
+
+<b>🛠️ Recraft AI</b>\n
+- <b>🖌️ Recraft 20b</b>: Model for generating images from text descriptions.\n
+- <b>🎭 Recraft V3</b>: Ability to stylize images with unique effects.\n\n
+
+<b>🔬 Stability AI</b>\n
+- <b>📸 Stable Diffusion 3</b>: Excels in photorealism and typography.\n
+- <b>🔍 Stable Diffusion 3.5 Large</b>: Improved image quality and complex prompt understanding.\n\n
+
+The choice of model depends on your goals and preferences. Experiment with different models to find the one that best suits your project. This will allow you to make the most of the "Text to Image" function and create unique visual images that accurately reflect your ideas. 🌈🖌️\n\n
+Imagine you want to create an image that conveys the atmosphere of a sunset over the ocean. You simply enter the text 'sunset over the ocean', and our bot gets to work. It analyzes your description and creates an image that most accurately reflects your idea. This image may include bright orange and pink hues of the sky reflected in the calm waters of the ocean, creating a sense of tranquility and beauty. 🌅🌊\n\n
+But this is just the beginning. You can experiment with different descriptions to see how they come to life. For example, try entering 'snow-capped mountains under a starry sky' or 'city street on a rainy day'. Each time you will receive a unique image that can be used for various purposes — from personal projects to professional presentations. 🚀🎨`
 
     await ctx.reply(message, { parse_mode: 'HTML' })
   } catch (error) {

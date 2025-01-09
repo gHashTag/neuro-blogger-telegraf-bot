@@ -4,15 +4,14 @@ import { imageModelMenu } from './menu/imageModelMenu'
 
 import { balanceCommand } from './commands/balanceCommand'
 import { menuCommand } from './commands/menuCommand'
-import { generateImage } from './services/generateReplicateImage'
+import { generateTextToImage } from './services/generateTextToImage'
 import { isRussian } from './helpers/language'
 
 import { generateNeuroImage } from './services/generateNeuroImage'
 
-import { mainMenu } from './menu'
-
 import { handleSizeSelection } from './handlers'
 import { imageModelPrices } from './price/models'
+import { mainMenu } from './menu'
 
 const myComposer = new Composer<MyContext>()
 
@@ -78,7 +77,8 @@ myComposer.hears(
   async ctx => {
     console.log('CASE: Изображение из текста')
     ctx.session.mode = 'text_to_image'
-    await imageModelMenu(ctx)
+    await ctx.scene.enter('textToImageWizard')
+    // await imageModelMenu(ctx)
   }
 )
 
@@ -145,7 +145,7 @@ myComposer.hears(['1️⃣', '2️⃣', '3️⃣', '4️⃣'], async ctx => {
         ctx
       )
     } else {
-      await generateImage(
+      await generateTextToImage(
         prompt,
         ctx.session.selectedModel || '',
         num,
@@ -212,39 +212,39 @@ myComposer.hears(
   }
 )
 
-myComposer.hears(
-  Object.values(imageModelPrices).map(model => model.shortName),
-  async ctx => {
-    console.log('CASE: Выбор модели')
-    if (!ctx.message) {
-      throw new Error('No message')
-    }
-    const isRu = isRussian(ctx)
-    const model = ctx.message.text
-    console.log(model, 'model')
-    ctx.session.selectedModel = model
+// myComposer.hears(
+//   Object.values(imageModelPrices).map(model => model.shortName),
+//   async ctx => {
+//     console.log('CASE: Выбор модели')
+//     if (!ctx.message) {
+//       throw new Error('No message')
+//     }
+//     const isRu = isRussian(ctx)
+//     const model = ctx.message.text
+//     console.log(model, 'model')
+//     ctx.session.selectedModel = model
 
-    await ctx.reply(
-      isRu ? `Вы выбрали модель: ${model}` : `You selected model: ${model}`,
-      {
-        reply_markup: {
-          remove_keyboard: true,
-        },
-      }
-    )
+//     await ctx.reply(
+//       isRu ? `Вы выбрали модель: ${model}` : `You selected model: ${model}`,
+//       {
+//         reply_markup: {
+//           remove_keyboard: true,
+//         },
+//       }
+//     )
 
-    await ctx.scene.enter('textToImageWizard')
-  }
-)
+//     await ctx.scene.enter('textToImageWizard')
+//   }
+// )
 
-myComposer.hears(['Отмена', 'Cancel'], async ctx => {
-  console.log('CASE: Отмена')
-  if (ctx.session.mode === 'image_to_video') {
-    await ctx.scene.enter('cancelPredictionsWizard')
-  } else {
-    const isRu = isRussian(ctx)
-    mainMenu(isRu)
-  }
-})
+// myComposer.hears(['Отмена', 'Cancel'], async ctx => {
+//   console.log('CASE: Отмена')
+//   if (ctx.session.mode === 'image_to_video') {
+//     await ctx.scene.enter('cancelPredictionsWizard')
+//   } else {
+//     const isRu = isRussian(ctx)
+//     mainMenu(isRu)
+//   }
+// })
 
 export default myComposer

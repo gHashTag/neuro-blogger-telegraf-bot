@@ -1,16 +1,14 @@
 import { MyContext } from '@/interfaces'
-import { videoModelPrices } from '@/price/models/videoModelPrices'
-import { VideoModel } from '@/interfaces'
-import { calculateFinalPrice } from '@/price/helpers'
+import { imageModelPrices } from '@/price/models/imageModelPrices'
 
-export async function validateAndCalculatePrice(
-  videoModel: string,
-  availableModels: VideoModel[],
+export async function validateAndCalculateImageModelPrice(
+  imageModel: string,
+  availableModels: string[],
   currentBalance: number,
   isRu: boolean,
   ctx: MyContext
 ): Promise<number | null> {
-  if (!videoModel || !availableModels.includes(videoModel as VideoModel)) {
+  if (!imageModel || !availableModels.includes(imageModel)) {
     await ctx.reply(
       isRu
         ? 'Пожалуйста, выберите корректную модель'
@@ -19,15 +17,18 @@ export async function validateAndCalculatePrice(
     return null
   }
 
-  const model = videoModel as VideoModel
-  if (!(model in videoModelPrices)) {
+  const modelInfo = imageModelPrices[imageModel]
+  console.log('modelInfo', modelInfo)
+  if (!modelInfo) {
     await ctx.reply(
-      isRu ? 'Ошибка: неверная модель видео.' : 'Error: invalid video model.'
+      isRu
+        ? 'Ошибка: неверная модель изображения.'
+        : 'Error: invalid image model.'
     )
     return null
   }
 
-  const price = calculateFinalPrice(model)
+  const price = modelInfo.costPerImage
   ctx.session.paymentAmount = price
   if (currentBalance < price) {
     await ctx.reply(

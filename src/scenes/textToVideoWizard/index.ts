@@ -1,6 +1,9 @@
 import { Scenes } from 'telegraf'
 import { MyContext, VideoModel } from '@/interfaces'
-import { sendBalanceMessage, validateAndCalculatePrice } from '@/price/helpers'
+import {
+  sendBalanceMessage,
+  validateAndCalculateVideoModelPrice,
+} from '@/price/helpers'
 import { generateTextToVideo } from '@/services/generateTextToVideo'
 import { isRussian } from '@/helpers/language'
 import {
@@ -81,7 +84,7 @@ export const textToVideoWizard = new Scenes.WizardScene<MyContext>(
       }
 
       // Используем await для получения результата
-      const price = await validateAndCalculatePrice(
+      const price = await validateAndCalculateVideoModelPrice(
         videoModel,
         availableModels,
         currentBalance,

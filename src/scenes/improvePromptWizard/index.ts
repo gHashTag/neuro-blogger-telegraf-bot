@@ -1,7 +1,7 @@
 import { Scenes, Markup } from 'telegraf'
 import { upgradePrompt } from '@/core/openai/upgradePrompt'
 import { MyContext } from '@/interfaces'
-import { generateImage } from '@/services/generateReplicateImage'
+import { generateTextToImage } from '@/services/generateTextToImage'
 import { generateNeuroImage } from '@/services/generateNeuroImage'
 import { generateTextToVideo } from '@/services/generateTextToVideo'
 import { sendPromptImprovementMessage } from '@/menu/sendPromptImprovementMessage'
@@ -140,7 +140,7 @@ export const improvePromptWizard = new Scenes.WizardScene<MyContext>(
               )
               break
             case 'text_to_image':
-              await generateImage(
+              await generateTextToImage(
                 ctx.session.prompt,
                 ctx.session.selectedModel,
                 1,

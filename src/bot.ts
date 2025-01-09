@@ -40,7 +40,9 @@ bot.action('callback_query', (ctx: MyContext) => handleCallback(ctx))
 
 bot.action(/^select_model_/, async ctx => {
   console.log('CASE: select_model_', ctx.match)
+
   const model = ctx.match.input.replace('select_model_', '')
+  ctx.session.selectedModel = model
   console.log('Selected model:', model)
   await handleModelCallback(ctx, model)
 })

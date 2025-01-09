@@ -1,5 +1,8 @@
 import { Scenes } from 'telegraf'
-import { sendBalanceMessage, validateAndCalculatePrice } from '@/price/helpers'
+import {
+  sendBalanceMessage,
+  validateAndCalculateVideoModelPrice,
+} from '@/price/helpers'
 import { generateImageToVideo } from '@/services/generateImageToVideo'
 import { MyContext, VIDEO_MODELS, VideoModel } from '@/interfaces'
 import {
@@ -55,7 +58,7 @@ export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
       console.log('currentBalance', currentBalance)
 
       // Используем новую функцию для проверки и расчета
-      const price = await validateAndCalculatePrice(
+      const price = await validateAndCalculateVideoModelPrice(
         videoModel as string,
         availableModels,
         currentBalance,
