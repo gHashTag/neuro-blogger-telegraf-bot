@@ -33,6 +33,7 @@ setBotCommands(bot)
 registerCommands(bot)
 
 bot.use(stage.middleware())
+
 bot.use(myComposer.middleware())
 
 bot.action('callback_query', (ctx: MyContext) => handleCallback(ctx))

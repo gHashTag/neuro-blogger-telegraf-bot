@@ -1,5 +1,36 @@
+import { mainMenu } from '@/menu'
 import { MyContext } from '../../interfaces'
 import { Markup } from 'telegraf'
+
+export async function handleQuestRules(ctx: MyContext) {
+  try {
+    const isRu = ctx.from?.language_code === 'ru'
+    const message = isRu
+      ? `📜 Правила НейроКвеста:
+
+1. Выполняйте задания последовательно
+2. За каждое выполненное задание вы получаете очки
+3. Чем больше очков - тем выше ваш уровень
+4. Некоторые задания имеют ограничение по времени
+5. За особые достижения вы получаете бонусы
+
+Удачи в прохождении! 🍀`
+      : `📜 NeuroQuest Rules:
+
+1. Complete tasks sequentially
+2. You get points for each completed task
+3. The more points - the higher your level
+4. Some tasks have time limits
+5. You get bonuses for special achievements
+
+Good luck! 🍀`
+
+    await ctx.reply(message)
+  } catch (error) {
+    console.error('Error in handleQuestRules:', error)
+    throw error
+  }
+}
 
 export async function handleLevel0(ctx: MyContext) {
   try {
@@ -39,12 +70,7 @@ More accurate and personalized answers.
 The ability to improve interactions with the bot.
 Create a unique profile that helps the bot better understand your requests.`
 
-    await ctx.reply(
-      message,
-      Markup.inlineKeyboard([
-        Markup.button.callback(isRu ? '➡️ Далее' : '➡️ Next', 'level_1'),
-      ])
-    )
+    await ctx.reply(message)
 
     return
   } catch (error) {
@@ -95,12 +121,7 @@ Create unique avatars for social networks.
 Visualize your dreams and goals.
 Use images for inspiration and creativity`
 
-    await ctx.reply(
-      message,
-      Markup.inlineKeyboard([
-        Markup.button.callback(isRu ? '➡️ Далее' : '➡️ Next', 'level_2'),
-      ])
-    )
+    await ctx.reply(message)
     return
   } catch (error) {
     console.error('Error in handleLevel1:', error)
@@ -149,12 +170,7 @@ Create an avatar for social networks.
 Visualize your dreams and goals.
 Share your creative ideas on social networks.`
 
-    await ctx.reply(
-      message,
-      Markup.inlineKeyboard([
-        Markup.button.callback(isRu ? '➡️ Далее' : '➡️ Next', 'level_3'),
-      ])
-    )
+    await ctx.reply(message)
     return
   } catch (error) {
     console.error('Error in handleLevel2:', error)
@@ -205,12 +221,7 @@ Get ideas for writing articles or posts.
 Use descriptions to improve the SEO of your content.
       `
 
-    await ctx.reply(
-      message,
-      Markup.inlineKeyboard([
-        Markup.button.callback(isRu ? '➡️ Далее' : '➡️ Next', 'level_4'),
-      ])
-    )
+    await ctx.reply(message)
     return
   } catch (error) {
     console.error('Error in handleLevel3:', error)
@@ -262,12 +273,7 @@ Create a cover for your book.
 Visualize your dreams and goals.
 Share your creative ideas on social media.`
 
-    await ctx.reply(
-      message,
-      Markup.inlineKeyboard([
-        Markup.button.callback(isRu ? '➡️ Далее' : '➡️ Next', 'level_5'),
-      ])
-    )
+    await ctx.reply(message)
     return
   } catch (error) {
     console.error('Error in handleLevel4:', error)
@@ -316,12 +322,7 @@ Create a trailer for your book or project.
 Visualize your dreams and goals in video format.
 Share your creative ideas on social media.`
 
-    await ctx.reply(
-      message,
-      Markup.inlineKeyboard([
-        Markup.button.callback(isRu ? '➡️ Далее' : '➡️ Next', 'level_6'),
-      ])
-    )
+    await ctx.reply(message)
     return
   } catch (error) {
     console.error('Error in handleLevel5:', error)
@@ -370,12 +371,7 @@ Create animations for your social networks.
 Visualize your ideas and projects in video format.
 Share your creative ideas on social networks.`
 
-    await ctx.reply(
-      message,
-      Markup.inlineKeyboard([
-        Markup.button.callback(isRu ? '➡️ Далее' : '➡️ Next', 'level_7'),
-      ])
-    )
+    await ctx.reply(message)
     return
   } catch (error) {
     console.error('Error in handleLevel6:', error)
@@ -424,13 +420,7 @@ Create an animation with your avatar for social networks.
 Voice your avatar for video projects.
 Share your creative ideas on social media.`
 
-    await ctx.reply(
-      message,
-      Markup.inlineKeyboard([
-        Markup.button.callback(isRu ? '➡️ Далее' : '➡️ Next', 'level_8'),
-      ])
-    )
-
+    await ctx.reply(message)
     return
   } catch (error) {
     console.error('Error in handleLevel7:', error)
@@ -479,12 +469,7 @@ Create an audiobook from your texts.
 Voice your articles or blogs.
 Share your creative ideas on social media.`
 
-    await ctx.reply(
-      message,
-      Markup.inlineKeyboard([
-        Markup.button.callback(isRu ? '➡️ Далее' : '➡️ Next', 'level_9'),
-      ])
-    )
+    await ctx.reply(message)
     return
   } catch (error) {
     console.error('Error in handleLevel8:', error)
@@ -530,12 +515,7 @@ More accurate and personalized texts.
 Ability to experiment with different styles and approaches.
 Improved interaction with the bot.`
 
-    await ctx.reply(
-      message,
-      Markup.inlineKeyboard([
-        Markup.button.callback(isRu ? '➡️ Далее' : '➡️ Next', 'level_10'),
-      ])
-    )
+    await ctx.reply(message)
     return
   } catch (error) {
     console.error('Error in handleLevel9:', error)
@@ -631,12 +611,7 @@ Create a music video or karaoke.
 Visualize podcasts or audiobooks.
 Share your creative ideas on social media.`
 
-    await ctx.reply(
-      message,
-      Markup.inlineKeyboard([
-        Markup.button.callback(isRu ? '➡️ Далее' : '➡️ Next', 'level_11'),
-      ])
-    )
+    await ctx.reply(message)
     return
   } catch (error) {
     console.error('Error in handleLevel10:', error)
@@ -685,12 +660,7 @@ Share a useful tool with your friends.
 Get rewards for activity.
 Expand the user community and open new horizons together!`
 
-    await ctx.reply(
-      message,
-      Markup.inlineKeyboard([
-        Markup.button.callback(isRu ? '➡️ Далее' : '➡️ Next', 'level_complete'),
-      ])
-    )
+    await ctx.reply(message)
     return
   } catch (error) {
     console.error('Error in handleLevel11:', error)
@@ -725,49 +695,14 @@ You have successfully completed all tasks and reached the maximum level! 🌟✨
 
 💵 You have 100 ⭐️ on your balance. Use it to unlock new features!`
 
-    await ctx.reply(
-      message,
-      Markup.inlineKeyboard([
-        Markup.button.callback(
-          isRu ? '💎 Пополнить баланс' : '💎 Top up balance',
-          'top_up_balance'
-        ),
-      ])
-    )
+    await ctx.reply(message, {
+      reply_markup: {
+        keyboard: mainMenu(isRu).reply_markup.keyboard,
+      },
+    })
     return
   } catch (error) {
     console.error('Error in handleQuestComplete:', error)
-    throw error
-  }
-}
-
-export async function handleQuestRules(ctx: MyContext) {
-  try {
-    const isRu = ctx.from?.language_code === 'ru'
-    const message = isRu
-      ? `📜 Правила НейроКвеста:
-
-1. Выполняйте задания последовательно
-2. За каждое выполненное задание вы получаете очки
-3. Чем больше очков - тем выше ваш уровень
-4. Некоторые задания имеют ограничение по времени
-5. За особые достижения вы получаете бонусы
-
-Удачи в прохождении! 🍀`
-      : `📜 NeuroQuest Rules:
-
-1. Complete tasks sequentially
-2. You get points for each completed task
-3. The more points - the higher your level
-4. Some tasks have time limits
-5. You get bonuses for special achievements
-
-Good luck! 🍀`
-
-    await ctx.reply(message)
-    return
-  } catch (error) {
-    console.error('Error in handleQuestRules:', error)
     throw error
   }
 }

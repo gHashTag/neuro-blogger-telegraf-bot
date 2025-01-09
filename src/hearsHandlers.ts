@@ -9,7 +9,6 @@ import { isRussian } from './helpers/language'
 
 import { generateNeuroImage } from './services/generateNeuroImage'
 
-import { handleLevelQuest } from './handlers/handleLevelQuest'
 import { mainMenu } from './menu'
 
 import { handleSizeSelection } from './handlers'
@@ -89,7 +88,7 @@ myComposer.hears(['❓ Помощь', '❓ Help'], async ctx => {
 
 myComposer.hears(['🎮 Начать обучение', '🎮 Start learning'], async ctx => {
   console.log('CASE: Начать обучение')
-  await handleLevelQuest(ctx, 'level_0')
+  await ctx.scene.enter('step0')
 })
 
 myComposer.hears(['💎 Пополнить баланс', '💎 Top up balance'], async ctx => {

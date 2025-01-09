@@ -5,6 +5,10 @@ export function mainMenu(isRu: boolean): Markup.Markup<ReplyKeyboardMarkup> {
   console.log('CASE: mainMenu')
   return Markup.keyboard([
     [
+      Markup.button.text(isRu ? '💎 Пополнить баланс' : '💎 Top up balance'),
+      Markup.button.text(isRu ? '🎮 Начать обучение' : '🎮 Start learning'),
+    ],
+    [
       Markup.button.text(isRu ? '🧠 Мозг аватара' : '🧠 Avatar Brain'),
       Markup.button.text(
         isRu ? '🖼️ Изображение из текста' : '🖼️ Text to Image'
@@ -32,9 +36,6 @@ export function mainMenu(isRu: boolean): Markup.Markup<ReplyKeyboardMarkup> {
         isRu ? '🔍 Описание из изображения' : '🔍 Image to Prompt'
       ),
     ],
-    [
-      Markup.button.text(isRu ? '📐 Изменить размер' : '📐 Change size'),
-      Markup.button.text(isRu ? '💎 Пополнить баланс' : '💎 Top up balance'),
-    ],
+    [Markup.button.text(isRu ? '📐 Изменить размер' : '📐 Change size')],
   ]).resize()
 }

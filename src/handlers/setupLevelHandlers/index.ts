@@ -14,7 +14,7 @@ import {
   handleLevel10,
   handleLevel11,
   handleQuestComplete,
-} from '../handleLevelQuest/handlers'
+} from '../../scenes/levelQuestWizard/handlers'
 
 export function setupLevelHandlers(bot: Telegraf<MyContext>) {
   bot.action('level_0', handleLevel0)

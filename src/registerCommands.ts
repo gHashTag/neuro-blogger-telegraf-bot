@@ -25,6 +25,7 @@ import {
   voiceAvatarWizard,
   textToSpeechWizard,
   paymentScene,
+  levelQuestWizard,
 } from './scenes'
 import { subscriptionMiddleware } from '@/middlewares/subscription'
 
@@ -63,7 +64,6 @@ export const stage = new Scenes.Stage<MyContext>([
   neuroQuestScene,
   menuScene,
   balanceScene,
-  // topUpBalanceScene,
   avatarWizard,
   imageToPromptWizard,
   emailWizard,
@@ -82,6 +82,7 @@ export const stage = new Scenes.Stage<MyContext>([
   voiceAvatarWizard,
   textToSpeechWizard,
   paymentScene,
+  ...levelQuestWizard,
 ])
 
 export function registerCommands(bot: Telegraf<MyContext>) {
