@@ -54,12 +54,6 @@ myComposer.hears(['🎥 Видео из текста', '🎥 Text to Video'], as
   await ctx.scene.enter('textToVideoWizard')
 })
 
-myComposer.hears(['🎥 Изображение в видео', '🎥 Image to Video'], async ctx => {
-  console.log('CASE: Изображение в видео')
-  ctx.session.mode = 'image_to_video'
-  await ctx.scene.enter('imageToVideoWizard')
-})
-
 myComposer.hears(['🎙️ Текст в голос', '🎙️ Text to Voice'], async ctx => {
   console.log('CASE: Текст в голос')
   ctx.session.mode = 'text_to_speech'
@@ -196,55 +190,19 @@ myComposer.hears(
   }
 )
 
+myComposer.hears(['🎥 Изображение в видео', '🎥 Image to Video'], async ctx => {
+  console.log('CASE: Изображение в видео')
+  ctx.session.mode = 'image_to_video'
+  await ctx.scene.enter('imageToVideoWizard')
+})
+
 myComposer.hears(
   ['🎥 Сгенерировать новое видео', '🎥 Generate new video'],
   async ctx => {
     console.log('CASE: Сгенерировать новое видео')
-    if (ctx.session.mode === 'image_to_video') {
-      await ctx.scene.enter('imageToVideoWizard')
-    } else if (ctx.session.mode === 'text_to_video') {
-      await ctx.scene.enter('textToVideoWizard')
-    } else {
-      await ctx.reply(
-        'Вы не можете сгенерировать новое видео, так как не выбрали изображение'
-      )
-    }
+    ctx.session.mode = 'text_to_video'
+    await ctx.scene.enter('textToVideoWizard')
   }
 )
-
-// myComposer.hears(
-//   Object.values(imageModelPrices).map(model => model.shortName),
-//   async ctx => {
-//     console.log('CASE: Выбор модели')
-//     if (!ctx.message) {
-//       throw new Error('No message')
-//     }
-//     const isRu = isRussian(ctx)
-//     const model = ctx.message.text
-//     console.log(model, 'model')
-//     ctx.session.selectedModel = model
-
-//     await ctx.reply(
-//       isRu ? `Вы выбрали модель: ${model}` : `You selected model: ${model}`,
-//       {
-//         reply_markup: {
-//           remove_keyboard: true,
-//         },
-//       }
-//     )
-
-//     await ctx.scene.enter('textToImageWizard')
-//   }
-// )
-
-// myComposer.hears(['Отмена', 'Cancel'], async ctx => {
-//   console.log('CASE: Отмена')
-//   if (ctx.session.mode === 'image_to_video') {
-//     await ctx.scene.enter('cancelPredictionsWizard')
-//   } else {
-//     const isRu = isRussian(ctx)
-//     mainMenu(isRu)
-//   }
-// })
 
 export default myComposer

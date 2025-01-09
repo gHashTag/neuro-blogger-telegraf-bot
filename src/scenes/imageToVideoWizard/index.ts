@@ -14,6 +14,8 @@ import {
 import { isRussian } from '@/helpers/language'
 import { BOT_TOKEN } from '@/core/bot'
 import { getUserBalance } from '@/core/supabase'
+import { handleHelpCancel } from '@/handlers'
+
 export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
   'imageToVideoWizard',
   async ctx => {
@@ -98,86 +100,90 @@ export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
   async ctx => {
     const message = ctx.message
     const isRu = ctx.from?.language_code === 'ru'
+    const isCancel = await handleHelpCancel(ctx)
+    if (isCancel) {
+      return ctx.scene.leave()
+    } else {
+      if (message && 'photo' in message) {
+        const photo = message.photo[message.photo.length - 1]
+        const file = await ctx.telegram.getFile(photo.file_id)
+        const filePath = file.file_path
 
-    if (message && 'photo' in message) {
-      const photo = message.photo[message.photo.length - 1]
-      const file = await ctx.telegram.getFile(photo.file_id)
-      const filePath = file.file_path
+        if (!filePath) {
+          await ctx.reply(
+            isRu ? 'Не удалось получить изображение' : 'Failed to get image'
+          )
+          return ctx.scene.leave()
+        }
 
-      if (!filePath) {
+        ctx.session.imageUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`
         await ctx.reply(
-          isRu ? 'Не удалось получить изображение' : 'Failed to get image'
+          isRu
+            ? 'Теперь опишите желаемое движение в видео'
+            : 'Now describe the desired movement in the video',
+          {
+            reply_markup: cancelMenu(isRu).reply_markup,
+          }
         )
-        return ctx.scene.leave()
+        return ctx.wizard.next()
       }
 
-      ctx.session.imageUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`
       await ctx.reply(
-        isRu
-          ? 'Теперь опишите желаемое движение в видео'
-          : 'Now describe the desired movement in the video',
-        {
-          reply_markup: cancelMenu(isRu).reply_markup,
-        }
+        isRu ? 'Пожалуйста, отправьте изображение' : 'Please send an image'
       )
-      return ctx.wizard.next()
+      return undefined
     }
-
-    await ctx.reply(
-      isRu ? 'Пожалуйста, отправьте изображение' : 'Please send an image'
-    )
-    return undefined
   },
   async ctx => {
     const message = ctx.message
     const isRu = ctx.from?.language_code === 'ru'
 
     if (message && 'text' in message) {
-      if (message.text.toLowerCase() === (isRu ? 'отмена' : 'cancel')) {
-        await sendGenerationCancelledMessage(ctx, isRu)
+      const isCancel = await handleHelpCancel(ctx)
+      if (isCancel) {
+        return ctx.scene.leave()
+      } else {
+        const prompt = message.text
+        const videoModel = ctx.session.videoModel as VideoModel
+        const imageUrl = ctx.session.imageUrl
+        if (!prompt) throw new Error('Prompt is required')
+        if (!videoModel) throw new Error('Video model is required')
+        if (!imageUrl) throw new Error('Image URL is required')
+        if (!ctx.from?.username) throw new Error('Username is required')
+        if (!isRu) throw new Error('Language is required')
+
+        try {
+          console.log('Calling generateImageToVideo with:', {
+            imageUrl,
+            prompt,
+            videoModel,
+            telegram_id: ctx.from.id,
+            username: ctx.from.username,
+            isRu,
+          })
+
+          const paymentAmount = ctx.session.paymentAmount
+          await generateImageToVideo(
+            imageUrl,
+            prompt,
+            videoModel,
+            paymentAmount,
+            ctx.from.id,
+            ctx.from.username,
+            isRu
+          )
+          ctx.session.prompt = prompt
+          ctx.session.mode = 'image_to_video'
+        } catch (error) {
+          console.error('Ошибка при создании видео:', error)
+          await ctx.reply(
+            isRu
+              ? 'Произошла ошибка при создании видео. Пожалуйста, попробуйте позже.'
+              : 'An error occurred while creating the video. Please try again later.'
+          )
+        }
         return ctx.scene.leave()
       }
-
-      const prompt = message.text
-      const videoModel = ctx.session.videoModel as VideoModel
-      const imageUrl = ctx.session.imageUrl
-      if (!prompt) throw new Error('Prompt is required')
-      if (!videoModel) throw new Error('Video model is required')
-      if (!imageUrl) throw new Error('Image URL is required')
-      if (!ctx.from?.username) throw new Error('Username is required')
-      if (!isRu) throw new Error('Language is required')
-
-      try {
-        console.log('Calling generateImageToVideo with:', {
-          imageUrl,
-          prompt,
-          videoModel,
-          telegram_id: ctx.from.id,
-          username: ctx.from.username,
-          isRu,
-        })
-
-        const paymentAmount = ctx.session.paymentAmount
-        await generateImageToVideo(
-          imageUrl,
-          prompt,
-          videoModel,
-          paymentAmount,
-          ctx.from.id,
-          ctx.from.username,
-          isRu
-        )
-        ctx.session.prompt = prompt
-        ctx.session.mode = 'image_to_video'
-      } catch (error) {
-        console.error('Ошибка при создании видео:', error)
-        await ctx.reply(
-          isRu
-            ? 'Произошла ошибка при создании видео. Пожалуйста, попробуйте позже.'
-            : 'An error occurred while creating the video. Please try again later.'
-        )
-      }
-      return ctx.scene.leave()
     }
 
     await ctx.reply(
