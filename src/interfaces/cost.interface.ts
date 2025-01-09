@@ -31,7 +31,6 @@ export const VIDEO_MODELS: VideoModelConfig[] = [
 
 export type Mode =
   | 'neuro_photo'
-  | 'text_to_video'
   | 'image_to_video'
   | 'avatar'
   | 'image_to_prompt'
@@ -39,5 +38,15 @@ export type Mode =
   | 'text_to_image'
   | 'text_to_video'
   | 'voice'
+  | 'model'
+  | 'select_model'
+  | 'invite'
+  | 'help'
+  | 'start_learning'
+  | 'top_up_balance'
+  | 'balance'
+  | 'main_menu'
+  | 'improve_prompt'
+  | 'change_size'
 
 export type ModeCosts = Required<Record<Mode, number>>

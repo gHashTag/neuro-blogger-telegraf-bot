@@ -1,4 +1,4 @@
-import { Composer } from 'telegraf'
+import { Composer, Markup } from 'telegraf'
 import { MyContext } from './interfaces'
 import { imageModelMenu } from './menu/imageModelMenu'
 
@@ -18,11 +18,19 @@ const myComposer = new Composer<MyContext>()
 
 myComposer.hears(['🧠 Мозг аватара', '🧠 Avatar Brain'], async ctx => {
   console.log('CASE: Создать аватар')
+  ctx.session.mode = 'avatar'
+
   await ctx.scene.enter('avatarWizard')
+})
+
+myComposer.hears(['Справка по команде', 'Help for the command'], async ctx => {
+  console.log('CASE: Справка по команде')
+  await ctx.scene.enter('helpCommand')
 })
 
 myComposer.hears(['🌟 Выбор модели ИИ', '🌟 Select AI Model'], async ctx => {
   console.log('CASE: Выбор модели ИИ')
+  ctx.session.mode = 'select_model'
   await ctx.scene.enter('selectModelWizard')
 })
 
@@ -30,32 +38,38 @@ myComposer.hears(
   ['🤖 Цифровое тело аватара', '🤖 Digital Avatar Body'],
   async ctx => {
     console.log('CASE: Цифровое тело аватара')
+    ctx.session.mode = 'model'
     await ctx.scene.enter('stepSelectionScene')
   }
 )
 
 myComposer.hears(['📸 Нейрофото', '📸 NeuroPhoto'], async ctx => {
   console.log('CASE: Нейрофото')
+  ctx.session.mode = 'neuro_photo'
   await ctx.scene.enter('neuroPhotoWizard')
 })
 
 myComposer.hears(['🎥 Видео из текста', '🎥 Text to Video'], async ctx => {
   console.log('CASE: Видео из текста')
+  ctx.session.mode = 'text_to_video'
   await ctx.scene.enter('textToVideoWizard')
 })
 
 myComposer.hears(['🎥 Изображение в видео', '🎥 Image to Video'], async ctx => {
   console.log('CASE: Изображение в видео')
+  ctx.session.mode = 'image_to_video'
   await ctx.scene.enter('imageToVideoWizard')
 })
 
 myComposer.hears(['🎙️ Текст в голос', '🎙️ Text to Voice'], async ctx => {
   console.log('CASE: Текст в голос')
+  ctx.session.mode = 'text_to_speech'
   await ctx.scene.enter('textToSpeechWizard')
 })
 
 myComposer.hears(['🎤 Голос для аватара', '🎤 Voice for Avatar'], async ctx => {
   console.log('CASE: Голос для аватара')
+  ctx.session.mode = 'voice'
   await ctx.scene.enter('voiceAvatarWizard')
 })
 
@@ -72,37 +86,44 @@ myComposer.hears(
   ['🔍 Описание из изображения', '🔍 Image to Prompt'],
   async ctx => {
     console.log('CASE: Описание из изображения')
+    ctx.session.mode = 'image_to_prompt'
     await ctx.scene.enter('imageToPromptWizard')
   }
 )
 
 myComposer.hears(['👥 Пригласить друга', '👥 Invite a friend'], async ctx => {
   console.log('CASE: Пригласить друга')
+  ctx.session.mode = 'invite'
   await ctx.scene.enter('inviteCommand')
 })
 
 myComposer.hears(['❓ Помощь', '❓ Help'], async ctx => {
   console.log('CASE: Помощь')
+  ctx.session.mode = 'help'
   await ctx.scene.enter('neuroQuestCommand')
 })
 
 myComposer.hears(['🎮 Начать обучение', '🎮 Start learning'], async ctx => {
   console.log('CASE: Начать обучение')
+  ctx.session.mode = 'start_learning'
   await ctx.scene.enter('step0')
 })
 
 myComposer.hears(['💎 Пополнить баланс', '💎 Top up balance'], async ctx => {
   console.log('CASE: Пополнить баланс')
+  ctx.session.mode = 'top_up_balance'
   await ctx.scene.enter('paymentScene')
 })
 
 myComposer.hears(['🤑 Баланс', '🤑 Balance'], async ctx => {
   console.log('CASE: Баланс')
+  ctx.session.mode = 'balance'
   await balanceCommand(ctx)
 })
 
 myComposer.hears(['🏠 Главное меню', '🏠 Main menu'], async ctx => {
   console.log('CASE: Главное меню')
+  ctx.session.mode = 'main_menu'
   await menuCommand(ctx)
 })
 
@@ -113,7 +134,7 @@ myComposer.hears(['1️⃣', '2️⃣', '3️⃣', '4️⃣'], async ctx => {
   const prompt = ctx.session.prompt
   const userId = ctx.from.id
   const numImages = parseInt(text[0])
-
+  ctx.session.mode = 'text_to_image'
   const generate = async (num: number) => {
     if (ctx.session.mode === 'neuro_photo') {
       await generateNeuroImage(
@@ -144,11 +165,13 @@ myComposer.hears(['1️⃣', '2️⃣', '3️⃣', '4️⃣'], async ctx => {
 
 myComposer.hears(['⬆️ Улучшить промпт', '⬆️ Improve prompt'], async ctx => {
   console.log('CASE: Улучшить промпт')
+
   await ctx.scene.enter('improvePromptWizard')
 })
 
 myComposer.hears(['📐 Изменить размер', '📐 Change size'], async ctx => {
   console.log('CASE: Изменить размер')
+
   await ctx.scene.enter('sizeWizard')
 })
 
