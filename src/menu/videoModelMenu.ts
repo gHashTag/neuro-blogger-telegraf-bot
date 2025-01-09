@@ -1,6 +1,6 @@
 import { Markup } from 'telegraf'
 import { ReplyKeyboardMarkup } from 'telegraf/typings/core/types/typegram'
-// Создаем клавиатуру для выбора модели
+
 export const videoModelKeyboard = (
   isRu: boolean
 ): Markup.Markup<ReplyKeyboardMarkup> =>
@@ -13,5 +13,8 @@ export const videoModelKeyboard = (
       Markup.button.text(isRu ? 'Ray' : 'Ray'),
       Markup.button.text(isRu ? 'I2VGen-XL' : 'I2VGen-XL'),
     ],
-    [Markup.button.text(isRu ? 'Отмена' : 'Cancel')],
+    [
+      Markup.button.text(isRu ? 'Справка по команде' : 'Help for the command'),
+      Markup.button.text(isRu ? 'Отмена' : 'Cancel'),
+    ],
   ]).resize()

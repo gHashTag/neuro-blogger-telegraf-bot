@@ -595,6 +595,57 @@ export async function handleLevel11(ctx: MyContext) {
   try {
     const isRu = ctx.from?.language_code === 'ru'
     const message = isRu
+      ? `🎥 <b>Команда: Видео из текста (Text to Video)</b> 🌟\n\n
+Эта функция позволяет вам воплотить ваши идеи в динамичные видеоролики, используя всего лишь текстовое описание. Это мощный инструмент, который открывает множество возможностей для творчества и самовыражения. 🎨✨\n\n
+Процесс начинается с выбора модели генерации видео. Наш бот предлагает вам несколько предустановленных моделей, каждая из которых обладает уникальными характеристиками и стилем. Вы можете выбрать модель, которая лучше всего соответствует вашим потребностям и предпочтениям. Например, одна модель может быть более подходящей для создания реалистичных сцен, в то время как другая может добавить художественные эффекты и стилизацию.\n\n
+<b>Доступные модели:</b>\n
+1️⃣ <b>Minimax</b>\n
+   - <b>Описание:</b> Эта модель обеспечивает оптимальное качество и скорость генерации видео. Она идеально подходит для проектов, где важен баланс между качеством и временем создания.\n
+   - <b>Применение:</b> Используйте Minimax для создания видео, когда вам нужно быстро получить хороший результат, например, для социальных сетей или презентаций.\n\n
+2️⃣ <b>Haiper</b>\n
+   - <b>Описание:</b> Haiper предлагает высокое качество видео с длительностью до 6 секунд. Эта модель подходит для коротких, но насыщенных видеороликов.\n
+   - <b>Применение:</b> Выбирайте Haiper для создания коротких видеоклипов, которые требуют высокого качества, таких как рекламные ролики или тизеры.\n\n
+3️⃣ <b>Ray</b>\n
+   - <b>Описание:</b> Ray специализируется на создании реалистичной анимации, что делает её идеальной для сцен, требующих высокой степени реализма.\n
+   - <b>Применение:</b> Используйте Ray для создания видео с реалистичными движениями и сценами, таких как документальные или обучающие видео.\n\n
+4️⃣ <b>I2VGen-XL</b>\n
+   - <b>Описание:</b> Эта продвинутая модель предназначена для детальной анимации, обеспечивая высокую степень детализации и сложные эффекты.\n
+   - <b>Применение:</b> Выбирайте I2VGen-XL для проектов, где важна детальная анимация и сложные визуальные эффекты, такие как художественные фильмы или анимационные проекты.\n\n
+После выбора модели, следующим шагом будет создание текстового описания, или промпта, который будет использоваться для генерации видео. Промпт — это ключевая часть процесса, так как он определяет, каким будет конечное видео. Чем более детализированным будет ваше описание, тем более точным и уникальным станет видео. Отправьте промпт боту, и он начнет процесс генерации. После завершения вы получите видео, которое можно использовать для различных целей, от личных проектов до профессиональных презентаций. Экспериментируйте с различными моделями, чтобы найти ту, которая лучше всего подходит для вашего проекта. 🚀🎥`
+      : `🎥 <b>Command: Text to Video</b> 🌟\n\n
+This function allows you to bring your ideas to life in dynamic videos using just a text description. It's a powerful tool that opens up many possibilities for creativity and self-expression. 🎨✨\n\n
+The process begins with selecting a video generation model. Our bot offers several preset models, each with unique characteristics and style. You can choose the model that best suits your needs and preferences. For example, one model may be more suitable for creating realistic scenes, while another may add artistic effects and stylization.\n\n
+<b>Available models:</b>\n
+1️⃣ <b>Minimax</b>\n
+   - <b>Description:</b> This model provides optimal quality and speed for video generation. It is ideal for projects where a balance between quality and creation time is important.\n
+   - <b>Application:</b> Use Minimax for creating videos when you need a quick good result, such as for social media or presentations.\n\n
+2️⃣ <b>Haiper</b>\n
+   - <b>Description:</b> Haiper offers high-quality video with a duration of up to 6 seconds. This model is suitable for short but rich video clips.\n
+   - <b>Application:</b> Choose Haiper for creating short video clips that require high quality, such as commercials or teasers.\n\n
+3️⃣ <b>Ray</b>\n
+   - <b>Description:</b> Ray specializes in creating realistic animation, making it ideal for scenes requiring a high degree of realism.\n
+   - <b>Application:</b> Use Ray for creating videos with realistic movements and scenes, such as documentaries or educational videos.\n\n
+4️⃣ <b>I2VGen-XL</b>\n
+   - <b>Description:</b> This advanced model is designed for detailed animation, providing a high degree of detail and complex effects.\n
+   - <b>Application:</b> Choose I2VGen-XL for projects where detailed animation and complex visual effects are important, such as artistic films or animation projects.\n\n
+After selecting a model, the next step is to create a text description or prompt that will be used to generate the video. The prompt is a key part of the process as it determines what the final video will be like. The more detailed your description, the more accurate and unique the video will be. Send the prompt to the bot, and it will start the generation process. Once completed, you will receive a video that can be used for various purposes, from personal projects to professional presentations. Experiment with different models to find the one that best suits your project. 🚀🎥`
+
+    await ctx.reply(message, { parse_mode: 'HTML' })
+  } catch (error) {
+    console.error('Error in handleLevel11:', error)
+    errorMessage(
+      error,
+      ctx.from?.id.toString(),
+      ctx.from?.language_code === 'ru'
+    )
+    throw error
+  }
+}
+
+export async function handleLevel12(ctx: MyContext) {
+  try {
+    const isRu = ctx.from?.language_code === 'ru'
+    const message = isRu
       ? `🎉 Пригласите друга и получите бонусы! 🎉
 
 Хотите получить больше возможностей с нашим ботом? Теперь это проще простого! Используйте команду /invite, чтобы пригласить своих друзей и получить крутые бонусы! 🎁✨

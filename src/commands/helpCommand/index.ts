@@ -11,6 +11,7 @@ import {
   handleLevel9,
   handleLevel10,
   handleLevel11,
+  handleLevel12,
 } from '../../scenes/levelQuestWizard/handlers'
 
 export async function helpCommand(ctx: MyContext) {
@@ -45,8 +46,11 @@ export async function helpCommand(ctx: MyContext) {
   } else if (mode === 'text_to_image') {
     await handleLevel10(ctx)
     return ctx.scene.leave()
-  } else if (mode === 'invite') {
+  } else if (mode === 'text_to_video') {
     await handleLevel11(ctx)
+    return ctx.scene.leave()
+  } else if (mode === 'invite') {
+    await handleLevel12(ctx)
     return ctx.scene.leave()
   }
   return ctx.scene.leave()

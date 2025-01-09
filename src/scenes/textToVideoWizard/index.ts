@@ -6,13 +6,10 @@ import {
 } from '@/price/helpers'
 import { generateTextToVideo } from '@/services/generateTextToVideo'
 import { isRussian } from '@/helpers/language'
-import {
-  sendGenerationCancelledMessage,
-  sendGenericErrorMessage,
-  videoModelKeyboard,
-} from '@/menu'
+import { sendGenericErrorMessage, videoModelKeyboard } from '@/menu'
 import { getUserBalance } from '@/core/supabase'
 import { VIDEO_MODELS } from '@/interfaces'
+import { handleHelpCancel } from '@/handlers'
 
 export const textToVideoWizard = new Scenes.WizardScene<MyContext>(
   'textToVideoWizard',
@@ -34,8 +31,6 @@ export const textToVideoWizard = new Scenes.WizardScene<MyContext>(
             : 'Could not identify username'
         )
       }
-
-      ctx.session.mode = 'text_to_video'
 
       // Запрашиваем модель
       await ctx.reply(
@@ -78,34 +73,35 @@ export const textToVideoWizard = new Scenes.WizardScene<MyContext>(
       const videoModel = message.text?.toLowerCase()
       const availableModels = VIDEO_MODELS.map(model => model.name)
       const currentBalance = await getUserBalance(ctx.from.id)
-      if (message.text === 'Отмена' || message.text === 'Cancel') {
-        await sendGenerationCancelledMessage(ctx, isRu)
+
+      const isCancel = await handleHelpCancel(ctx)
+      if (isCancel) {
         return ctx.scene.leave()
+      } else {
+        // Используем await для получения результата
+        const price = await validateAndCalculateVideoModelPrice(
+          videoModel,
+          availableModels,
+          currentBalance,
+          isRu,
+          ctx
+        )
+        if (price === null) {
+          return ctx.scene.leave()
+        }
+
+        // Устанавливаем videoModel в сессии
+        ctx.session.videoModel = videoModel as VideoModel
+
+        await sendBalanceMessage(ctx.from.id, currentBalance, price, isRu)
+
+        await ctx.reply(
+          isRu
+            ? 'Пожалуйста, отправьте текстовое описание'
+            : 'Please send a text description'
+        )
+        return ctx.wizard.next()
       }
-
-      // Используем await для получения результата
-      const price = await validateAndCalculateVideoModelPrice(
-        videoModel,
-        availableModels,
-        currentBalance,
-        isRu,
-        ctx
-      )
-      if (price === null) {
-        return ctx.scene.leave()
-      }
-
-      // Устанавливаем videoModel в сессии
-      ctx.session.videoModel = videoModel as VideoModel
-
-      await sendBalanceMessage(ctx.from.id, currentBalance, price, isRu)
-
-      await ctx.reply(
-        isRu
-          ? 'Пожалуйста, отправьте текстовое описание'
-          : 'Please send a text description'
-      )
-      return ctx.wizard.next()
     } else {
       console.log('textToVideoWizard: else')
       await sendGenericErrorMessage(ctx, isRu)
@@ -136,7 +132,7 @@ export const textToVideoWizard = new Scenes.WizardScene<MyContext>(
           ctx.from.username,
           isRu
         )
-        ctx.session.mode = 'text_to_video'
+
         ctx.session.prompt = prompt
       }
 
