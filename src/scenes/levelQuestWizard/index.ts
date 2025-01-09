@@ -17,6 +17,7 @@ import {
 } from './handlers'
 import { MyContext } from '../../interfaces'
 import { isRussian } from '@/helpers'
+import { mainMenu } from '@/menu'
 
 // Создаем сцены для каждого шага
 const createStepScene = (
@@ -29,15 +30,25 @@ const createStepScene = (
     await handler(ctx)
     const isRu = isRussian(ctx)
     await ctx.reply(
-      isRu
-        ? `Нажмите "${nextStepText}", чтобы продолжить.`
-        : `Click "${nextStepText}", to continue.`,
-      Markup.keyboard([[nextStepText], ['➡️ Завершить']]).resize()
+      stepNumber < 12
+        ? isRu
+          ? `Нажмите "${nextStepText}", чтобы продолжить.`
+          : `Click "${nextStepText}", to continue.`
+        : isRu
+        ? `Вы успешно прошли все обучение и достигли максимального уровня! 🌟✨`
+        : `You have successfully completed all training and reached the maximum level! 🌟✨`,
+      stepNumber < 12
+        ? Markup.keyboard([[nextStepText], ['➡️ Завершить']]).resize()
+        : mainMenu(isRu)
     )
   })
 
   scene.hears(nextStepText, async ctx => {
-    await ctx.scene.enter(`step${stepNumber + 1}`)
+    if (stepNumber < 12) {
+      await ctx.scene.enter(`step${stepNumber + 1}`)
+    } else {
+      await ctx.scene.enter('complete')
+    }
   })
 
   scene.hears('➡️ Завершить', async ctx => {
