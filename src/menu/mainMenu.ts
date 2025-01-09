@@ -33,7 +33,5 @@ export function mainMenu(isRu: boolean): Markup.Markup<ReplyKeyboardMarkup> {
       ),
     ],
     [Markup.button.text(isRu ? '📐 Изменить размер' : '📐 Change size')],
-  ])
-    .resize()
-    .oneTime()
+  ]).resize()
 }

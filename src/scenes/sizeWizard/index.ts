@@ -12,9 +12,7 @@ export const sizeWizard = new Scenes.WizardScene<MyContext>(
       ['4:3', '5:4', '1:1'],
       ['4:5', '3:4', '2:3'],
       ['9:16', '9:21'],
-    ])
-      .resize()
-      .oneTime()
+    ]).resize()
 
     // Отправляем сообщение с клавиатурой
     await ctx.reply(

@@ -37,7 +37,7 @@ export const imageModelPrices: Record<string, ModelInfo> = {
     previewImage:
       'https://replicate.delivery/xezq/4bt5HoegzYR9EKqv70zsBoHnhFkcaB9Yk1naaQJai6rtfPzTA/out-0.webp',
     costPerImage: calculateFinalImageCostInStars(0.025),
-    inputType: ['text', 'image'],
+    inputType: ['text', 'image', 'dev'],
   },
   'black-forest-labs/flux-canny-pro': {
     shortName: 'FLUX1.1 [pro] Canny',
@@ -46,7 +46,7 @@ export const imageModelPrices: Record<string, ModelInfo> = {
     previewImage:
       'https://replicate.delivery/czjl/yRS3V6IYC877GF3DnejR0WJvcz5eg6LTlbE3cJPC6CJQqMzTA/tmp8gs0wfw3.jpg',
     costPerImage: calculateFinalImageCostInStars(0.05),
-    inputType: ['text', 'image'],
+    inputType: ['text', 'image', 'dev'],
   },
   'black-forest-labs/flux-depth-dev': {
     shortName: 'FLUX1.1 [dev] Depth',

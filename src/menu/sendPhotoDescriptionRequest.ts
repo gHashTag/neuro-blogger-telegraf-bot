@@ -1,5 +1,6 @@
 import { MyContext } from '../interfaces'
-import { Markup } from 'telegraf'
+
+import { cancelMenu } from './cancelMenu'
 
 export const sendPhotoDescriptionRequest = async (
   ctx: MyContext,
@@ -12,8 +13,6 @@ export const sendPhotoDescriptionRequest = async (
     : `📸 Describe what kind of ${type} you want to generate in English.`
 
   await ctx.reply(message, {
-    reply_markup: Markup.keyboard([
-      Markup.button.text(isRu ? 'Отменить генерацию' : 'Cancel generation'),
-    ]).reply_markup,
+    reply_markup: cancelMenu(isRu).reply_markup,
   })
 }

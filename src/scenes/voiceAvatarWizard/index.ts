@@ -33,9 +33,7 @@ export const voiceAvatarWizard = new Scenes.WizardScene<MyContext>(
       isRu
         ? '🎙️ Пожалуйста, отправьте голосовое сообщение для создания голосового аватара'
         : '🎙️ Please send a voice message to create your voice avatar',
-      Markup.keyboard([
-        [Markup.button.text(isRu ? '❌ Отменить' : '❌ Cancel')],
-      ])
+      Markup.keyboard([[Markup.button.text(isRu ? 'Отменить' : 'Cancel')]])
     )
 
     return ctx.wizard.next()
@@ -56,10 +54,7 @@ export const voiceAvatarWizard = new Scenes.WizardScene<MyContext>(
       return
     }
 
-    if (
-      'text' in message &&
-      message.text === (isRu ? '❌ Отменить' : '❌ Cancel')
-    ) {
+    if ('text' in message && message.text === (isRu ? 'Отменить' : 'Cancel')) {
       await ctx.reply(isRu ? '❌ Обучение отменено' : '❌ Training cancelled')
       return ctx.scene.leave()
     }

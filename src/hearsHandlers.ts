@@ -12,7 +12,7 @@ import { generateNeuroImage } from './services/generateNeuroImage'
 import { handleLevelQuest } from './handlers/handleLevelQuest'
 import { mainMenu } from './menu'
 
-import { handleSelectStars, handleSizeSelection } from './handlers'
+import { handleSizeSelection } from './handlers'
 import { imageModelPrices } from './price/models'
 
 const myComposer = new Composer<MyContext>()

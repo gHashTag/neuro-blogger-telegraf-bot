@@ -33,7 +33,7 @@ export async function selectModelCommand(ctx: MyContext) {
 
     buttons.push([Markup.button.callback(isRu ? 'Отмена' : 'Cancel', 'cancel')])
 
-    const keyboard = Markup.keyboard(buttons)
+    const keyboard = Markup.keyboard(buttons).resize()
 
     await ctx.reply(
       isRu ? '🧠 Выберите модель:' : '🧠 Select AI Model:',

@@ -16,9 +16,7 @@ export const avatarWizard = new Scenes.WizardScene<MyContext>(
       isRu
         ? '👋 Привет, как называется ваша компания?'
         : '👋 Hello, what is your company name?',
-      Markup.keyboard([isRu ? 'Отмена' : 'Cancel'])
-        .oneTime()
-        .resize()
+      Markup.keyboard([isRu ? 'Отмена' : 'Cancel']).resize()
     )
     return ctx.wizard.next()
   },
@@ -41,9 +39,7 @@ export const avatarWizard = new Scenes.WizardScene<MyContext>(
           : '💼 What is your position?',
         Markup.keyboard([
           ctx.from?.language_code === 'ru' ? 'Отмена' : 'Cancel',
-        ])
-          .oneTime()
-          .resize()
+        ]).resize()
       )
       return ctx.wizard.next()
     }
@@ -72,9 +68,7 @@ export const avatarWizard = new Scenes.WizardScene<MyContext>(
           : '🛠️ What are your skills?',
         Markup.keyboard([
           ctx.from?.language_code === 'ru' ? 'Отмена' : 'Cancel',
-        ])
-          .oneTime()
-          .resize()
+        ]).resize()
       )
       return ctx.wizard.next()
     }

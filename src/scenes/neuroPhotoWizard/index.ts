@@ -9,6 +9,7 @@ import {
 import { generateNeuroImage } from '@/services/generateNeuroImage'
 import { getLatestUserModel, getUserBalance } from '@/core/supabase'
 import {
+  mainMenu,
   sendGenerationCancelledMessage,
   sendPhotoDescriptionRequest,
 } from '@/menu'
@@ -51,8 +52,13 @@ export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
     if (!userModel || !userModel.model_url) {
       await ctx.reply(
         isRu
-          ? '❌ У вас нет обученных моделей. Используйте /train_flux_model чтобы создать свою модель.'
-          : "❌ You don't have any trained models. Use /train_flux_model to create your model."
+          ? '❌ У вас нет обученных моделей.\n\nИспользуйте команду "🤖 Цифровое тело аватара", в главном меню, чтобы создать свою ИИ модель для генерации нейрофото в вашим лицом. '
+          : "❌ You don't have any trained models.\n\nUse the '🤖  Digital avatar body' command in the main menu to create your AI model for generating neurophotos with your face.",
+        {
+          reply_markup: {
+            keyboard: mainMenu(isRu).reply_markup.keyboard,
+          },
+        }
       )
 
       return ctx.scene.leave()
