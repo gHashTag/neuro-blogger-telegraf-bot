@@ -4,7 +4,7 @@ import { imageToPromptCost, sendBalanceMessage } from '@/price/helpers'
 import { generateImageToPrompt } from '@/services/generateImageToPrompt'
 import { BOT_TOKEN } from '@/core/bot'
 import { mainMenu } from '@/menu/mainMenu'
-import { cancelMenu } from '@/menu/cancelMenu'
+import { cancelMenu } from '@/menu'
 import { getUserBalance } from '@/core/supabase'
 
 if (!process.env.HUGGINGFACE_TOKEN) {
