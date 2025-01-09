@@ -8,6 +8,8 @@ import {
 } from '@/price/helpers'
 import { generateTextToSpeech } from '../../services/generateTextToSpeech'
 import { isRussian } from '@/helpers'
+import { createHelpCancelKeyboard } from '@/menu'
+import { handleHelpCancel } from '@/handlers'
 
 export const textToSpeechWizard = new Scenes.WizardScene<MyContext>(
   'textToSpeechWizard',
@@ -33,9 +35,7 @@ export const textToSpeechWizard = new Scenes.WizardScene<MyContext>(
       isRu
         ? '🎙️ Отправьте текст, для преобразования его в голос'
         : '🎙️ Send text, to convert it to voice',
-      Markup.keyboard([
-        [Markup.button.text(isRu ? 'Отменить' : 'Cancel')],
-      ]).resize()
+      createHelpCancelKeyboard(isRu)
     )
 
     return ctx.wizard.next()
@@ -51,40 +51,40 @@ export const textToSpeechWizard = new Scenes.WizardScene<MyContext>(
       return
     }
 
-    if (message.text === (isRu ? 'Отменить' : 'Cancel')) {
-      await ctx.reply(isRu ? '❌ Операция отменена' : '❌ Operation cancelled')
+    const isCancel = await handleHelpCancel(ctx)
+    if (isCancel) {
       return ctx.scene.leave()
-    }
+    } else {
+      try {
+        const voice_id = await getVoiceId(ctx.from.id.toString())
 
-    try {
-      const voice_id = await getVoiceId(ctx.from.id.toString())
-      console.log('voice_id', voice_id)
-      if (!voice_id) {
+        if (!voice_id) {
+          await ctx.reply(
+            isRu
+              ? '🎯 Для корректной работы обучите аватар используя 🎤 Голос для аватара в главном меню'
+              : '🎯 For correct operation, train the avatar using 🎤 Voice for avatar in the main menu'
+          )
+          return ctx.scene.leave()
+        }
+
+        await generateTextToSpeech(
+          message.text,
+          voice_id,
+          ctx.from.id,
+          ctx.from.username || '',
+          isRu
+        )
+      } catch (error) {
+        console.error('Error in textToSpeechWizard:', error)
         await ctx.reply(
           isRu
-            ? '🎯 Для корректной работы обучите аватар используя 🎤 Голос для аватара в главном меню'
-            : '🎯 For correct operation, train the avatar using 🎤 Voice for avatar in the main menu'
+            ? 'Произошла ошибка при создании голосового аватара'
+            : 'Error occurred while creating voice avatar'
         )
-        return ctx.scene.leave()
       }
 
-      await generateTextToSpeech(
-        message.text,
-        voice_id,
-        ctx.from.id,
-        ctx.from.username || '',
-        isRu
-      )
-    } catch (error) {
-      console.error('Error in textToSpeechWizard:', error)
-      await ctx.reply(
-        isRu
-          ? 'Произошла ошибка при создании голосового аватара'
-          : 'Error occurred while creating voice avatar'
-      )
+      return ctx.scene.leave()
     }
-
-    return ctx.scene.leave()
   }
 )
 
