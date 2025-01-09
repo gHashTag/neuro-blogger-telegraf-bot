@@ -3,10 +3,10 @@ import { MyContext } from '../../interfaces'
 import { getStepSelectionMenu } from '../../menu/getStepSelectionMenu'
 import { isRussian } from '@/helpers/language'
 import { handleTrainingCost } from '@/price/helpers'
-import { mainMenu } from '@/menu'
+import { handleHelpCancel } from '@/handlers/handleHelpCancel'
 
-export const stepSelectionScene = new Scenes.WizardScene<MyContext>(
-  'stepSelectionScene',
+export const digitalAvatarBodyWizard = new Scenes.WizardScene<MyContext>(
+  'digitalAvatarBodyWizard',
   async ctx => {
     const isRu = isRussian(ctx)
     await ctx.reply(
@@ -45,19 +45,16 @@ export const stepSelectionScene = new Scenes.WizardScene<MyContext>(
       console.error('Callback query does not contain data')
     }
 
-    if (ctx.message && 'text' in ctx.message && ctx.message.text === 'Отмена') {
-      await ctx.reply(isRu ? '❌ Отмена' : '❌ Cancel', {
-        reply_markup: {
-          keyboard: mainMenu(isRu).reply_markup.keyboard,
-        },
-      })
-      return ctx.scene.leave()
-    }
+    const isCancel = await handleHelpCancel(ctx)
 
-    await ctx.reply(
-      isRu
-        ? '🔢 Пожалуйста, выберите количество шагов для продолжения обучения модели.'
-        : '🔢 Please select the number of steps to proceed with model training.'
-    )
+    if (isCancel) {
+      return ctx.scene.leave()
+    } else {
+      await ctx.reply(
+        isRu
+          ? '🔢 Пожалуйста, выберите количество шагов для продолжения обучения модели.'
+          : '🔢 Please select the number of steps to proceed with model training.'
+      )
+    }
   }
 )

@@ -38,8 +38,8 @@ myComposer.hears(
   ['🤖 Цифровое тело аватара', '🤖 Digital Avatar Body'],
   async ctx => {
     console.log('CASE: Цифровое тело аватара')
-    ctx.session.mode = 'model'
-    await ctx.scene.enter('stepSelectionScene')
+    ctx.session.mode = 'digital_avatar_body'
+    await ctx.scene.enter('digitalAvatarBodyWizard')
   }
 )
 

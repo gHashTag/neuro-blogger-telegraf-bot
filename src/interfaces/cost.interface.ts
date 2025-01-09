@@ -38,7 +38,7 @@ export type Mode =
   | 'text_to_image'
   | 'text_to_video'
   | 'voice'
-  | 'model'
+  | 'digital_avatar_body'
   | 'select_model'
   | 'invite'
   | 'help'
