@@ -128,7 +128,8 @@ myComposer.hears(['1️⃣', '2️⃣', '3️⃣', '4️⃣'], async ctx => {
   const prompt = ctx.session.prompt
   const userId = ctx.from.id
   const numImages = parseInt(text[0])
-  ctx.session.mode = 'text_to_image'
+  console.log('ctx.session.mode', ctx.session.mode)
+  // ctx.session.mode = 'text_to_image'
   const generate = async (num: number) => {
     if (ctx.session.mode === 'neuro_photo') {
       await generateNeuroImage(
