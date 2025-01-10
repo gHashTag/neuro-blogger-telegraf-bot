@@ -12,7 +12,7 @@ export interface CreateUserData {
   count: number
   aspect_ratio: string
   balance: number
-  inviter: string
+  inviter: string | null
 }
 
 export interface ModelTraining {

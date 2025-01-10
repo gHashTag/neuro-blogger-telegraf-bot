@@ -57,7 +57,7 @@ export const subscriptionMiddleware = async (
     const startPayload = ctx.message.text.split(' ')[1]
 
     console.log('startPayload', startPayload)
-    const inviter = await getUid(startPayload)
+    const { inviter_id, inviter_username } = await getUid(startPayload)
 
     const {
       username,
@@ -69,7 +69,6 @@ export const subscriptionMiddleware = async (
     } = ctx.from
 
     const finalUsername = username || first_name || telegram_id.toString()
-    const photo_url = await getUserPhotoUrl(ctx, telegram_id)
 
     // Проверяем, существует ли пользователь
     const existingUser = await getUserByTelegramId(telegram_id.toString())
@@ -77,7 +76,7 @@ export const subscriptionMiddleware = async (
       console.log('User already registered:', telegram_id)
       return await next()
     }
-
+    const photo_url = await getUserPhotoUrl(ctx, telegram_id)
     // Создаем пользователя с inviter из start параметра
     const userData = {
       username: finalUsername,
@@ -93,13 +92,13 @@ export const subscriptionMiddleware = async (
       count: 0,
       aspect_ratio: '9:16',
       balance: 100,
-      inviter,
+      inviter: inviter_id || null,
     }
 
     await createUser(userData as CreateUserData)
 
-    if (inviter) {
-      const inviterTelegramId = await getTelegramIdByUserId(inviter)
+    if (inviter_id) {
+      const inviterTelegramId = await getTelegramIdByUserId(inviter_id)
       console.log('inviterTelegramId', inviterTelegramId)
       if (inviterTelegramId) {
         const balance = await getUserBalance(inviterTelegramId)
@@ -115,7 +114,7 @@ export const subscriptionMiddleware = async (
         })
         await bot.telegram.sendMessage(
           '@neuro_coder_privat',
-          `💵 Новый пользователь зарегистрировался в боте: @${finalUsername}. По реферальной ссылке от: @${finalUsername}. ️`
+          `💵 Новый пользователь зарегистрировался в боте: @${finalUsername}. По реферальной ссылке от: @${inviter_username}. ️`
         )
       }
     } else {

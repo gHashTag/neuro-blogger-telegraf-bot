@@ -3,7 +3,7 @@ import { MyContext } from '../../interfaces'
 import { generateNeuroImage } from '../../services/generateNeuroImage'
 import { isRussian } from '@/helpers'
 import { handleHelpCancel } from '@/handlers'
-import { promptNeuroCoder } from './promts'
+import { promptNeuroCoder, promptNeuroCoder2 } from './promts'
 
 export const neuroCoderScene = new Scenes.WizardScene<MyContext>(
   'neuroCoderScene',
@@ -42,10 +42,6 @@ export const neuroCoderScene = new Scenes.WizardScene<MyContext>(
 
         console.log(numImages)
 
-        const generatingMessage = await ctx.reply(
-          'Генерация изображения началась...'
-        )
-
         if (!ctx?.chat?.id) {
           await ctx.reply('Ошибка при генерации ')
           return
@@ -58,7 +54,6 @@ export const neuroCoderScene = new Scenes.WizardScene<MyContext>(
 
         await generateNeuroImage(prompt, model_url, numImages, ctx.from.id, ctx)
 
-        await ctx.deleteMessage(generatingMessage.message_id)
         return ctx.scene.leave()
       } else {
         await ctx.reply('Пожалуйста, выберите количество изображений.')
