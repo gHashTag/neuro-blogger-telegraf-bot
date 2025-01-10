@@ -10,8 +10,6 @@ import { isRussian } from './helpers/language'
 import { generateNeuroImage } from './services/generateNeuroImage'
 
 import { handleSizeSelection } from './handlers'
-import { imageModelPrices } from './price/models'
-import { mainMenu } from './menu'
 
 const myComposer = new Composer<MyContext>()
 

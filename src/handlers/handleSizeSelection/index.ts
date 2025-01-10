@@ -1,6 +1,7 @@
 import { MyContext } from '@/interfaces'
 import { setAspectRatio } from '@/core/supabase'
 import { isRussian } from '@/helpers/language'
+import { mainMenu } from '@/menu'
 
 export async function handleSizeSelection(ctx: MyContext, size: string) {
   ctx.session.selectedSize = size
@@ -16,5 +17,6 @@ export async function handleSizeSelection(ctx: MyContext, size: string) {
     await ctx.scene.enter('textToImageWizard')
   } else {
     console.log('CASE: Неизвестный режим')
+    mainMenu(isRu)
   }
 }

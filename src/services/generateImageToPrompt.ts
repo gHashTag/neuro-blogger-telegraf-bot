@@ -1,6 +1,6 @@
 import axios, { isAxiosError } from 'axios'
 
-import { isDev } from '@/config'
+import { ELESTIO_URL, isDev, SECRET_KEY } from '@/config'
 import { MyContext } from '@/interfaces'
 
 if (!process.env.ELESTIO_URL) {
@@ -17,7 +17,7 @@ export async function generateImageToPrompt(
 
   try {
     const url = `${
-      isDev ? 'http://localhost:3000' : process.env.ELESTIO_URL
+      isDev ? 'http://localhost:3000' : ELESTIO_URL
     }/generate/image-to-prompt`
     console.log('url', url)
     await axios.post(
@@ -31,6 +31,7 @@ export async function generateImageToPrompt(
       {
         headers: {
           'Content-Type': 'application/json',
+          SECRET_KEY: SECRET_KEY,
         },
       }
     )
