@@ -26,6 +26,7 @@ import {
   textToSpeechWizard,
   paymentScene,
   levelQuestWizard,
+  neuroCoderScene,
 } from './scenes'
 import { subscriptionMiddleware } from '@/middlewares/subscription'
 
@@ -82,6 +83,7 @@ export const stage = new Scenes.Stage<MyContext>([
   voiceAvatarWizard,
   textToSpeechWizard,
   paymentScene,
+  neuroCoderScene,
   ...levelQuestWizard,
 ])
 
@@ -121,5 +123,9 @@ export function registerCommands(bot: Telegraf<MyContext>) {
 
   myComposer.command('price', async ctx => {
     await priceCommand(ctx)
+  })
+
+  myComposer.command('neuro_coder', async ctx => {
+    await ctx.scene.enter('neuroCoderScene')
   })
 }
