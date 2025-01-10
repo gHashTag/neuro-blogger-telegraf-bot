@@ -8,7 +8,7 @@ export async function getLatestUserModel(
     .from('model_trainings')
     .select('model_name, trigger_word, model_url')
     .eq('user_id', userId)
-    .eq('status', 'completed')
+    .eq('status', 'succeeded')
     .order('created_at', { ascending: false })
     .limit(1)
     .single()
