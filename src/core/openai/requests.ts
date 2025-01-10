@@ -12,9 +12,10 @@ export const answerAi = async (
   model: string,
   userData: UserData,
   prompt: string,
-  languageCode: string
+  languageCode: string,
+  systemPrompt?: string
 ): Promise<string> => {
-  const systemPrompt = `Respond in the language: ${languageCode} You communicate with: ${JSON.stringify(
+  const initialPrompt = `Respond in the language: ${languageCode} You communicate with: ${JSON.stringify(
     userData
   )}`
 
@@ -23,7 +24,9 @@ export const answerAi = async (
     messages: [
       {
         role: 'system',
-        content: systemPrompt,
+        content: systemPrompt
+          ? systemPrompt + '\n' + initialPrompt
+          : initialPrompt,
       },
       {
         role: 'user',
