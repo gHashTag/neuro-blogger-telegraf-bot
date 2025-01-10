@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { isDev } from '@/config'
+import { ELESTIO_URL, isDev, SECRET_API_KEY } from '@/config'
 import { MyContext } from '@/interfaces'
 
 export const generateTextToImage = async (
@@ -13,8 +13,9 @@ export const generateTextToImage = async (
 ) => {
   try {
     const url = `${
-      isDev ? 'http://localhost:3000' : process.env.ELESTIO_URL
+      isDev ? 'http://localhost:3000' : ELESTIO_URL
     }/generate/text-to-image`
+    console.log(url, 'url')
 
     await axios.post(
       url,
@@ -29,6 +30,7 @@ export const generateTextToImage = async (
       {
         headers: {
           'Content-Type': 'application/json',
+          'x-secret-key': SECRET_API_KEY,
         },
       }
     )

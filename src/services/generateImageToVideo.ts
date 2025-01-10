@@ -1,5 +1,5 @@
 import axios, { isAxiosError } from 'axios'
-import { isDev } from '@/config'
+import { isDev, SECRET_API_KEY } from '@/config'
 import { ImageToVideoResponse, VideoModel } from '@/interfaces'
 
 export async function generateImageToVideo(
@@ -37,6 +37,7 @@ export async function generateImageToVideo(
       {
         headers: {
           'Content-Type': 'application/json',
+          'x-secret-key': SECRET_API_KEY,
         },
       }
     )

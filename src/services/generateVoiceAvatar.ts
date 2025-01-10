@@ -1,5 +1,5 @@
 import axios, { isAxiosError } from 'axios'
-import { isDev } from '@/config'
+import { isDev, SECRET_API_KEY } from '@/config'
 import { MyContext } from '@/interfaces'
 import { sendGenericErrorMessage } from '@/menu'
 
@@ -30,6 +30,7 @@ export async function generateVoiceAvatar(
       {
         headers: {
           'Content-Type': 'application/json',
+          'x-secret-key': SECRET_API_KEY,
         },
       }
     )

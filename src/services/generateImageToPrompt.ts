@@ -1,6 +1,6 @@
 import axios, { isAxiosError } from 'axios'
 
-import { ELESTIO_URL, isDev, SECRET_KEY } from '@/config'
+import { ELESTIO_URL, isDev, SECRET_API_KEY } from '@/config'
 import { MyContext } from '@/interfaces'
 
 if (!process.env.ELESTIO_URL) {
@@ -31,7 +31,7 @@ export async function generateImageToPrompt(
       {
         headers: {
           'Content-Type': 'application/json',
-          SECRET_KEY: SECRET_KEY,
+          'x-secret-key': SECRET_API_KEY,
         },
       }
     )

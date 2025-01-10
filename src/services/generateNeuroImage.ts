@@ -1,6 +1,6 @@
 import axios, { isAxiosError } from 'axios'
 
-import { isDev } from '@/config'
+import { isDev, SECRET_API_KEY } from '@/config'
 import { isRussian } from '@/helpers/language'
 import { MyContext, ModelUrl } from '@/interfaces'
 
@@ -48,6 +48,7 @@ export async function generateNeuroImage(
       {
         headers: {
           'Content-Type': 'application/json',
+          'x-secret-key': SECRET_API_KEY,
         },
       }
     )

@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
 import FormData from 'form-data'
 import fs from 'fs'
-import { isDev } from '@/config'
+import { isDev, SECRET_API_KEY } from '@/config'
 
 interface ModelTrainingRequest {
   filePath: string
@@ -45,6 +45,7 @@ export async function createModelTraining(
       formData,
       {
         headers: {
+          'x-secret-key': SECRET_API_KEY,
           ...formData.getHeaders(),
         },
       }
