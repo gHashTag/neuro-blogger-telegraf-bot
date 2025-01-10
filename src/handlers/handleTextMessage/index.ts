@@ -2,33 +2,45 @@ import bot from '@/core/bot'
 import { answerAi } from '../../core/openai/requests'
 import { getUserModel, getUserData } from '../../core/supabase'
 import { MyTextMessageContext } from '../../interfaces'
-import { isRussian } from '@/helpers'
 import { Markup } from 'telegraf'
 
 export async function handleTextMessage(ctx: MyTextMessageContext) {
   console.log('CASE: handleTextMessage')
-  const isRu = isRussian(ctx)
+  const userLanguage = ctx.from?.language_code || 'ru'
+  console.log('User language:', userLanguage)
+
   if (ctx.message?.text?.startsWith('/')) {
     console.log('SKIP')
     return
   }
+  console.log('handleTextMessage ctx', ctx)
 
   try {
-    const userModel = await getUserModel(ctx.from?.id.toString() || '')
-    const userData = await getUserData(ctx.from?.id.toString() || '')
+    const userId = ctx.from?.id.toString() || ''
+    console.log('User ID:', userId)
 
+    let userModel = await getUserModel(userId)
+    let userData = await getUserData(userId)
+
+    // Если пользователь не найден, используем данные из контекста
     if (!userData) {
-      await ctx.reply(
-        isRu
-          ? 'Не удалось получить данные пользователя'
-          : 'Failed to get user data'
-      )
-      return
+      console.log('User not found, using context data:', userId)
+      userData = {
+        username: ctx.from?.username || '',
+        first_name: ctx.from?.first_name || '',
+        last_name: ctx.from?.last_name || '',
+        company: '',
+        position: '',
+        designation: '',
+        language_code: userLanguage,
+      }
+      userModel = 'gpt-4o'
     }
 
     if (!ctx.message?.text) {
+      console.log('No message text found')
       await ctx.reply(
-        isRu
+        userLanguage === 'ru'
           ? 'Не удалось получить текст сообщения'
           : 'Failed to get message text'
       )
@@ -40,12 +52,13 @@ export async function handleTextMessage(ctx: MyTextMessageContext) {
       userModel,
       userData,
       ctx.message.text,
-      isRu ? 'ru' : 'en'
+      userLanguage
     )
+    console.log('AI response:', response)
 
     if (!response) {
       await ctx.reply(
-        isRu
+        userLanguage === 'ru'
           ? 'Не удалось получить ответ от GPT. Пожалуйста, попробуйте позже.'
           : 'Failed to get response from GPT. Please try again later.'
       )
@@ -57,7 +70,7 @@ export async function handleTextMessage(ctx: MyTextMessageContext) {
   } catch (error) {
     console.error('Error in GPT response:', error)
     await ctx.reply(
-      isRu
+      userLanguage === 'ru'
         ? 'Произошла ошибка при обработке запроса'
         : 'An error occurred while processing your request'
     )

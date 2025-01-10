@@ -3,7 +3,7 @@ import { MyContext } from '../../interfaces'
 import { generateNeuroImage } from '../../services/generateNeuroImage'
 import { isRussian } from '@/helpers'
 import { handleHelpCancel } from '@/handlers'
-import { promptNeuroCoder, promptNeuroCoder2 } from './promts'
+import { promptNeuroCoder } from './promts'
 
 export const neuroCoderScene = new Scenes.WizardScene<MyContext>(
   'neuroCoderScene',

@@ -70,7 +70,7 @@ myComposer.hears(
     console.log('CASE: Изображение из текста')
     ctx.session.mode = 'text_to_image'
     await ctx.scene.enter('textToImageWizard')
-    // await imageModelMenu(ctx)
+    await imageModelMenu(ctx)
   }
 )
 
