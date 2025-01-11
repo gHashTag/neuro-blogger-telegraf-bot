@@ -27,7 +27,7 @@ export function mainMenu(isRu: boolean): Markup.Markup<ReplyKeyboardMarkup> {
       ),
     ],
     [
-      Markup.button.text(isRu ? '🎤 Синхронизация губ' : '🎤 Lip Sync'),
+      Markup.button.text(isRu ? '📐 Изменить размер' : '📐 Change size'),
       Markup.button.text(isRu ? '🎤 Голос для аватара' : '🎤 Voice for Avatar'),
     ],
     [
@@ -35,9 +35,9 @@ export function mainMenu(isRu: boolean): Markup.Markup<ReplyKeyboardMarkup> {
       Markup.button.text(isRu ? '🤖 Выбор модели ИИ' : '🤖 Select AI Model'),
     ],
     [
-      Markup.button.text(isRu ? '📐 Изменить размер' : '📐 Change size'),
       Markup.button.text(isRu ? '💎 Пополнить баланс' : '💎 Top up balance'),
+      Markup.button.text(isRu ? '🎮 Начать обучение' : '🎮 Start learning'),
     ],
-    [Markup.button.text(isRu ? '🎮 Начать обучение' : '🎮 Start learning')],
   ]).resize()
 }
+// Markup.button.text(isRu ? '🎤 Синхронизация губ' : '🎤 Lip Sync'),
