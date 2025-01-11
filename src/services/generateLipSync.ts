@@ -3,6 +3,7 @@ import FormData from 'form-data'
 import { isDev, SECRET_API_KEY } from '@/config'
 import fs from 'fs'
 import path from 'path'
+import { ensureDirectoryExistence } from '@/helpers'
 interface LipSyncResponse {
   message: string
   resultUrl?: string
@@ -38,6 +39,8 @@ export async function generateLipSync(
     const audioPath = path.join(__dirname, '../../tmp', 'temp_audio.mp3')
     console.log('videoPath', videoPath)
     console.log('audioPath', audioPath)
+    await ensureDirectoryExistence(path.dirname(videoPath))
+    await ensureDirectoryExistence(path.dirname(audioPath))
     // Скачиваем видео и аудио файлы
     await downloadFile(videoUrl, videoPath)
     await downloadFile(audioUrl, audioPath)
