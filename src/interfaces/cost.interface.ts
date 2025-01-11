@@ -30,6 +30,7 @@ export const VIDEO_MODELS: VideoModelConfig[] = [
 ]
 
 export type Mode =
+  | 'chat_with_avatar'
   | 'neuro_photo'
   | 'image_to_video'
   | 'avatar'
@@ -48,5 +49,5 @@ export type Mode =
   | 'main_menu'
   | 'improve_prompt'
   | 'change_size'
-
+  | 'lip_sync'
 export type ModeCosts = Required<Record<Mode, number>>

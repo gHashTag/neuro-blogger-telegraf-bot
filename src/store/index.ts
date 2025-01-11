@@ -14,7 +14,6 @@ export const defaultSession: () => MySession = () => ({
   mode: 'text_to_image',
   attempts: 0,
   videoModel: '',
-  imageUrl: '',
   paymentAmount: 0,
   images: [],
   modelName: '',
@@ -22,4 +21,7 @@ export const defaultSession: () => MySession = () => ({
   username: '',
   triggerWord: '',
   steps: 0,
+  videoUrl: '',
+  imageUrl: '',
+  audioUrl: '',
 })

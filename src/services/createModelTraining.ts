@@ -53,7 +53,8 @@ export async function createModelTraining(
         },
       }
     )
-    fs.unlinkSync(requestData.filePath)
+
+    await fs.promises.unlink(requestData.filePath)
     console.log('Model training response:', response.data)
     return response.data
   } catch (error) {

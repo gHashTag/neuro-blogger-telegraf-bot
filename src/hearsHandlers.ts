@@ -13,6 +13,16 @@ import { handleSizeSelection } from './handlers'
 
 const myComposer = new Composer<MyContext>()
 
+myComposer.hears(['💭 Чат с аватаром', '💭 Chat with avatar'], async ctx => {
+  console.log('CASE: Чат с аватаром')
+  ctx.session.mode = 'chat_with_avatar'
+  ctx.reply(
+    isRussian(ctx)
+      ? 'Напиши мне сообщение 💭, и я отвечу на него'
+      : 'Write me a message 💭, and I will answer you'
+  )
+})
+
 myComposer.hears(['🧠 Мозг аватара', '🧠 Avatar Brain'], async ctx => {
   console.log('CASE: Создать аватар')
   ctx.session.mode = 'avatar'
@@ -50,6 +60,12 @@ myComposer.hears(['🎥 Видео из текста', '🎥 Text to Video'], as
   console.log('CASE: Видео из текста')
   ctx.session.mode = 'text_to_video'
   await ctx.scene.enter('textToVideoWizard')
+})
+
+myComposer.hears(['🎤 Синхронизация губ', '🎤 Lip Sync'], async ctx => {
+  console.log('CASE: Синхронизация губ')
+  ctx.session.mode = 'lip_sync'
+  await ctx.scene.enter('lipSyncWizard')
 })
 
 myComposer.hears(['🎙️ Текст в голос', '🎙️ Text to Voice'], async ctx => {

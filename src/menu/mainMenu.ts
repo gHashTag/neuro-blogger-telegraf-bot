@@ -5,8 +5,8 @@ export function mainMenu(isRu: boolean): Markup.Markup<ReplyKeyboardMarkup> {
   console.log('CASE: mainMenu')
   return Markup.keyboard([
     [
-      Markup.button.text(isRu ? '🎮 Начать обучение' : '🎮 Start learning'),
       Markup.button.text(isRu ? '🧠 Мозг аватара' : '🧠 Avatar Brain'),
+      Markup.button.text(isRu ? '💭 Чат с аватаром' : '💭 Chat with avatar'),
     ],
     [
       Markup.button.text(
@@ -27,13 +27,17 @@ export function mainMenu(isRu: boolean): Markup.Markup<ReplyKeyboardMarkup> {
       ),
     ],
     [
-      Markup.button.text(isRu ? '📐 Изменить размер' : '📐 Change size'),
+      Markup.button.text(isRu ? '🎤 Синхронизация губ' : '🎤 Lip Sync'),
       Markup.button.text(isRu ? '🎤 Голос для аватара' : '🎤 Voice for Avatar'),
     ],
     [
       Markup.button.text(isRu ? '🎙️ Текст в голос' : '🎙️ Text to Voice'),
       Markup.button.text(isRu ? '🤖 Выбор модели ИИ' : '🤖 Select AI Model'),
     ],
-    [Markup.button.text(isRu ? '💎 Пополнить баланс' : '💎 Top up balance')],
+    [
+      Markup.button.text(isRu ? '📐 Изменить размер' : '📐 Change size'),
+      Markup.button.text(isRu ? '💎 Пополнить баланс' : '💎 Top up balance'),
+    ],
+    [Markup.button.text(isRu ? '🎮 Начать обучение' : '🎮 Start learning')],
   ]).resize()
 }

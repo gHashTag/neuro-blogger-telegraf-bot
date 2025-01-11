@@ -39,6 +39,8 @@ export interface MySession extends Scenes.WizardSession<MyWizardSession> {
   attempts: number
   videoModel: string
   imageUrl: string
+  videoUrl: string
+  audioUrl: string
   paymentAmount: number
   images: BufferType
   modelName: string

@@ -3,9 +3,8 @@ import { MyContext } from '../../interfaces'
 
 import { isValidImage } from '../../helpers/images'
 import { isRussian } from '@/helpers/language'
-import bot, { BOT_TOKEN } from '@/core/bot'
-import { calculateTrainingCostInStars } from '@/price/helpers'
-import { getUserBalance } from '@/core/supabase'
+import { BOT_TOKEN } from '@/core/bot'
+
 export const trainFluxModelWizard = new Scenes.WizardScene<MyContext>(
   'trainFluxModelWizard',
 
