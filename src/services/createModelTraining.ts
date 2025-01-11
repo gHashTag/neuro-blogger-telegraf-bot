@@ -33,11 +33,13 @@ export async function createModelTraining(
 
     // Создаем FormData для передачи файла
     const formData = new FormData()
+    formData.append('type', 'model')
+    formData.append('telegram_id', requestData.telegram_id)
     formData.append('zipUrl', fs.createReadStream(requestData.filePath))
     formData.append('triggerWord', requestData.triggerWord)
     formData.append('modelName', requestData.modelName)
-    formData.append('steps', requestData.steps)
-    formData.append('telegram_id', requestData.telegram_id)
+    formData.append('steps', requestData.steps.toString()) // Убедитесь, что steps передается как строка
+
     formData.append('is_ru', requestData.is_ru.toString())
 
     const response: AxiosResponse<ModelTrainingResponse> = await axios.post(
@@ -45,12 +47,13 @@ export async function createModelTraining(
       formData,
       {
         headers: {
+          'Content-Type': 'multipart/form-data',
           'x-secret-key': SECRET_API_KEY,
           ...formData.getHeaders(),
         },
       }
     )
-
+    fs.unlinkSync(requestData.filePath)
     console.log('Model training response:', response.data)
     return response.data
   } catch (error) {
