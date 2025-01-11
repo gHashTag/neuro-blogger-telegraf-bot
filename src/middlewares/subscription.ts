@@ -57,7 +57,6 @@ export const subscriptionMiddleware = async (
     const startPayload = ctx.message.text.split(' ')[1]
 
     console.log('startPayload', startPayload)
-    const { inviter_id, inviter_username } = await getUid(startPayload)
 
     const {
       username,
@@ -78,6 +77,7 @@ export const subscriptionMiddleware = async (
     }
     const photo_url = await getUserPhotoUrl(ctx, telegram_id)
     // Создаем пользователя с inviter из start параметра
+    const { inviter_id, inviter_username } = await getUid(startPayload)
     const userData = {
       username: finalUsername,
       telegram_id: telegram_id.toString(),
