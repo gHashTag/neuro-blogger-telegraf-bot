@@ -79,10 +79,17 @@ export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
 
       await sendBalanceMessage(ctx.from.id, currentBalance, price, isRu)
 
+      const info =
+        videoModel === 'i2vgen-xl'
+          ? isRu
+            ? 'Используйте горизонтальное изображение для генерации видео с этой моделью. Так как вертикальные изображения не поддерживаются.'
+            : 'Use a horizontal image for video generation with this model. Vertical images are not supported.'
+          : ''
+
       await ctx.reply(
         isRu
-          ? `Вы выбрали модель для генерации: ${videoModel}`
-          : `You have chosen the generation model: ${videoModel}`,
+          ? `Вы выбрали модель для генерации: ${videoModel}. ${info}`
+          : `You have chosen the generation model: ${videoModel}. ${info}`,
         {
           reply_markup: { remove_keyboard: true },
         }
