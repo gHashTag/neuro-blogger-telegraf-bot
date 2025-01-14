@@ -28,7 +28,5 @@ paymentScene.hears(['⭐️ Звездами', '⭐️ Stars'], async ctx => {
 
 paymentScene.hears(['💳 Рублями', '💳 In rubles'], async ctx => {
   console.log('CASE: 💳 Рублями', ctx.match)
-  const isRu = isRussian(ctx)
-  await handleBuyRobokassa({ ctx, isRu })
-  await ctx.scene.leave() // Завершение сцены после выбора
+  await ctx.scene.enter('emailWizard')
 })

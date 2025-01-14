@@ -4,7 +4,6 @@ import { MyContext } from './interfaces'
 import { startCommand } from './commands/startCommand'
 import { neuroQuestCommand } from './commands/neuroQuestCommand'
 
-// import { topUpBalanceCommand } from './commands/topUpBalanceCommand'
 import { balanceCommand } from './commands/balanceCommand'
 
 import {
@@ -56,10 +55,6 @@ export const balanceScene = new Scenes.WizardScene<MyContext>(
   'balanceCommand',
   balanceCommand
 )
-// export const topUpBalanceScene = new Scenes.WizardScene<MyContext>(
-//   'topUpBalanceCommand',
-//   topUpBalanceCommand
-// )
 
 export const stage = new Scenes.Stage<MyContext>([
   startScene,

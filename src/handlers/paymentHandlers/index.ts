@@ -1,6 +1,6 @@
 import { Context } from 'telegraf'
 import { isRussian } from '@/helpers'
-import { getUid, incrementBalance } from '@/core/supabase'
+import { getUid, incrementBalance, setPayments } from '@/core/supabase'
 import { handleBuy } from '@/handlers'
 
 export async function handlePaymentPolicyInfo(ctx: Context) {
@@ -46,6 +46,19 @@ export async function handleSuccessfulPayment(ctx) {
       ? `💫 Ваш баланс пополнен на ${stars}⭐️ звезд!`
       : `💫 Your balance has been replenished by ${stars}⭐️ stars!`
   )
+
+  const Email = ctx.from.email
+  const OutSum = stars
+  const user_id = ctx.from.id
+
+  await setPayments({
+    user_id,
+    OutSum,
+    currency: 'STARS',
+    stars,
+    email: Email,
+    payment_method: 'Telegram',
+  })
   await ctx.telegram.sendMessage(
     '-1001978334539',
     `💫 Пользователь @${ctx.from.username} (ID: ${ctx.from.id}) пополнил баланс на ${stars} звезд!`
