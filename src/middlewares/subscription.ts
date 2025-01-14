@@ -105,8 +105,12 @@ export const subscriptionMiddleware = async (
         await bot.telegram.sendMessage(
           inviterTelegramId,
           isRu
-            ? `🔗 Новый пользователь зарегистрировался по вашей ссылке: @${finalUsername}. \n🎁 За каждого приглашенного друга вы получаете дополнительные 100 звезд для генерации!\n🤑 Ваш новый баланс: ${balance}⭐️ `
-            : `🔗 New user registered through your link: @${finalUsername}. \n🎁 For each friend you invite, you get additional 100 stars for generation!\n🤑 Your new balance: ${balance}⭐️`
+            ? `🔗 Новый пользователь зарегистрировался по вашей ссылке: @${finalUsername}. \n🎁 За каждого приглашенного друга вы получаете дополнительные 100 звезд для генерации!\n🤑 Ваш новый баланс: ${
+                balance + 100
+              }⭐️ `
+            : `🔗 New user registered through your link: @${finalUsername}. \n🎁 For each friend you invite, you get additional 100 stars for generation!\n🤑 Your new balance: ${
+                balance + 100
+              }⭐️`
         )
         await incrementBalance({
           telegram_id: inviterTelegramId.toString(),
