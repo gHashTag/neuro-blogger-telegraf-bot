@@ -6,6 +6,7 @@ import {
   getUserByTelegramId,
   getUserBalance,
   incrementBalance,
+  getUidInviter,
 } from '@/core/supabase'
 import { CreateUserData, MyContext } from '@/interfaces'
 import bot from '@/core/bot'
@@ -77,7 +78,7 @@ export const subscriptionMiddleware = async (
     }
     const photo_url = await getUserPhotoUrl(ctx, telegram_id)
     // Создаем пользователя с inviter из start параметра
-    const { inviter_id, inviter_username } = await getUid(startPayload)
+    const { inviter_id, inviter_username } = await getUidInviter(startPayload)
     const userData = {
       username: finalUsername,
       telegram_id: telegram_id.toString(),

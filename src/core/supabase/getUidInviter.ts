@@ -1,10 +1,10 @@
 import { supabase } from '.'
 
-export const getUid = async (
+export const getUidInviter = async (
   telegram_id: string | number
 ): Promise<{
-  user_id: string | null
-  username: string | null
+  inviter_id: string | null
+  inviter_username: string | null
 } | null> => {
   try {
     if (!telegram_id) {
@@ -14,7 +14,7 @@ export const getUid = async (
 
     const { data, error } = await supabase
       .from('users')
-      .select('user_id, username, telegram_id')
+      .select('user_id, username')
       .eq('telegram_id', telegram_id.toString())
 
     if (error) {
@@ -23,8 +23,8 @@ export const getUid = async (
     }
 
     return {
-      user_id: data?.[0]?.user_id || null,
-      username: data?.[0]?.username || null,
+      inviter_id: data?.[0]?.user_id || null,
+      inviter_username: data?.[0]?.username || null,
     }
   } catch (error) {
     console.error('Error in getUid:', error)

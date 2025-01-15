@@ -35,8 +35,6 @@ export async function handleSuccessfulPayment(ctx) {
   const stars = ctx.message.successful_payment.total_amount
 
   if (!ctx.from?.id) throw new Error('No telegram id')
-  const { inviter_id } = await getUid(ctx.from.id.toString())
-  if (!inviter_id) throw new Error('No user_id')
 
   // Увеличиваем баланс пользователя на количество звезд
   await incrementBalance({ telegram_id: ctx.from.id.toString(), amount: stars })
@@ -49,7 +47,13 @@ export async function handleSuccessfulPayment(ctx) {
 
   const Email = ctx.from.email
   const OutSum = stars
-  const user_id = ctx.from.id
+
+  await ctx.telegram.sendMessage(
+    '-1001978334539',
+    `💫 Пользователь @${ctx.from.username} (ID: ${ctx.from.id}) пополнил баланс на ${stars} звезд!`
+  )
+
+  const { user_id } = await getUid(ctx.from.id.toString())
 
   await setPayments({
     user_id,
@@ -59,8 +63,4 @@ export async function handleSuccessfulPayment(ctx) {
     email: Email,
     payment_method: 'Telegram',
   })
-  await ctx.telegram.sendMessage(
-    '-1001978334539',
-    `💫 Пользователь @${ctx.from.username} (ID: ${ctx.from.id}) пополнил баланс на ${stars} звезд!`
-  )
 }
