@@ -6,7 +6,6 @@ export async function generateImageToVideo(
   imageUrl: string,
   prompt: string,
   videoModel: VideoModel,
-  paymentAmount: number,
   telegram_id: number,
   username: string,
   isRu: boolean
@@ -29,7 +28,6 @@ export async function generateImageToVideo(
         imageUrl,
         prompt,
         videoModel,
-        paymentAmount,
         telegram_id,
         username,
         is_ru: isRu,

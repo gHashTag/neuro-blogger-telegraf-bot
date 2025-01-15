@@ -13,8 +13,9 @@ import {
 } from '@/menu'
 import { isRussian } from '@/helpers/language'
 import { BOT_TOKEN } from '@/core/bot'
-import { getUserBalance } from '@/core/supabase'
+
 import { handleHelpCancel } from '@/handlers'
+import { processBalanceVideoOperation } from '@/price/helpers/processBalanceVideoOperation'
 
 export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
   'imageToVideoWizard',
@@ -52,32 +53,23 @@ export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
       const videoModel = messageText
       console.log('videoModel', videoModel)
 
-      const availableModels: VideoModel[] = VIDEO_MODELS.map(
-        model => model.name
-      )
-      console.log('availableModels', availableModels)
-      const currentBalance = await getUserBalance(ctx.from.id)
-      console.log('currentBalance', currentBalance)
-
-      // Используем новую функцию для проверки и расчета
-      const price = await validateAndCalculateVideoModelPrice(
-        videoModel as string,
-        availableModels,
-        currentBalance,
-        isRu,
-        ctx
-      )
-      if (price === null) {
+      const { newBalance, success, modePrice } =
+        await processBalanceVideoOperation({
+          videoModel,
+          telegram_id: ctx.from.id,
+          is_ru: isRu,
+        })
+      if (!success) {
         console.log('price is null')
         return ctx.scene.leave()
       }
-      ctx.session.paymentAmount = price
+      ctx.session.paymentAmount = modePrice
 
       // Устанавливаем videoModel в сессии
       ctx.session.videoModel = videoModel as VideoModel
       console.log('ctx.session.videoModel', ctx.session.videoModel)
 
-      await sendBalanceMessage(ctx.from.id, currentBalance, price, isRu)
+      await sendBalanceMessage(ctx.from.id, newBalance, modePrice, isRu)
 
       const info =
         videoModel === 'i2vgen-xl'
@@ -169,12 +161,10 @@ export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
             isRu,
           })
 
-          const paymentAmount = ctx.session.paymentAmount
           await generateImageToVideo(
             imageUrl,
             prompt,
             videoModel,
-            paymentAmount,
             ctx.from.id,
             ctx.from.username,
             isRu
