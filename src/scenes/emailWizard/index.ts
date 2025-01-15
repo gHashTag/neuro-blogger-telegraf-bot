@@ -5,6 +5,7 @@ import { isRussian } from '@/helpers'
 import { calculateStars } from '@/price/helpers'
 import md5 from 'md5'
 import { MERCHANT_LOGIN, PASSWORD1, RESULT_URL2 } from '@/config'
+import { handleHelpCancel } from '@/handlers'
 
 const merchantLogin = MERCHANT_LOGIN
 const password1 = PASSWORD1
@@ -135,7 +136,10 @@ emailWizard.on('text', async ctx => {
 
   if (msg && 'text' in msg) {
     const selectedOption = msg.text
-
+    const isCancel = await handleHelpCancel(ctx)
+    if (isCancel) {
+      return ctx.scene.leave()
+    }
     const selectedPayment = paymentOptions.find(option =>
       selectedOption.includes(option.amount.toString())
     )
