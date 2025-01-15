@@ -29,6 +29,7 @@ export interface MyWizardSession extends Scenes.WizardSessionData {
 }
 
 export interface MySession extends Scenes.WizardSession<MyWizardSession> {
+  email: string
   selectedModel: string
   prompt: string
   selectedSize: string

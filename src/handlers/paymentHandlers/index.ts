@@ -1,6 +1,6 @@
 import { Context } from 'telegraf'
 import { isRussian } from '@/helpers'
-import { getUid, incrementBalance, setPayments } from '@/core/supabase'
+import { incrementBalance, setPayments } from '@/core/supabase'
 import { handleBuy } from '@/handlers'
 
 export async function handlePaymentPolicyInfo(ctx: Context) {

@@ -24,4 +24,5 @@ export const defaultSession: () => MySession = () => ({
   videoUrl: '',
   imageUrl: '',
   audioUrl: '',
+  email: '',
 })

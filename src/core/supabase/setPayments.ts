@@ -3,6 +3,7 @@ import { supabase } from '.'
 type Payment = {
   user_id: string
   OutSum: string
+  InvId: string
   currency: 'RUB' | 'USD' | 'EUR' | 'STARS'
   stars: number
   email: string
@@ -13,6 +14,7 @@ type Payment = {
 export const setPayments = async ({
   user_id,
   OutSum,
+  InvId,
   currency,
   stars,
   email,
@@ -23,6 +25,7 @@ export const setPayments = async ({
     const { error } = await supabase.from('payments').insert({
       user_id,
       amount: parseFloat(OutSum),
+      inv_id: InvId,
       currency,
       status,
       payment_method,
