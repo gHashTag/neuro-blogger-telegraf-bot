@@ -1,7 +1,6 @@
 import { Telegraf, Scenes, session, Middleware } from 'telegraf'
 import { MyContext } from './interfaces'
 
-import { startCommand } from './commands/startCommand'
 import { neuroQuestCommand } from './commands/neuroQuestCommand'
 
 import { balanceCommand } from './commands/balanceCommand'
@@ -27,6 +26,9 @@ import {
   levelQuestWizard,
   neuroCoderScene,
   lipSyncWizard,
+  startScene,
+  neuroQuestScene,
+  chatWithAvatarWizard,
 } from './scenes'
 import { subscriptionMiddleware } from '@/middlewares/subscription'
 
@@ -35,29 +37,14 @@ import { menuCommand } from './commands/menuCommand'
 import { inviteCommand } from './commands/inviteCommand'
 
 import { priceCommand } from './commands/priceCommand'
-import myComposer from './hearsHandlers'
+import { myComposer } from './hearsHandlers'
 
 import { defaultSession } from './store'
-
-export const startScene = new Scenes.WizardScene<MyContext>(
-  'startCommand',
-  startCommand
-)
-export const neuroQuestScene = new Scenes.WizardScene<MyContext>(
-  'neuroQuestCommand',
-  neuroQuestCommand
-)
-export const menuScene = new Scenes.WizardScene<MyContext>(
-  'menuCommand',
-  menuCommand
-)
-export const balanceScene = new Scenes.WizardScene<MyContext>(
-  'balanceCommand',
-  balanceCommand
-)
+import { menuScene, balanceScene } from './scenes/'
 
 export const stage = new Scenes.Stage<MyContext>([
   startScene,
+  chatWithAvatarWizard,
   neuroQuestScene,
   menuScene,
   balanceScene,
@@ -65,7 +52,6 @@ export const stage = new Scenes.Stage<MyContext>([
   imageToPromptWizard,
   emailWizard,
   textToImageWizard,
-  menuScene,
   improvePromptWizard,
   sizeWizard,
   neuroPhotoWizard,

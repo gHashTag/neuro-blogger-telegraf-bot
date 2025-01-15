@@ -8,6 +8,7 @@ import {
   handleLevel5,
   handleLevel6,
   handleLevel7,
+  handleLevel8,
   handleLevel9,
   handleLevel10,
   handleLevel11,
@@ -39,6 +40,9 @@ export async function helpCommand(ctx: MyContext) {
     return ctx.scene.leave()
   } else if (mode === 'select_model') {
     await handleLevel7(ctx)
+    return ctx.scene.leave()
+  } else if (mode === 'chat_with_avatar') {
+    await handleLevel8(ctx)
     return ctx.scene.leave()
   } else if (mode === 'image_to_video') {
     await handleLevel9(ctx)

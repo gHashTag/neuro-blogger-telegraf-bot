@@ -1,5 +1,5 @@
 import { Composer } from 'telegraf'
-import { MyContext } from './interfaces'
+import { MyContext, MyTextMessageContext } from './interfaces'
 import { imageModelMenu } from './menu/imageModelMenu'
 
 import { balanceCommand } from './commands/balanceCommand'
@@ -11,16 +11,12 @@ import { generateNeuroImage } from './services/generateNeuroImage'
 
 import { handleSizeSelection } from './handlers'
 
-const myComposer = new Composer<MyContext>()
+export const myComposer = new Composer<MyContext>()
 
 myComposer.hears(['💭 Чат с аватаром', '💭 Chat with avatar'], async ctx => {
   console.log('CASE: Чат с аватаром')
   ctx.session.mode = 'chat_with_avatar'
-  ctx.reply(
-    isRussian(ctx)
-      ? 'Напиши мне сообщение 💭, и я отвечу на него'
-      : 'Write me a message 💭, and I will answer you'
-  )
+  await ctx.scene.enter('chatWithAvatarWizard')
 })
 
 myComposer.hears(['🧠 Мозг аватара', '🧠 Avatar Brain'], async ctx => {
@@ -239,5 +235,3 @@ myComposer.hears(
     await ctx.scene.enter('textToVideoWizard')
   }
 )
-
-export default myComposer

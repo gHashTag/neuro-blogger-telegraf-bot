@@ -14,7 +14,7 @@ import { setBotCommands } from './setCommands'
 import { registerCommands, stage } from './registerCommands'
 import { handleCallback } from './handlers/handleCallback'
 import { MyContext, MyTextMessageContext } from './interfaces'
-import myComposer from './hearsHandlers'
+import { myComposer } from './hearsHandlers'
 import { NODE_ENV } from './config'
 
 import { handlePaymentPolicyInfo } from './handlers/paymentHandlers'
@@ -51,8 +51,7 @@ bot.action('payment_policy_info', handlePaymentPolicyInfo)
 bot.action(/top_up_\d+/, handleTopUp)
 bot.on('pre_checkout_query', handlePreCheckoutQuery)
 bot.on('successful_payment', handleSuccessfulPayment)
-
-bot.on('text', (ctx: MyTextMessageContext) => handleTextMessage(ctx))
+// bot.on('text', (ctx: MyTextMessageContext) => handleTextMessage(ctx))
 
 bot.catch(err => {
   const error = err as Error
