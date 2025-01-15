@@ -235,3 +235,9 @@ myComposer.hears(
     await ctx.scene.enter('textToVideoWizard')
   }
 )
+
+myComposer.hears(['🤖 Выбор модели ИИ', '🤖 Select AI Model'], async ctx => {
+  console.log('CASE: Выбор модели ИИ')
+  ctx.session.mode = 'select_model'
+  await ctx.scene.enter('selectModelWizard')
+})
