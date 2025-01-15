@@ -6,6 +6,7 @@ type Payment = {
   currency: 'RUB' | 'USD' | 'EUR' | 'STARS'
   stars: number
   email: string
+  status: 'COMPLETED' | 'PENDING' | 'FAILED'
   payment_method: 'Robokassa' | 'YooMoney' | 'Telegram' | 'Stripe' | 'Other'
 }
 
@@ -15,6 +16,7 @@ export const setPayments = async ({
   currency,
   stars,
   email,
+  status,
   payment_method,
 }: Payment) => {
   try {
@@ -22,7 +24,7 @@ export const setPayments = async ({
       user_id,
       amount: parseFloat(OutSum),
       currency,
-      status: 'COMPLETED',
+      status,
       payment_method,
       description: `Purchase and sale:: ${stars}`,
       stars,

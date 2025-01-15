@@ -53,13 +53,12 @@ export async function handleSuccessfulPayment(ctx) {
     `💫 Пользователь @${ctx.from.username} (ID: ${ctx.from.id}) пополнил баланс на ${stars} звезд!`
   )
 
-  const { user_id } = await getUid(ctx.from.id.toString())
-
   await setPayments({
-    user_id,
+    user_id: ctx.from.id.toString(),
     OutSum,
     currency: 'STARS',
     stars,
+    status: 'COMPLETED',
     email: Email,
     payment_method: 'Telegram',
   })

@@ -2,7 +2,6 @@ import { Markup } from 'telegraf'
 import {
   createUser,
   getTelegramIdByUserId,
-  getUid,
   getUserByTelegramId,
   getUserBalance,
   incrementBalance,

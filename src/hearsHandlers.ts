@@ -1,5 +1,5 @@
 import { Composer } from 'telegraf'
-import { MyContext, MyTextMessageContext } from './interfaces'
+import { MyContext } from './interfaces'
 import { imageModelMenu } from './menu/imageModelMenu'
 
 import { balanceCommand } from './commands/balanceCommand'
