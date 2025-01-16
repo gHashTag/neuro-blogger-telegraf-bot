@@ -1,9 +1,7 @@
 import { Markup } from 'telegraf'
 import {
   createUser,
-  getTelegramIdByUserId,
   getUserByTelegramId,
-  getUserBalance,
   incrementBalance,
   getUidInviter,
 } from '@/core/supabase'
@@ -54,9 +52,9 @@ export const subscriptionMiddleware = async (
     }
 
     // Получаем inviter_id из start параметра
-    const startPayload = ctx.message.text.split(' ')[1]
+    const inviteCode = ctx.message.text.split(' ')[1]
 
-    console.log('startPayload', startPayload)
+    console.log('inviteCode', inviteCode)
 
     const {
       username,
@@ -71,13 +69,51 @@ export const subscriptionMiddleware = async (
 
     // Проверяем, существует ли пользователь
     const existingUser = await getUserByTelegramId(telegram_id.toString())
+    console.log('existingUser', existingUser)
     if (existingUser) {
       console.log('User already registered:', telegram_id)
       return await next()
     }
     const photo_url = await getUserPhotoUrl(ctx, telegram_id)
     // Создаем пользователя с inviter из start параметра
-    const { inviter_id, inviter_username } = await getUidInviter(startPayload)
+    let inviter: string | null = null
+    if (inviteCode) {
+      const {
+        inviter_id,
+        inviter_username,
+        inviter_telegram_id,
+        inviter_balance,
+      } = await getUidInviter(inviteCode)
+
+      inviter = inviter_id
+
+      if (inviter_telegram_id) {
+        await bot.telegram.sendMessage(
+          inviter_telegram_id,
+          isRu
+            ? `🔗 Новый пользователь зарегистрировался по вашей ссылке: @${finalUsername}. \n🎁 За каждого приглашенного друга вы получаете дополнительные 100 звезд для генерации!\n🤑 Ваш новый баланс: ${
+                inviter_balance + 100
+              }⭐️ `
+            : `🔗 New user registered through your link: @${finalUsername}. \n🎁 For each friend you invite, you get additional 100 stars for generation!\n🤑 Your new balance: ${
+                inviter_balance + 100
+              }⭐️`
+        )
+        await incrementBalance({
+          telegram_id: inviter_telegram_id.toString(),
+          amount: 100,
+        })
+        await bot.telegram.sendMessage(
+          '@neuro_coder_privat',
+          `💵 Новый пользователь зарегистрировался в боте: @${finalUsername}. По реферальной ссылке от: @${inviter_username}. ️`
+        )
+      }
+    } else {
+      await bot.telegram.sendMessage(
+        '@neuro_coder_privat',
+        `💵 Новый пользователь зарегистрировался в боте: @${finalUsername}. ️`
+      )
+    }
+
     const userData = {
       username: finalUsername,
       telegram_id: telegram_id.toString(),
@@ -92,41 +128,10 @@ export const subscriptionMiddleware = async (
       count: 0,
       aspect_ratio: '9:16',
       balance: 100,
-      inviter: inviter_id || null,
+      inviter: inviter || null,
     }
 
     await createUser(userData as CreateUserData)
-
-    if (inviter_id) {
-      const inviterTelegramId = await getTelegramIdByUserId(inviter_id)
-      console.log('inviterTelegramId', inviterTelegramId)
-      if (inviterTelegramId) {
-        const balance = await getUserBalance(inviterTelegramId)
-        await bot.telegram.sendMessage(
-          inviterTelegramId,
-          isRu
-            ? `🔗 Новый пользователь зарегистрировался по вашей ссылке: @${finalUsername}. \n🎁 За каждого приглашенного друга вы получаете дополнительные 100 звезд для генерации!\n🤑 Ваш новый баланс: ${
-                balance + 100
-              }⭐️ `
-            : `🔗 New user registered through your link: @${finalUsername}. \n🎁 For each friend you invite, you get additional 100 stars for generation!\n🤑 Your new balance: ${
-                balance + 100
-              }⭐️`
-        )
-        await incrementBalance({
-          telegram_id: inviterTelegramId.toString(),
-          amount: 100,
-        })
-        await bot.telegram.sendMessage(
-          '@neuro_coder_privat',
-          `💵 Новый пользователь зарегистрировался в боте: @${finalUsername}. По реферальной ссылке от: @${inviter_username}. ️`
-        )
-      }
-    } else {
-      await bot.telegram.sendMessage(
-        '@neuro_coder_privat',
-        `💵 Новый пользователь зарегистрировался в боте: @${finalUsername}. ️`
-      )
-    }
 
     const isSubscribed = await checkSubscription(ctx)
     if (!isSubscribed) {
