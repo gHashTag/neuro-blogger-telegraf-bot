@@ -3,7 +3,7 @@ import { openai } from '.'
 export const upgradePrompt = async (prompt: string) => {
   try {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'chatgpt-4o-latest',
       messages: [
         {
           role: 'system',
