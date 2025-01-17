@@ -10,6 +10,7 @@ import { isRussian } from './helpers/language'
 import { generateNeuroImage } from './services/generateNeuroImage'
 
 import { handleSizeSelection } from './handlers'
+import { mainMenu } from './menu'
 
 export const myComposer = new Composer<MyContext>()
 
@@ -240,4 +241,11 @@ myComposer.hears(['🤖 Выбор модели ИИ', '🤖 Select AI Model'], 
   console.log('CASE: Выбор модели ИИ')
   ctx.session.mode = 'select_model'
   await ctx.scene.enter('selectModelWizard')
+})
+
+myComposer.hears(/^(Отмена|отмена|Cancel|cancel)$/i, async ctx => {
+  console.log('CASE: Отмена')
+  const isRu = isRussian(ctx)
+  mainMenu(isRu)
+  return ctx.scene.leave()
 })

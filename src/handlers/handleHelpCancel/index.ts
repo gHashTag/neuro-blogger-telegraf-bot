@@ -16,6 +16,8 @@ export async function handleHelpCancel(ctx: MyContext): Promise<boolean> {
 
     if (text === (isRu ? 'справка по команде' : 'help for the command')) {
       await ctx.scene.enter('helpScene')
+      await menuCommand(ctx)
+      ctx.scene.leave()
       return true
     }
   }

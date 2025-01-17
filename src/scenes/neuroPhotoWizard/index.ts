@@ -66,12 +66,16 @@ export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
     ctx.session.mode = 'neuro_photo'
 
     await sendPhotoDescriptionRequest(ctx, isRu, 'neuro_photo')
-
+    const isCancel = await handleHelpCancel(ctx)
+    if (isCancel) {
+      return ctx.scene.leave()
+    }
     return ctx.wizard.next()
   },
   async ctx => {
     const isRu = ctx.from?.language_code === 'ru'
     const promptMsg = ctx.message
+    console.log(promptMsg, 'promptMsg')
 
     if (promptMsg && 'text' in promptMsg) {
       const promptText = promptMsg.text
@@ -81,9 +85,6 @@ export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
       if (isCancel) {
         return ctx.scene.leave()
       } else {
-        console.log(promptText, 'promptText')
-        console.log(promptText, 'promptText')
-        console.log(ctx.session.userModel, 'ctx.session.userModel')
         ctx.session.prompt = promptText
         const model_url = ctx.session.userModel.model_url as ModelUrl
         const trigger_word = ctx.session.userModel.trigger_word as string
@@ -92,7 +93,6 @@ export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
         const userId = ctx.from?.id
 
         if (model_url && trigger_word) {
-          console.log(model_url, 'model_url')
           const fullPrompt = `Fashionable ${trigger_word}, ${promptText}`
           await generateNeuroImage(fullPrompt, model_url, 1, userId || 0, ctx)
         } else {
