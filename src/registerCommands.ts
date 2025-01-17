@@ -29,6 +29,7 @@ import {
   startScene,
   neuroQuestScene,
   chatWithAvatarWizard,
+  helpScene,
 } from './scenes'
 import { subscriptionMiddleware } from '@/middlewares/subscription'
 
@@ -67,6 +68,7 @@ export const stage = new Scenes.Stage<MyContext>([
   paymentScene,
   neuroCoderScene,
   lipSyncWizard,
+  helpScene,
   ...levelQuestWizard,
 ])
 

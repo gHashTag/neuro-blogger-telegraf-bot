@@ -1,5 +1,5 @@
 import { MyContext } from '../../interfaces'
-import { helpCommand } from '../../commands/helpCommand'
+
 import { menuCommand } from '../../commands/menuCommand'
 
 export async function handleHelpCancel(ctx: MyContext): Promise<boolean> {
@@ -15,8 +15,7 @@ export async function handleHelpCancel(ctx: MyContext): Promise<boolean> {
     }
 
     if (text === (isRu ? 'справка по команде' : 'help for the command')) {
-      await helpCommand(ctx)
-      await menuCommand(ctx)
+      await ctx.scene.enter('helpScene')
       return true
     }
   }

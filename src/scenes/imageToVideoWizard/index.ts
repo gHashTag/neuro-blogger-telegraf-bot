@@ -7,6 +7,7 @@ import { generateImageToVideo } from '@/services/generateImageToVideo'
 import { MyContext, VIDEO_MODELS, VideoModel } from '@/interfaces'
 import {
   cancelMenu,
+  createHelpCancelKeyboard,
   sendGenerationCancelledMessage,
   sendGenericErrorMessage,
   videoModelKeyboard,
@@ -86,9 +87,18 @@ export const imageToVideoWizard = new Scenes.WizardScene<MyContext>(
           reply_markup: { remove_keyboard: true },
         }
       )
+      const isCancel = await handleHelpCancel(ctx)
+      if (isCancel) {
+        return ctx.scene.leave()
+      }
 
       await ctx.reply(
-        isRu ? 'Пожалуйста, отправьте изображение' : 'Please send an image'
+        isRu
+          ? 'Пожалуйста, отправьте изображение для генерации видео'
+          : 'Please send an image for video generation',
+        {
+          reply_markup: createHelpCancelKeyboard(isRu).reply_markup,
+        }
       )
       return ctx.wizard.next()
     } else {

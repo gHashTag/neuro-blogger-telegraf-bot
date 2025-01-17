@@ -28,7 +28,7 @@ myComposer.hears(['🧠 Мозг аватара', '🧠 Avatar Brain'], async ct
 
 myComposer.hears(['Справка по команде', 'Help for the command'], async ctx => {
   console.log('CASE: Справка по команде')
-  await ctx.scene.enter('helpCommand')
+  await ctx.scene.enter('helpScene')
 })
 
 myComposer.hears(['🌟 Выбор модели ИИ', '🌟 Select AI Model'], async ctx => {

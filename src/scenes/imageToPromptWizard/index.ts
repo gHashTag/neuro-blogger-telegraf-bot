@@ -26,7 +26,10 @@ export const imageToPromptWizard = new Scenes.WizardScene<MyContext>(
     const currentBalance = await getUserBalance(userId)
 
     await sendBalanceMessage(userId, currentBalance, imageToPromptCost, isRu)
-
+    const isCancel = await handleHelpCancel(ctx)
+    if (isCancel) {
+      return ctx.scene.leave()
+    }
     await ctx.reply(
       isRu
         ? 'Пожалуйста, отправьте изображение для генерации промпта'
