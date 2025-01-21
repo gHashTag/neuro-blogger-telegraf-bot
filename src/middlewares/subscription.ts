@@ -103,13 +103,13 @@ export const subscriptionMiddleware = async (
           amount: 100,
         })
         await bot.telegram.sendMessage(
-          '@neuro_coder_privat',
+          '@neuro_blogger_group',
           `💵 Новый пользователь зарегистрировался в боте: @${finalUsername}. По реферальной ссылке от: @${inviter_username}. ️`
         )
       }
     } else {
       await bot.telegram.sendMessage(
-        '@neuro_coder_privat',
+        '@neuro_blogger_group',
         `💵 Новый пользователь зарегистрировался в боте: @${finalUsername}. ️`
       )
     }
