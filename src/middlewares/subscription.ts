@@ -4,6 +4,7 @@ import {
   getUserByTelegramId,
   incrementBalance,
   getUidInviter,
+  getReferalsCount,
 } from '@/core/supabase'
 import { CreateUserData, MyContext } from '@/interfaces'
 import bot from '@/core/bot'
@@ -115,10 +116,14 @@ export const subscriptionMiddleware = async (
         await bot.telegram.sendMessage(
           inviter_telegram_id,
           isRu
-            ? `🔗 Новый пользователь зарегистрировался по вашей ссылке: @${finalUsername}. \n🎁 За каждого приглашенного друга вы получаете дополнительные 100 звезд для генерации!\n🤑 Ваш новый баланс: ${
+            ? `🔗 Новый пользователь зарегистрировался по вашей ссылке: @${finalUsername}.\n🆔 Уровень аватара: ${await getReferalsCount(
+                inviter_telegram_id
+              )}\n🎁. За каждого приглашенного друга вы получаете дополнительные 100 звезд для генерации!\n🤑 Ваш новый баланс: ${
                 inviter_balance + 100
               }⭐️ `
-            : `🔗 New user registered through your link: @${finalUsername}. \n🎁 For each friend you invite, you get additional 100 stars for generation!\n🤑 Your new balance: ${
+            : `🔗 New user registered through your link: @${finalUsername}.🆔 Avatar level: ${await getReferalsCount(
+                inviter_telegram_id
+              )}\n🎁. For each friend you invite, you get additional 100 stars for generation!\n🤑 Your new balance: ${
                 inviter_balance + 100
               }⭐️`
         )
@@ -128,13 +133,17 @@ export const subscriptionMiddleware = async (
         })
         await bot.telegram.sendMessage(
           '@neuro_blogger_group',
-          `🔗 Новый пользователь зарегистрировался в боте: @${finalUsername}. По реферальной ссылке от: @${inviter_username}. \n✨ Получил(а) бонус в размере 100⭐️ на свой баланс. Спасибо за участие в нашей программе!`
+          `🔗 Новый пользователь зарегистрировался в боте: @${finalUsername}. По реферальной ссылке от: @${inviter_username}. 🆔 Уровень аватара: ${await getReferalsCount(
+            inviter_telegram_id
+          )}\n🎁 Получил(а) бонус в размере 100⭐️ на свой баланс.\nБлагодарим за участие в нашей программе!`
         )
       }
     } else {
       await bot.telegram.sendMessage(
         '@neuro_blogger_group',
-        `💵 Новый пользователь зарегистрировался в боте: @${finalUsername}. ️`
+        `💵 Новый пользователь зарегистрировался в боте: @${finalUsername}. 🆔 Уровень аватара: ${await getReferalsCount(
+          telegram_id.toString()
+        )}`
       )
     }
 
