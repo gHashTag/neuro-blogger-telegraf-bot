@@ -29,6 +29,25 @@ async function checkSubscription(ctx: MyContext): Promise<boolean> {
   }
 }
 
+async function handleSubscriptionMessage(
+  ctx: MyContext,
+  language_code: string
+): Promise<void> {
+  const message =
+    language_code === 'ru'
+      ? '❗️ВНИМАНИЕ\nВы видите это сообщение потому что не подписаны на канал @neuro_blogger_group\n Группа нужна для того чтобы вы могли задать вопросы и получить помощь. Пожалуйста, подпишитесь на наш канал, чтобы продолжить использование бота.'
+      : '❗️ATTENTION\nYou see this message because you are not subscribed to the channel @neuro_blogger_group\nThe group is needed so that you can ask questions and get help. Please subscribe to our channel to continue using the bot.'
+
+  await ctx.reply(message, {
+    reply_markup: Markup.inlineKeyboard([
+      Markup.button.url(
+        language_code === 'ru' ? 'Подписаться' : 'Subscribe',
+        'https://t.me/neuro_blogger_group'
+      ),
+    ]).reply_markup,
+  })
+}
+
 // Основной middleware
 export const subscriptionMiddleware = async (
   ctx: MyContext,
@@ -72,6 +91,11 @@ export const subscriptionMiddleware = async (
     console.log('existingUser', existingUser)
     if (existingUser) {
       console.log('User already registered:', telegram_id)
+      const isSubscribed = await checkSubscription(ctx)
+      if (!isSubscribed) {
+        await handleSubscriptionMessage(ctx, language_code)
+        return
+      }
       return await next()
     }
     const photo_url = await getUserPhotoUrl(ctx, telegram_id)
@@ -135,18 +159,7 @@ export const subscriptionMiddleware = async (
 
     const isSubscribed = await checkSubscription(ctx)
     if (!isSubscribed) {
-      const message =
-        language_code === 'ru'
-          ? '❗️ВНИМАНИЕ\nВы видите это сообщение потому что не подписаны на канал @neuro_blogger_group\n Группа нужна для того чтобы вы могли задать вопросы и получить помощь. Пожалуйста, подпишитесь на наш канал, чтобы продолжить использование бота.'
-          : '❗️ATTENTION\nYou see this message because you are not subscribed to the channel @neuro_blogger_group\nThe group is needed so that you can ask questions and get help. Please subscribe to our channel to continue using the bot.'
-      await ctx.reply(message, {
-        reply_markup: Markup.inlineKeyboard([
-          Markup.button.url(
-            language_code === 'ru' ? 'Подписаться' : 'Subscribe',
-            'https://t.me/neuro_blogger_group'
-          ),
-        ]).reply_markup,
-      })
+      await handleSubscriptionMessage(ctx, language_code)
       return
     }
 
