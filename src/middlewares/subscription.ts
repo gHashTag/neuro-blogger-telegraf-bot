@@ -133,15 +133,15 @@ export const subscriptionMiddleware = async (
         })
         await bot.telegram.sendMessage(
           '@neuro_blogger_group',
-          `🔗 Новый пользователь зарегистрировался в боте: @${finalUsername}. По реферальной ссылке от: @${inviter_username}. 🆔 Уровень аватара: ${await getReferalsCount(
-            inviter_telegram_id
-          )}\n🎁 Получил(а) бонус в размере 100⭐️ на свой баланс.\nБлагодарим за участие в нашей программе!`
+          `🔗 Новый пользователь зарегистрировался в боте: @${finalUsername}. По реферальной ссылке от: @${inviter_username}. 🆔 Уровень аватара: ${
+            (await getReferalsCount(inviter_telegram_id)) + 1
+          }\n🎁 Received a bonus of 100⭐️ on their balance.\nThank you for participating in our program!`
         )
       }
     } else {
       await bot.telegram.sendMessage(
         '@neuro_blogger_group',
-        `💵 Новый пользователь зарегистрировался в боте: @${finalUsername}. 🆔 Уровень аватара: ${await getReferalsCount(
+        `💵 New user registered in the bot: @${finalUsername}. 🆔 Avatar level: ${await getReferalsCount(
           telegram_id.toString()
         )}`
       )
