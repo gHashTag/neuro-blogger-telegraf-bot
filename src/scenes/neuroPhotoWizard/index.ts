@@ -7,7 +7,11 @@ import {
   sendBalanceMessage,
 } from '@/price/helpers'
 import { generateNeuroImage } from '@/services/generateNeuroImage'
-import { getLatestUserModel, getUserBalance } from '@/core/supabase'
+import {
+  getLatestUserModel,
+  getReferalsCount,
+  getUserBalance,
+} from '@/core/supabase'
 import { mainMenu, sendPhotoDescriptionRequest } from '@/menu'
 import { handleHelpCancel } from '@/handlers/handleHelpCancel'
 
@@ -44,7 +48,8 @@ export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
     // Получаем последнюю обученную модель пользователя
     const userModel = await getLatestUserModel(userId)
 
-    console.log(userModel, 'userModel')
+    const telegram_id = ctx.from?.id?.toString() || ''
+    const inviteCount = (await getReferalsCount(telegram_id)) || 0
 
     if (!userModel || !userModel.model_url) {
       await ctx.reply(
@@ -53,7 +58,7 @@ export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
           : "❌ You don't have any trained models.\n\nUse the '🤖  Digital avatar body' command in the main menu to create your AI model for generating neurophotos with your face.",
         {
           reply_markup: {
-            keyboard: mainMenu(isRu).reply_markup.keyboard,
+            keyboard: (await mainMenu(isRu, inviteCount)).reply_markup.keyboard,
           },
         }
       )

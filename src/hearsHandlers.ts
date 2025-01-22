@@ -10,53 +10,77 @@ import { isRussian } from './helpers/language'
 import { generateNeuroImage } from './services/generateNeuroImage'
 
 import { handleSizeSelection } from './handlers'
-import { mainMenu } from './menu'
+import { levels, mainMenu } from './menu'
+import { getReferalsCount } from './core/supabase'
 
 export const myComposer = new Composer<MyContext>()
 
-myComposer.hears(['💭 Чат с аватаром', '💭 Chat with avatar'], async ctx => {
-  console.log('CASE: Чат с аватаром')
-  ctx.session.mode = 'chat_with_avatar'
-  await ctx.scene.enter('chatWithAvatarWizard')
-})
-
-myComposer.hears(['🧠 Мозг аватара', '🧠 Avatar Brain'], async ctx => {
-  console.log('CASE: Создать аватар')
+myComposer.hears([levels[1].title_ru, levels[1].title_en], async ctx => {
+  console.log('CASE: 🧠 Мозг аватара')
   ctx.session.mode = 'avatar'
 
   await ctx.scene.enter('avatarWizard')
 })
 
-myComposer.hears(['Справка по команде', 'Help for the command'], async ctx => {
-  console.log('CASE: Справка по команде')
-  await ctx.scene.enter('helpScene')
+myComposer.hears([levels[2].title_ru, levels[2].title_en], async ctx => {
+  console.log('CASE: 💭 Чат с аватаром')
+  ctx.session.mode = 'chat_with_avatar'
+  await ctx.scene.enter('chatWithAvatarWizard')
 })
 
-myComposer.hears(['🌟 Выбор модели ИИ', '🌟 Select AI Model'], async ctx => {
-  console.log('CASE: Выбор модели ИИ')
+myComposer.hears([levels[3].title_ru, levels[3].title_en], async ctx => {
+  console.log('CASE: 🤖 Выбор модели ИИ')
   ctx.session.mode = 'select_model'
   await ctx.scene.enter('selectModelWizard')
 })
 
-myComposer.hears(
-  ['🤖 Цифровое тело аватара', '🤖 Digital Avatar Body'],
-  async ctx => {
-    console.log('CASE: Цифровое тело аватара')
-    ctx.session.mode = 'digital_avatar_body'
-    await ctx.scene.enter('digitalAvatarBodyWizard')
-  }
-)
+myComposer.hears([levels[4].title_ru, levels[4].title_en], async ctx => {
+  console.log('CASE: 🤖 Цифровое тело')
+  ctx.session.mode = 'digital_avatar_body'
+  await ctx.scene.enter('digitalAvatarBodyWizard')
+})
 
-myComposer.hears(['📸 Нейрофото', '📸 NeuroPhoto'], async ctx => {
-  console.log('CASE: Нейрофото')
+myComposer.hears([levels[5].title_ru, levels[5].title_en], async ctx => {
+  console.log('CASE: 📸 Нейрофото')
   ctx.session.mode = 'neuro_photo'
   await ctx.scene.enter('neuroPhotoWizard')
 })
 
-myComposer.hears(['🎥 Видео из текста', '🎥 Text to Video'], async ctx => {
-  console.log('CASE: Видео из текста')
+myComposer.hears([levels[6].title_ru, levels[6].title_en], async ctx => {
+  console.log('CASE: 🔍 Промпт из фото')
+  ctx.session.mode = 'image_to_prompt'
+  await ctx.scene.enter('imageToPromptWizard')
+})
+
+myComposer.hears([levels[7].title_ru, levels[7].title_en], async ctx => {
+  console.log('CASE: 🎤 Голос аватара')
+  ctx.session.mode = 'voice'
+  await ctx.scene.enter('voiceAvatarWizard')
+})
+
+myComposer.hears([levels[8].title_ru, levels[8].title_en], async ctx => {
+  console.log('CASE: 🎙️ Текст в голос')
+  ctx.session.mode = 'text_to_speech'
+  await ctx.scene.enter('textToSpeechWizard')
+})
+
+myComposer.hears([levels[9].title_ru, levels[9].title_en], async ctx => {
+  console.log('CASE: 🎥 Фото в видео')
+  ctx.session.mode = 'image_to_video'
+  await ctx.scene.enter('imageToVideoWizard')
+})
+
+myComposer.hears([levels[10].title_ru, levels[10].title_en], async ctx => {
+  console.log('CASE: 🎥 Видео из текста')
   ctx.session.mode = 'text_to_video'
   await ctx.scene.enter('textToVideoWizard')
+})
+
+myComposer.hears([levels[11].title_ru, levels[11].title_en], async ctx => {
+  console.log('CASE: 🖼️ Текст в фото')
+  ctx.session.mode = 'text_to_image'
+  await ctx.scene.enter('textToImageWizard')
+  await imageModelMenu(ctx)
 })
 
 myComposer.hears(['🎤 Синхронизация губ', '🎤 Lip Sync'], async ctx => {
@@ -65,65 +89,34 @@ myComposer.hears(['🎤 Синхронизация губ', '🎤 Lip Sync'], as
   await ctx.scene.enter('lipSyncWizard')
 })
 
-myComposer.hears(['🎙️ Текст в голос', '🎙️ Text to Voice'], async ctx => {
-  console.log('CASE: Текст в голос')
-  ctx.session.mode = 'text_to_speech'
-  await ctx.scene.enter('textToSpeechWizard')
-})
-
-myComposer.hears(['🎤 Голос для аватара', '🎤 Voice for Avatar'], async ctx => {
-  console.log('CASE: Голос для аватара')
-  ctx.session.mode = 'voice'
-  await ctx.scene.enter('voiceAvatarWizard')
-})
-
-myComposer.hears(
-  ['🖼️ Изображение из текста', '🖼️ Text to Image'],
-  async ctx => {
-    console.log('CASE: Изображение из текста')
-    ctx.session.mode = 'text_to_image'
-    await ctx.scene.enter('textToImageWizard')
-    await imageModelMenu(ctx)
-  }
-)
-
-myComposer.hears(
-  ['🔍 Описание из изображения', '🔍 Image to Prompt'],
-  async ctx => {
-    console.log('CASE: Описание из изображения')
-    ctx.session.mode = 'image_to_prompt'
-    await ctx.scene.enter('imageToPromptWizard')
-  }
-)
-
-myComposer.hears(['👥 Пригласить друга', '👥 Invite a friend'], async ctx => {
-  console.log('CASE: Пригласить друга')
-  ctx.session.mode = 'invite'
-  await ctx.scene.enter('inviteCommand')
-})
-
 myComposer.hears(['❓ Помощь', '❓ Help'], async ctx => {
   console.log('CASE: Помощь')
   ctx.session.mode = 'help'
   await ctx.scene.enter('neuroQuestCommand')
 })
 
-myComposer.hears(['🎮 Начать обучение', '🎮 Start learning'], async ctx => {
+myComposer.hears([levels[99].title_ru, levels[99].title_en], async ctx => {
   console.log('CASE: Начать обучение')
   ctx.session.mode = 'start_learning'
   await ctx.scene.enter('step0')
 })
 
-myComposer.hears(['💎 Пополнить баланс', '💎 Top up balance'], async ctx => {
+myComposer.hears([levels[100].title_ru, levels[100].title_en], async ctx => {
   console.log('CASE: Пополнить баланс')
   ctx.session.mode = 'top_up_balance'
   await ctx.scene.enter('paymentScene')
 })
 
-myComposer.hears(['🤑 Баланс', '🤑 Balance'], async ctx => {
+myComposer.hears([levels[101].title_ru, levels[101].title_en], async ctx => {
   console.log('CASE: Баланс')
   ctx.session.mode = 'balance'
   await balanceCommand(ctx)
+})
+
+myComposer.hears([levels[102].title_ru, levels[102].title_en], async ctx => {
+  console.log('CASE: Пригласить друга')
+  ctx.session.mode = 'invite'
+  await ctx.scene.enter('inviteCommand')
 })
 
 myComposer.hears(['🏠 Главное меню', '🏠 Main menu'], async ctx => {
@@ -222,12 +215,6 @@ myComposer.hears(
   }
 )
 
-myComposer.hears(['🎥 Изображение в видео', '🎥 Image to Video'], async ctx => {
-  console.log('CASE: Изображение в видео')
-  ctx.session.mode = 'image_to_video'
-  await ctx.scene.enter('imageToVideoWizard')
-})
-
 myComposer.hears(
   ['🎥 Сгенерировать новое видео', '🎥 Generate new video'],
   async ctx => {
@@ -237,15 +224,16 @@ myComposer.hears(
   }
 )
 
-myComposer.hears(['🤖 Выбор модели ИИ', '🤖 Select AI Model'], async ctx => {
-  console.log('CASE: Выбор модели ИИ')
-  ctx.session.mode = 'select_model'
-  await ctx.scene.enter('selectModelWizard')
-})
-
 myComposer.hears(/^(Отмена|отмена|Cancel|cancel)$/i, async ctx => {
   console.log('CASE: Отмена')
   const isRu = isRussian(ctx)
-  mainMenu(isRu)
+  const telegram_id = ctx.from?.id?.toString() || ''
+  const inviteCount = await getReferalsCount(telegram_id)
+  await mainMenu(isRu, inviteCount)
   return ctx.scene.leave()
+})
+
+myComposer.hears(['Справка по команде', 'Help for the command'], async ctx => {
+  console.log('CASE: Справка по команде')
+  await ctx.scene.enter('helpScene')
 })

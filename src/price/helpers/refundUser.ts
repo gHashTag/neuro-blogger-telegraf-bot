@@ -1,5 +1,9 @@
 import { MyContext } from '@/interfaces'
-import { getUserBalance, updateUserBalance } from '@/core/supabase'
+import {
+  getReferalsCount,
+  getUserBalance,
+  updateUserBalance,
+} from '@/core/supabase'
 import { mainMenu } from '@/menu'
 
 export async function refundUser(ctx: MyContext, paymentAmount: number) {
@@ -15,6 +19,8 @@ export async function refundUser(ctx: MyContext, paymentAmount: number) {
 
   // Отправляем сообщение пользователю
   const isRu = ctx.from.language_code === 'ru'
+  const telegram_id = ctx.from?.id?.toString() || ''
+  const inviteCount = (await getReferalsCount(telegram_id)) || 0
   await ctx.reply(
     isRu
       ? `Возвращено ${paymentAmount.toFixed(
@@ -27,7 +33,7 @@ export async function refundUser(ctx: MyContext, paymentAmount: number) {
         )} ⭐️`,
     {
       reply_markup: {
-        keyboard: mainMenu(isRu).reply_markup.keyboard,
+        keyboard: (await mainMenu(isRu, inviteCount)).reply_markup.keyboard,
       },
     }
   )

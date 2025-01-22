@@ -18,6 +18,7 @@ import {
 import { MyContext } from '../../interfaces'
 import { isRussian } from '@/helpers'
 import { mainMenu } from '@/menu'
+import { getReferalsCount } from '@/core/supabase'
 
 // Создаем сцены для каждого шага
 const createStepScene = (
@@ -27,6 +28,8 @@ const createStepScene = (
 ) => {
   const scene = new Scenes.BaseScene<MyContext>(`step${stepNumber}`)
   scene.enter(async ctx => {
+    const telegram_id = ctx.from?.id?.toString() || ''
+    const inviteCount = (await getReferalsCount(telegram_id)) || 0
     await handler(ctx)
     const isRu = isRussian(ctx)
     await ctx.reply(
@@ -39,7 +42,7 @@ const createStepScene = (
         : `You have successfully completed all training and reached the maximum level! 🌟✨`,
       stepNumber < 12
         ? Markup.keyboard([[nextStepText], ['➡️ Завершить']]).resize()
-        : mainMenu(isRu)
+        : await mainMenu(isRu, inviteCount)
     )
   })
 

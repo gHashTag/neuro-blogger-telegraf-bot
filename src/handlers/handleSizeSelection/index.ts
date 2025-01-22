@@ -1,5 +1,5 @@
 import { MyContext } from '@/interfaces'
-import { setAspectRatio } from '@/core/supabase'
+import { getReferalsCount, setAspectRatio } from '@/core/supabase'
 import { isRussian } from '@/helpers/language'
 import { mainMenu } from '@/menu'
 
@@ -17,6 +17,8 @@ export async function handleSizeSelection(ctx: MyContext, size: string) {
     await ctx.scene.enter('textToImageWizard')
   } else {
     console.log('CASE: Неизвестный режим')
-    mainMenu(isRu)
+    const telegram_id = ctx.from?.id?.toString() || ''
+    const inviteCount = await getReferalsCount(telegram_id)
+    await mainMenu(isRu, inviteCount)
   }
 }
