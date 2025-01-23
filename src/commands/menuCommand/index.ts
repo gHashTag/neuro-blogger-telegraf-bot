@@ -9,23 +9,23 @@ export async function menuCommand(ctx: MyContext) {
   try {
     console.log('CASE: menu')
     const telegram_id = ctx.from?.id?.toString() || ''
-    const inviteCount = await getReferalsCount(telegram_id)
+    const { count, vip } = await getReferalsCount(telegram_id)
 
-    const menu = await mainMenu(isRu, inviteCount.count, inviteCount.vip)
+    const menu = await mainMenu(isRu, count, vip)
     const message = isRu
       ? '🏠 Главное меню\nВыберите нужный раздел 👇'
       : '🏠 Main menu\nChoose the section 👇'
     await ctx.reply(message, menu)
     const url = `https://neuro-blogger-web-u14194.vm.elestio.app/neuro_sage/1/1/1/1/1/${
-      inviteCount.count + 1
+      count + 1
     }`
     console.log('url', url)
 
-    if (inviteCount.count <= 10) {
+    if (count <= 10) {
       await ctx.reply(
         isRu
-          ? `🚀 Чтобы разблокировать следующий уровень аватара и получить доступ к новым нейро функциям, пригласите друзей! 🌟\n\n🆔 Уровень вашего аватара: ${inviteCount} \n\n🤖 Чтобы начать пользоваться ботом нажмите команду /menu`
-          : `🚀 To unlock the next level of the avatar and gain access to new features, invite friends! 🌟\n\n🆔 Level your avatar: ${inviteCount} invitations \n\n🤖 To start using the bot, click the /menu command`,
+          ? `🚀 Чтобы разблокировать следующий уровень аватара и получить доступ к новым нейро функциям, пригласите друзей! 🌟\n\n🆔 Уровень вашего аватара: ${count} \n\n🤖 Чтобы начать пользоваться ботом нажмите команду /menu`
+          : `🚀 To unlock the next level of the avatar and gain access to new features, invite friends! 🌟\n\n🆔 Level your avatar: ${count} invitations \n\n🤖 To start using the bot, click the /menu command`,
         {
           reply_markup: {
             inline_keyboard: [
