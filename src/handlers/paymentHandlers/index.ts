@@ -49,13 +49,14 @@ export async function handleSuccessfulPayment(ctx) {
   const OutSum = stars
 
   await ctx.telegram.sendMessage(
-    '-1001978334539',
+    '-1476314188',
     `💫 Пользователь @${ctx.from.username} (ID: ${ctx.from.id}) пополнил баланс на ${stars} звезд!`
   )
 
   await setPayments({
     user_id: ctx.from.id.toString(),
     OutSum,
+    InvId: ctx.message.successful_payment.invoice_payload,
     currency: 'STARS',
     stars,
     status: 'COMPLETED',
