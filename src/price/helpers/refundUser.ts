@@ -20,7 +20,10 @@ export async function refundUser(ctx: MyContext, paymentAmount: number) {
   // Отправляем сообщение пользователю
   const isRu = ctx.from.language_code === 'ru'
   const telegram_id = ctx.from?.id?.toString() || ''
-  const inviteCount = (await getReferalsCount(telegram_id)) || 0
+  const { count, vip } = (await getReferalsCount(telegram_id)) || {
+    count: 0,
+    vip: false,
+  }
   await ctx.reply(
     isRu
       ? `Возвращено ${paymentAmount.toFixed(
@@ -33,7 +36,7 @@ export async function refundUser(ctx: MyContext, paymentAmount: number) {
         )} ⭐️`,
     {
       reply_markup: {
-        keyboard: (await mainMenu(isRu, inviteCount)).reply_markup.keyboard,
+        keyboard: (await mainMenu(isRu, count, vip)).reply_markup.keyboard,
       },
     }
   )

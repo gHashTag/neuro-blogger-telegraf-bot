@@ -25,66 +25,69 @@ helpScene.enter(async ctx => {
   const mode = ctx.session.mode
   const isRu = isRussian(ctx)
   const telegram_id = ctx.from?.id?.toString() || ''
-  const inviteCount = (await getReferalsCount(telegram_id)) || 0
+  const { count, vip } = (await getReferalsCount(telegram_id)) || {
+    count: 0,
+    vip: false,
+  }
   try {
     switch (mode) {
       case 'avatar':
         await handleLevel0(ctx)
-        await mainMenu(isRu, inviteCount)
+        await mainMenu(isRu, count, vip)
         break
       case 'digital_avatar_body':
         await handleLevel1(ctx)
-        await mainMenu(isRu, inviteCount)
+        await mainMenu(isRu, count, vip)
         break
       case 'neuro_photo':
         await handleLevel2(ctx)
-        await mainMenu(isRu, inviteCount)
+        await mainMenu(isRu, count, vip)
         break
       case 'image_to_prompt':
         await handleLevel3(ctx)
-        await mainMenu(isRu, inviteCount)
+        await mainMenu(isRu, count, vip)
         break
       case 'change_size':
         await handleLevel4(ctx)
-        await mainMenu(isRu, inviteCount)
+        await mainMenu(isRu, count, vip)
         break
       case 'voice':
         await handleLevel5(ctx)
-        await mainMenu(isRu, inviteCount)
+        await mainMenu(isRu, count, vip)
         break
       case 'text_to_speech':
         await handleLevel6(ctx)
-        await mainMenu(isRu, inviteCount)
+        await mainMenu(isRu, count, vip)
         break
       case 'select_model':
         await handleLevel7(ctx)
-        await mainMenu(isRu, inviteCount)
+        await mainMenu(isRu, count, vip)
         break
       case 'chat_with_avatar':
         await handleLevel8(ctx)
-        await mainMenu(isRu, inviteCount)
+        await mainMenu(isRu, count, vip)
         break
       case 'image_to_video':
         await handleLevel9(ctx)
-        await mainMenu(isRu, inviteCount)
+        await mainMenu(isRu, count, vip)
         break
       case 'text_to_image':
         await handleLevel10(ctx)
-        await mainMenu(isRu, inviteCount)
+        await mainMenu(isRu, count, vip)
         break
       case 'text_to_video':
         await handleLevel11(ctx)
-        await mainMenu(isRu, inviteCount)
+        await mainMenu(isRu, count, vip)
         break
       case 'invite':
         await handleLevel12(ctx)
-        await mainMenu(isRu, inviteCount)
+        await mainMenu(isRu, count, vip)
         break
       default:
         await ctx.reply(
           'Неизвестный режим. Пожалуйста, выберите корректный режим.'
         )
-        await mainMenu(isRu, inviteCount)
+        await mainMenu(isRu, count, vip)
         break
     }
   } catch (error) {

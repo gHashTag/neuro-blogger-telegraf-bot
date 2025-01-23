@@ -71,12 +71,13 @@ export const levels: Record<number, Level> = {
 
 export async function mainMenu(
   isRu: boolean,
-  inviteCount: number
+  inviteCount: number,
+  vip = false
 ): Promise<Markup.Markup<ReplyKeyboardMarkup>> {
   console.log('CASE: mainMenu')
 
   const availableLevels = Object.keys(levels)
-    .filter(level => parseInt(level) <= inviteCount)
+    .filter(level => vip || parseInt(level) <= inviteCount)
     .map(level => levels[parseInt(level)])
 
   const buttons = availableLevels.map(level =>

@@ -2,7 +2,6 @@ import { sendGenericErrorMessage } from '@/menu'
 import { MyContext } from '../../interfaces'
 import { mainMenu } from '../../menu/mainMenu'
 import { getReferalsCount } from '@/core/supabase/getReferalsCount'
-import { isDev } from '@/config'
 
 export async function menuCommand(ctx: MyContext) {
   console.log('CASE: menuCommand')
@@ -12,17 +11,17 @@ export async function menuCommand(ctx: MyContext) {
     const telegram_id = ctx.from?.id?.toString() || ''
     const inviteCount = await getReferalsCount(telegram_id)
 
-    const menu = await mainMenu(isRu, inviteCount)
+    const menu = await mainMenu(isRu, inviteCount.count, inviteCount.vip)
     const message = isRu
       ? '🏠 Главное меню\nВыберите нужный раздел 👇'
       : '🏠 Main menu\nChoose the section 👇'
     await ctx.reply(message, menu)
     const url = `https://neuro-blogger-web-u14194.vm.elestio.app/neuro_sage/1/1/1/1/1/${
-      inviteCount + 1
+      inviteCount.count + 1
     }`
     console.log('url', url)
 
-    if (inviteCount <= 10) {
+    if (inviteCount.count <= 10) {
       await ctx.reply(
         isRu
           ? `🚀 Чтобы разблокировать следующий уровень аватара и получить доступ к новым нейро функциям, пригласите друзей! 🌟\n\n🆔 Уровень вашего аватара: ${inviteCount} \n\n🤖 Чтобы начать пользоваться ботом нажмите команду /menu`

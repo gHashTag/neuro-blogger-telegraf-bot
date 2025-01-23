@@ -228,8 +228,8 @@ myComposer.hears(/^(Отмена|отмена|Cancel|cancel)$/i, async ctx => {
   console.log('CASE: Отмена')
   const isRu = isRussian(ctx)
   const telegram_id = ctx.from?.id?.toString() || ''
-  const inviteCount = await getReferalsCount(telegram_id)
-  await mainMenu(isRu, inviteCount)
+  const { count, vip } = await getReferalsCount(telegram_id)
+  await mainMenu(isRu, count, vip)
   return ctx.scene.leave()
 })
 

@@ -1,17 +1,19 @@
 import { supabase } from '.'
 
-export const getReferalsCount = async (telegram_id: string) => {
+export const getReferalsCount = async (
+  telegram_id: string
+): Promise<{ count: number; vip: boolean }> => {
   try {
     // Сначала получаем UUID пользователя
     const { data: userData, error: userError } = await supabase
       .from('users')
-      .select('user_id')
+      .select('user_id, vip')
       .eq('telegram_id', telegram_id.toString())
       .single()
 
     if (userError) {
       console.error('Ошибка при получении user_id:', userError)
-      return 0
+      return { count: 0, vip: false }
     }
 
     // Теперь ищем рефералов по UUID
@@ -22,12 +24,18 @@ export const getReferalsCount = async (telegram_id: string) => {
 
     if (error) {
       console.error('Ошибка при получении рефералов:', error)
-      return 0
+      return { count: 0, vip: false }
     }
 
-    return data?.length || 0
+    return {
+      count: data?.length || 0,
+      vip: userData.vip,
+    }
   } catch (error) {
     console.error('Ошибка в getReferalsCount:', error)
-    return 0
+    return {
+      count: 0,
+      vip: false,
+    }
   }
 }

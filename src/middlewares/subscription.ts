@@ -134,7 +134,7 @@ export const subscriptionMiddleware = async (
         await bot.telegram.sendMessage(
           '@neuro_blogger_group',
           `🔗 Новый пользователь зарегистрировался в боте: @${finalUsername}. По реферальной ссылке от: @${inviter_username}. 🆔 Уровень аватара: ${
-            (await getReferalsCount(inviter_telegram_id)) + 1
+            (await getReferalsCount(inviter_telegram_id)).count + 1
           }\n🎁 Получил(a) бонус в размере 100⭐️ на свой баланс.\nСпасибо за участие в нашей программе!`
         )
       }
