@@ -403,12 +403,12 @@ export async function handleLevel7(ctx: MyContext) {
     const isRu = ctx.from?.language_code === 'ru'
     const message = isRu
       ? `🤖 <b>Команда: ВЫБОР МОДЕЛИ ИИ (Select AI Model)</b> 🌟\n\n
-Предоставляет вам возможность выбрать наиболее подходящую модель для выполнения различных задач, таких как генерация текста, изображений или видео. Правильный выбор модели может значительно повысить качество и точность результатов, которые вы получаете от бота. 🎯\n\n
+Предоставляет вам возможность выбрать наиболее подходящую модель для выполнения различных задач. Правильный выбор модели может значительно повысить качество и точность результатов, которые вы получаете от бота. 🎯\n\n
 <b>Как это работает:</b>\n
 1️⃣ <b>Вызов команды выбора модели:</b>\n
    - Начните с вызова команды выбора модели в интерфейсе бота. Это первый шаг для настройки вашего взаимодействия с ИИ. 🛠️\n\n
 2️⃣ <b>Ознакомление с доступными моделями:</b>\n
-   - Бот предложит вам список доступных моделей, каждая из которых обладает уникальными характеристиками и возможностями. Например, одна модель может быть оптимизирована для генерации креативного текста, в то время как другая может быть более эффективной для аналитических задач или создания визуального контента. 📜\n\n
+   - Бот предложит вам список доступных моделей, каждая из которых обладает уникальными характеристиками и возможностями. Например, одна модель может быть оптимизирована для генерации креативного текста, в то время как другая может быть более эффективной для аналитических задач или программирования. 📜\n\n
 3️⃣ <b>Выбор модели:</b>\n
    - Выберите модель, которая лучше всего соответствует вашим потребностям и задачам. Это позволит вам адаптировать работу бота под ваши конкретные требования. 🎨\n\n
 4️⃣ <b>Использование выбранной модели:</b>\n
@@ -418,12 +418,12 @@ export async function handleLevel7(ctx: MyContext) {
 - ⚙️ <b>Оптимизация задач:</b> Использование подходящей модели для конкретных задач может значительно улучшить эффективность и качество выполнения этих задач.\n\n
 Функция "Выбор модели ИИ" открывает перед вами возможность более гибкого и эффективного использования возможностей бота, адаптируя его работу под ваши индивидуальные нужды. 🌐`
       : `🤖 <b>Command: Select AI Model</b> 🌟\n\n
-Allows you to choose the most suitable model for performing various tasks, such as generating text, images, or videos. Choosing the right model can significantly enhance the quality and accuracy of the results you get from the bot. 🎯\n\n
+Allows you to choose the most suitable model for performing various tasks. Choosing the right model can significantly enhance the quality and accuracy of the results you get from the bot. 🎯\n\n
 <b>How it works:</b>\n
 1️⃣ <b>Call the model selection command:</b>\n
    - Start by calling the model selection command in the bot interface. This is the first step to setting up your interaction with AI. 🛠️\n\n
 2️⃣ <b>Familiarize yourself with available models:</b>\n
-   - The bot will offer you a list of available models, each with unique characteristics and capabilities. For example, one model may be optimized for generating creative text, while another may be more effective for analytical tasks or creating visual content. 📜\n\n
+   - The bot will offer you a list of available models, each with unique characteristics and capabilities. For example, one model may be optimized for generating creative text, while another may be more effective for analytical tasks or programming. 📜\n\n
 3️⃣ <b>Select a model:</b>\n
    - Choose the model that best suits your needs and tasks. This will allow you to tailor the bot's work to your specific requirements. 🎨\n\n
 4️⃣ <b>Use the selected model:</b>\n
@@ -490,7 +490,7 @@ export async function handleLevel9(ctx: MyContext) {
 4️⃣ <b>Генерация видео:</b>\n
    - После отправки описания движения бот начнет процесс генерации видео. Это может занять некоторое время, так как бот использует сложные алгоритмы и нейронные сети для создания анимации. Но результат стоит ожидания — вы получите уникальное видео, которое можно использовать для различных целей: от личных проектов до профессиональных презентаций. 🚀\n\n
 Функция "Изображение в видео" позволяет вам воплотить ваши идеи в динамичные видеоролики, добавляя глубину и выразительность вашим проектам. 🎥\n\n
-Здесь мы завершаем и вперёд к практическим заданиям. Пробуйте и экспериментируйте!`
+`
       : `🎥 <b>Command: Image to Video</b> 🌟\n\n
 The "Image to Video" function allows you to bring static images with your avatar to life by adding movement and dynamics. This opens up new horizons for creativity and self-expression, turning your ideas into captivating videos. 🎬\n\n
 <b>Usage process:</b>\n
@@ -503,7 +503,7 @@ The "Image to Video" function allows you to bring static images with your avatar
 4️⃣ <b>Generate the video:</b>\n
    - After sending the movement description, the bot will start the video generation process. This may take some time as the bot uses complex algorithms and neural networks to create the animation. But the result is worth the wait — you will receive a unique video that can be used for various purposes: from personal projects to professional presentations. 🚀\n\n
 The "Image to Video" function allows you to bring your ideas to life in dynamic videos, adding depth and expressiveness to your projects. 🎥\n\n
-Here we conclude and move on to practical tasks. Try and experiment!`
+`
 
     await ctx.reply(message, { parse_mode: 'HTML' })
   } catch (error) {
@@ -521,7 +521,7 @@ export async function handleLevel10(ctx: MyContext) {
   try {
     const isRu = ctx.from?.language_code === 'ru'
     const message = isRu
-      ? `🖼️ <b>Команда: Изображение из текста (Text to Image)</b> 🌟\n\n
+      ? `🖼️ <b>Команда: Текст в изображение (Text to image)</b> 🌟\n\n
 Эта функция позволяет вам воплотить ваши идеи в визуальную форму, используя всего лишь текстовое описание. Это невероятно мощный инструмент, который открывает множество возможностей для творчества и самовыражения. 🎨✨\n\n
 При использовании функции "Изображение из текста" у вас есть возможность выбрать одну из нескольких моделей, каждая из которых обладает уникальными характеристиками и стилем генерации изображений. Это позволяет вам адаптировать процесс создания изображений под ваши конкретные нужды и предпочтения. Рассмотрим доступные модели от различных производителей:\n\n
 <b>🌲 Black Forest Labs</b>\n
@@ -549,7 +549,7 @@ export async function handleLevel10(ctx: MyContext) {
 
 Выбор модели зависит от ваших целей и предпочтений. Экспериментируйте с различными моделями, чтобы найти ту, которая лучше всего подходит для вашего проекта. Это позволит вам максимально эффективно использовать функцию "Изображение из текста" и создавать уникальные визуальные образы, которые точно отражают ваши идеи. 🌈🖌️\n\n
 Представьте себе, что вы хотите создать изображение, которое передает атмосферу заката над океаном. Вы просто вводите текст 'закат над океаном', и наш бот начинает работать. Он анализирует ваше описание и создает изображение, которое максимально точно отражает вашу задумку. Это изображение может включать в себя яркие оранжевые и розовые оттенки неба, отражающиеся в спокойных водах океана, создавая ощущение умиротворения и красоты. 🌅🌊\n\n
-Но это только начало. Вы можете экспериментировать с различными описаниями, чтобы увидеть, как они воплощаются в жизнь. Например, попробуйте ввести 'заснеженные горы под звездным небом' или 'городская улица в дождливый день'. Каждый раз вы будете получать уникальное изображение, которое можно использовать для различных целей — от личных проектов до профессиональных презентаций. 🚀🎨`
+Но это только начало. Вы можете экспериментировать с различными описаниями, чтобы увидеть, как они воплощаются в жизнь. Например, попробуйте ввести 'заснеженные горы под звездным небом' или 'городская улица в солнечный день'. Каждый раз вы будете получать уникальное изображение, которое можно использовать для различных целей — от личных проектов до профессиональных презентаций. 🚀🎨`
       : `🖼️ <b>Command: Text to Image</b> 🌟\n\n
 This function allows you to bring your ideas to life in visual form using just a text description. It's an incredibly powerful tool that opens up many possibilities for creativity and self-expression. 🎨✨\n\n
 When using the "Text to Image" function, you have the option to choose from several models, each with unique characteristics and image generation styles. This allows you to tailor the image creation process to your specific needs and preferences. Let's look at the available models from different manufacturers:\n\n
@@ -578,7 +578,7 @@ When using the "Text to Image" function, you have the option to choose from seve
 
 The choice of model depends on your goals and preferences. Experiment with different models to find the one that best suits your project. This will allow you to make the most of the "Text to Image" function and create unique visual images that accurately reflect your ideas. 🌈🖌️\n\n
 Imagine you want to create an image that conveys the atmosphere of a sunset over the ocean. You simply enter the text 'sunset over the ocean', and our bot gets to work. It analyzes your description and creates an image that most accurately reflects your idea. This image may include bright orange and pink hues of the sky reflected in the calm waters of the ocean, creating a sense of tranquility and beauty. 🌅🌊\n\n
-But this is just the beginning. You can experiment with different descriptions to see how they come to life. For example, try entering 'snow-capped mountains under a starry sky' or 'city street on a rainy day'. Each time you will receive a unique image that can be used for various purposes — from personal projects to professional presentations. 🚀🎨`
+But this is just the beginning. You can experiment with different descriptions to see how they come to life. For example, try entering 'snow-capped mountains under a starry sky' or 'city street on a sunny day'. Each time you will receive a unique image that can be used for various purposes — from personal projects to professional presentations. 🚀🎨`
 
     await ctx.reply(message, { parse_mode: 'HTML' })
   } catch (error) {
