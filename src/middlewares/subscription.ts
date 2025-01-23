@@ -112,18 +112,16 @@ export const subscriptionMiddleware = async (
 
       inviter = inviter_id
 
+      const { count } = await getReferalsCount(inviter_telegram_id)
+
       if (inviter_telegram_id) {
         await bot.telegram.sendMessage(
           inviter_telegram_id,
           isRu
-            ? `🔗 Новый пользователь зарегистрировался по вашей ссылке: @${finalUsername}.\n🆔 Уровень аватара: ${await getReferalsCount(
-                inviter_telegram_id
-              )}\n🎁. За каждого приглашенного друга вы получаете дополнительные 100 звезд для генерации!\n🤑 Ваш новый баланс: ${
+            ? `🔗 Новый пользователь зарегистрировался по вашей ссылке: @${finalUsername}.\n🆔 Уровень аватара: ${count}\n🎁. За каждого приглашенного друга вы получаете дополнительные 100 звезд для генерации!\n🤑 Ваш новый баланс: ${
                 inviter_balance + 100
               }⭐️ `
-            : `🔗 New user registered through your link: @${finalUsername}.🆔 Avatar level: ${await getReferalsCount(
-                inviter_telegram_id
-              )}\n🎁. For each friend you invite, you get additional 100 stars for generation!\n🤑 Your new balance: ${
+            : `🔗 New user registered through your link: @${finalUsername}.🆔 Avatar level: ${count}\n🎁. For each friend you invite, you get additional 100 stars for generation!\n🤑 Your new balance: ${
                 inviter_balance + 100
               }⭐️`
         )
