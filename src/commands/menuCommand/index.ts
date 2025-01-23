@@ -42,15 +42,20 @@ export async function menuCommand(ctx: MyContext) {
           },
         }
       )
-      // await ctx.reply(isRu ? `Ссылка для приглашения 👇🏻` : `Invite link 👇🏻`, {
-      //   parse_mode: 'HTML',
-      // })
-      // const botUsername = ctx.botInfo.username
-      // const telegram_id = ctx.from?.id?.toString() || ''
+      await ctx.reply(
+        isRu
+          ? `Чтобы активировать доступ к следующему уровню аватара и открыть новые нейро функции, пригласите друзей! Ссылка для приглашения 👇🏻`
+          : `To activate access to the next level of the avatar and open new features, invite friends! Invite link 👇🏻`,
+        {
+          parse_mode: 'HTML',
+        }
+      )
+      const botUsername = ctx.botInfo.username
+      const telegram_id = ctx.from?.id?.toString() || ''
 
-      // const linkText = `<a href="https://t.me/${botUsername}?start=${telegram_id}">https://t.me/${botUsername}?start=${telegram_id}</a>`
+      const linkText = `<a href="https://t.me/${botUsername}?start=${telegram_id}">https://t.me/${botUsername}?start=${telegram_id}</a>`
 
-      // await ctx.reply(linkText, { parse_mode: 'HTML' })
+      await ctx.reply(linkText, { parse_mode: 'HTML' })
     }
     return
   } catch (error) {
