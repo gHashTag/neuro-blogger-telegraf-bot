@@ -19,7 +19,7 @@ export async function handleBuy({ ctx, data, isRu }: BuyParams) {
           currency: 'XTR', // Pass “XTR” for payments in Telegram Stars.
           prices: [
             {
-              label: 'Цена',
+              label: isRu ? 'Цена' : 'Price',
               amount: amount,
             },
           ],

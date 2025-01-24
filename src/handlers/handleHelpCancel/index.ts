@@ -1,7 +1,5 @@
 import { MyContext } from '../../interfaces'
 
-import { menuCommand } from '../../commands/menuCommand'
-
 export async function handleHelpCancel(ctx: MyContext): Promise<boolean> {
   if (ctx.message && 'text' in ctx.message) {
     const isRu = ctx.from?.language_code === 'ru'
@@ -9,15 +7,14 @@ export async function handleHelpCancel(ctx: MyContext): Promise<boolean> {
 
     if (text === (isRu ? 'отмена' : 'cancel')) {
       await ctx.reply(isRu ? '❌ Процесс отменён.' : '❌ Process cancelled.')
-      await menuCommand(ctx)
+      await ctx.scene.enter('menuScene')
       ctx.scene.leave()
       return true
     }
 
     if (text === (isRu ? 'справка по команде' : 'help for the command')) {
       await ctx.scene.enter('helpScene')
-      await menuCommand(ctx)
-      ctx.scene.leave()
+      await ctx.scene.leave()
       return true
     }
   }

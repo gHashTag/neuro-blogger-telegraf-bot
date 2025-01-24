@@ -30,18 +30,20 @@ import {
   neuroQuestScene,
   chatWithAvatarWizard,
   helpScene,
+  balanceScene,
+  menuScene,
+  subscriptionScene,
 } from './scenes'
 import { subscriptionMiddleware } from '@/middlewares/subscription'
 
 import { setupLevelHandlers } from './handlers/setupLevelHandlers'
-import { menuCommand } from './commands/menuCommand'
+
 import { inviteCommand } from './commands/inviteCommand'
 
 import { priceCommand } from './commands/priceCommand'
 import { myComposer } from './hearsHandlers'
 
 import { defaultSession } from './store'
-import { menuScene, balanceScene } from './scenes/'
 
 export const stage = new Scenes.Stage<MyContext>([
   startScene,
@@ -69,6 +71,7 @@ export const stage = new Scenes.Stage<MyContext>([
   neuroCoderScene,
   lipSyncWizard,
   helpScene,
+  subscriptionScene,
   ...levelQuestWizard,
 ])
 
@@ -92,7 +95,7 @@ export function registerCommands(bot: Telegraf<MyContext>) {
 
   myComposer.command('menu', async ctx => {
     console.log('CASE: myComposer.command menu')
-    await menuCommand(ctx)
+    await ctx.scene.enter('menuScene')
   })
 
   myComposer.command('invite', async ctx => {

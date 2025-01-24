@@ -1,12 +1,12 @@
 import { Context } from 'telegraf'
-import { starAmounts } from '@/price/helpers/starAmounts'
 
 interface BuyParams {
   ctx: Context
+  starAmounts: number[]
   isRu: boolean
 }
 
-export async function handleSelectStars({ ctx, isRu }: BuyParams) {
+export async function handleSelectStars({ ctx, starAmounts, isRu }: BuyParams) {
   try {
     const inlineKeyboard = []
     for (let i = 0; i < starAmounts.length; i += 3) {

@@ -43,6 +43,7 @@ export interface MySession extends Scenes.WizardSession<MyWizardSession> {
   videoUrl: string
   audioUrl: string
   paymentAmount: number
+  subscription: string
   images: BufferType
   modelName: string
   targetUserId: number
@@ -58,6 +59,7 @@ export interface MyContext extends Context {
   scene: Scenes.SceneContextScene<MyContext, MyWizardSession>
   wizard: Scenes.WizardContextWizard<MyContext>
 }
+
 // Создайте новый тип, объединяющий MyContext и WizardContext
 export type MyWizardContext = MyContext & Scenes.WizardContext<MyWizardSession>
 

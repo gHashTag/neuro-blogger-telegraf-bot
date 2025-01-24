@@ -3,7 +3,6 @@ import { MyContext } from './interfaces'
 import { imageModelMenu } from './menu/imageModelMenu'
 
 import { balanceCommand } from './commands/balanceCommand'
-import { menuCommand } from './commands/menuCommand'
 import { generateTextToImage } from './services/generateTextToImage'
 import { isRussian } from './helpers/language'
 
@@ -122,7 +121,7 @@ myComposer.hears([levels[102].title_ru, levels[102].title_en], async ctx => {
 myComposer.hears(['🏠 Главное меню', '🏠 Main menu'], async ctx => {
   console.log('CASE: Главное меню')
   ctx.session.mode = 'main_menu'
-  await menuCommand(ctx)
+  await ctx.scene.enter('menuScene')
 })
 
 myComposer.hears(['1️⃣', '2️⃣', '3️⃣', '4️⃣'], async ctx => {
