@@ -103,6 +103,7 @@ myComposer.hears([levels[99].title_ru, levels[99].title_en], async ctx => {
 myComposer.hears([levels[100].title_ru, levels[100].title_en], async ctx => {
   console.log('CASE: Пополнить баланс')
   ctx.session.mode = 'top_up_balance'
+  ctx.session.subscription = 'stars'
   await ctx.scene.enter('paymentScene')
 })
 

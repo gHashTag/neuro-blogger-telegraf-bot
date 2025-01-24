@@ -1,22 +1,26 @@
 import { Markup, Scenes } from 'telegraf'
+import md5 from 'md5'
 import { MyContext } from '../../interfaces'
-import { saveUserEmail, setPayments } from '../../core/supabase'
+import { saveUserEmail, setPayments, Subscription } from '../../core/supabase'
 import { isRussian } from '@/helpers'
 import { calculateStars } from '@/price/helpers'
-import md5 from 'md5'
 import { MERCHANT_LOGIN, PASSWORD1, RESULT_URL2 } from '@/config'
 import { handleHelpCancel } from '@/handlers'
+import { updateUserSubscription } from '@/core/supabase/updateUserSubscription'
 
 const merchantLogin = MERCHANT_LOGIN
 const password1 = PASSWORD1
 
 const description = 'Покупка звезд'
 
-const paymentOptions = [
-  { amount: 1999, stars: '1999' },
-  { amount: 5000, stars: '5000' },
-  { amount: 10000, stars: '10000' },
-  { amount: 10, stars: '6' },
+const paymentOptions: {
+  amount: number
+  stars: string
+  subscription: Subscription
+}[] = [
+  { amount: 9999, stars: '1000', subscription: 'neurobase' },
+  { amount: 49999, stars: '5000', subscription: 'neuromeeting' },
+  { amount: 99999, stars: '7500', subscription: 'neuroblogger' },
 ]
 
 const resultUrl2 = RESULT_URL2
@@ -35,9 +39,7 @@ function generateRobokassaUrl(
   ).toUpperCase()
   const url = `https://auth.robokassa.ru/Merchant/Index.aspx?MerchantLogin=${merchantLogin}&OutSum=${outSum}&InvId=${invId}&Description=${encodeURIComponent(
     description
-  )}&SignatureValue=${signatureValue}&ResultUrl2=${encodeURIComponent(
-    resultUrl2
-  )}`
+  )}&SignatureValue=${signatureValue}`
 
   return url
 }
@@ -49,7 +51,7 @@ async function getInvoiceId(
   description: string,
   password1: string
 ): Promise<string> {
-  console.log('Start getInvoiceId', {
+  console.log('Start getInvoiceId rubGetWizard', {
     merchantLogin,
     outSum,
     invId,
@@ -78,19 +80,30 @@ async function getInvoiceId(
   }
 }
 
-export const emailWizard = new Scenes.BaseScene<MyContext>('emailWizard')
+export const rubGetWizard = new Scenes.BaseScene<MyContext>('rubGetWizard')
 
-emailWizard.enter(async ctx => {
+rubGetWizard.enter(async ctx => {
   const isRu = isRussian(ctx)
-  await ctx.reply(
-    isRu
-      ? '👉 Для формирования счета напишите ваш E-mail.'
-      : '👉 To generate an invoice, please provide your E-mail.',
-    Markup.keyboard([Markup.button.text(isRu ? 'Отмена' : 'Cancel')]).resize()
-  )
+  const email = ctx.session.email
+  if (!email) {
+    await ctx.reply(
+      isRu
+        ? '👉 Для формирования счета напишите ваш E-mail.'
+        : '👉 To generate an invoice, please provide your E-mail.',
+      Markup.keyboard([Markup.button.text(isRu ? 'Отмена' : 'Cancel')]).resize()
+    )
+  } else {
+    return ctx.wizard.next()
+  }
 })
 
-emailWizard.hears(/@/, async ctx => {
+const subscriptionTitles = (isRu: boolean) => ({
+  neurobase: isRu ? '📚 НейроБаза' : '📚 NeuroBase',
+  neuromeeting: isRu ? '🧠 НейроВстреча' : '🧠 NeuroMeeting',
+  neuroblogger: isRu ? '🤖 НейроБлогер' : '🤖 NeuroBlogger',
+})
+
+rubGetWizard.hears(/@/, async ctx => {
   const isRu = isRussian(ctx)
   const email = ctx.message.text
 
@@ -109,8 +122,12 @@ emailWizard.hears(/@/, async ctx => {
 
     const buttons = paymentOptions.map(option => [
       isRu
-        ? `Купить ${option.stars}⭐️ за ${option.amount} р`
-        : `Buy ${option.stars}⭐️ for ${option.amount} RUB`,
+        ? `Купить ${subscriptionTitles(isRu)[option.subscription]}⭐️ за ${
+            option.amount
+          } р`
+        : `Buy ${subscriptionTitles(isRu)[option.subscription]}⭐️ for ${
+            option.amount
+          } RUB`,
     ])
 
     const keyboard = Markup.keyboard(buttons).resize()
@@ -130,7 +147,7 @@ emailWizard.hears(/@/, async ctx => {
   }
 })
 
-emailWizard.on('text', async ctx => {
+rubGetWizard.on('text', async ctx => {
   const isRu = isRussian(ctx)
   const msg = ctx.message
 
@@ -146,8 +163,9 @@ emailWizard.on('text', async ctx => {
 
     if (selectedPayment) {
       const email = ctx.session.email
-      const amount = selectedPayment.amount
-      const stars = calculateStars(amount, 10)
+      const stars = selectedPayment.amount
+
+      const subscription = selectedPayment.subscription
 
       try {
         const userId = ctx.from?.id
@@ -156,7 +174,7 @@ emailWizard.on('text', async ctx => {
         // Получение invoiceID
         const invoiceURL = await getInvoiceId(
           merchantLogin,
-          amount,
+          stars,
           invId,
           description,
           password1
@@ -165,15 +183,18 @@ emailWizard.on('text', async ctx => {
         // Сохранение платежа со статусом PENDING
         await setPayments({
           user_id: userId.toString(),
-          OutSum: amount.toString(),
+          OutSum: stars.toString(),
           InvId: invId.toString(),
           currency: 'STARS',
           stars,
           status: 'PENDING',
           email: email,
           payment_method: 'Telegram',
-          subscription: 'stars',
+          subscription: subscription,
         })
+
+        // Обновление подписки пользователя
+        await updateUserSubscription(userId.toString(), subscription)
 
         console.log('invoiceURL', invoiceURL)
 
@@ -181,8 +202,12 @@ emailWizard.on('text', async ctx => {
           [
             {
               text: isRu
-                ? `Купить ${stars}⭐️ за ${amount} р`
-                : `Buy ${stars}⭐️ for ${amount} RUB`,
+                ? `Купить ${
+                    subscriptionTitles(isRu)[subscription]
+                  } за ${stars} р.`
+                : `Buy ${
+                    subscriptionTitles(isRu)[subscription]
+                  } for ${stars} RUB.`,
               web_app: {
                 url: invoiceURL,
               },
@@ -190,22 +215,22 @@ emailWizard.on('text', async ctx => {
           ],
           [
             {
-              text: isRu ? 'Что такое звезды❓' : 'What are stars❓',
-              web_app: {
-                url: `https://telegram.org/blog/telegram-stars/${
-                  isRu ? 'ru' : 'en'
-                }?ln=a`,
-              },
+              text: isRu ? 'Отмена' : 'Cancel',
+              callback_data: 'cancel',
             },
           ],
         ]
+        const isCancel = await handleHelpCancel(ctx)
+        if (isCancel) {
+          return ctx.scene.leave()
+        }
 
         await ctx.reply(
           isRu
-            ? `<b>🤑 Пополнение баланса</b>
-Теперь вы можете пополнить баланс на любое количество звезд и использовать их для различных функций бота.\nПросто выберите количество звезд, которое вы хотите добавить на свой баланс.\nВ случае возникновения проблем с оплатой, пожалуйста, свяжитесь с нами @neuro_sage`
-            : `<b>🤑 Balance Top-Up</b>
-You can now top up your balance with any number of stars and use them for various bot features. Simply choose the number of stars you want to add to your balance.\nIn case of payment issues, please contact us @neuro_sage`,
+            ? `<b>🤑 Подписка ${subscriptionTitles(isRu)[subscription]}</b>
+            \nВ случае возникновения проблем с оплатой, пожалуйста, свяжитесь с нами @neuro_sage`
+            : `<b>🤑 Subscription ${subscriptionTitles(isRu)[subscription]}</b>
+            \nIn case of payment issues, please contact us @neuro_sage`,
           {
             reply_markup: {
               inline_keyboard: inlineKeyboard,
@@ -232,4 +257,4 @@ You can now top up your balance with any number of stars and use them for variou
   }
 })
 
-export default emailWizard
+export default rubGetWizard

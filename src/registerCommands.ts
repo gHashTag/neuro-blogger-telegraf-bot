@@ -44,6 +44,7 @@ import { priceCommand } from './commands/priceCommand'
 import { myComposer } from './hearsHandlers'
 
 import { defaultSession } from './store'
+import { rubGetWizard } from './scenes/rubGetWizard'
 
 export const stage = new Scenes.Stage<MyContext>([
   startScene,
@@ -72,6 +73,7 @@ export const stage = new Scenes.Stage<MyContext>([
   lipSyncWizard,
   helpScene,
   subscriptionScene,
+  rubGetWizard,
   ...levelQuestWizard,
 ])
 
@@ -90,6 +92,7 @@ export function registerCommands(bot: Telegraf<MyContext>) {
 
   myComposer.command('buy', async ctx => {
     console.log('CASE: buy')
+    ctx.session.subscription = 'stars'
     await ctx.scene.enter('paymentScene')
   })
 

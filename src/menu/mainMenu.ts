@@ -80,9 +80,19 @@ export async function mainMenu(
     .filter(level => vip || parseInt(level) <= inviteCount)
     .map(level => levels[parseInt(level)])
 
+  if (availableLevels.length === 0) {
+    console.warn(
+      'No available levels for the current invite count and VIP status.'
+    )
+    return Markup.keyboard([
+      [Markup.button.text(isRu ? '💎 Пополнить баланс' : '💎 Top up balance')],
+    ]).resize()
+  }
+
   const buttons = availableLevels.map(level =>
     Markup.button.text(isRu ? level.title_ru : level.title_en)
   )
+  console.log('buttons', buttons)
 
   // Разбиваем кнопки на строки по две кнопки
   const buttonRows = []

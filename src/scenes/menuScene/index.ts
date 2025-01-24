@@ -3,7 +3,7 @@ import { sendGenericErrorMessage } from '@/menu'
 import { MyContext } from '../../interfaces'
 import { levels, mainMenu } from '../../menu/mainMenu'
 import { getReferalsCount } from '@/core/supabase/getReferalsCount'
-import { isRussian } from '@/helpers'
+import { isDev, isRussian } from '@/helpers'
 import { InlineKeyboardButton } from 'telegraf/typings/core/types/typegram'
 
 export const menuScene = new Scenes.WizardScene<MyContext>(
@@ -14,24 +14,32 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
     try {
       console.log('CASE: menu')
       const telegram_id = ctx.from?.id?.toString() || ''
-      const { count, vip } = await getReferalsCount(telegram_id)
-      // const count = 1
-      // const vip = false
-      const menu = await mainMenu(isRu, count, vip)
+      let newCount = 0
+      let newVip = false
+
+      if (isDev) {
+        newCount = 1
+        newVip = false
+      } else {
+        const { count, vip } = await getReferalsCount(telegram_id)
+        newCount = count
+        newVip = vip
+      }
+
+      const menu = await mainMenu(isRu, newCount, newVip)
 
       const url = `https://neuro-blogger-web-u14194.vm.elestio.app/neuro_sage/1/1/1/1/1/${
-        count + 1
+        newCount + 1
       }`
-      console.log('url', url)
 
       const nameStep = isRu
-        ? levels[count + 1].title_ru
-        : levels[count + 1].title_en
+        ? levels[newCount + 1].title_ru
+        : levels[newCount + 1].title_en
 
-      if (count <= 10) {
+      if (newCount <= 10) {
         const message = isRu
-          ? `🚀 Чтобы разблокировать следующий уровень аватара и получить доступ к функции: <b>${nameStep}</b>, пригласите друга! 🌟\n\n🆔 Уровень вашего аватара: ${count} \n\n🤖 Чтобы начать пользоваться ботом нажмите команду /menu\n\n🔓 Хотите разблокировать все функции?\n💳 Оформите подписку, чтобы получить полный доступ!`
-          : `🚀 To unlock the next level of the avatar and gain access to new features, invite friend! 🌟\n\n🆔 Level your avatar: ${count} invitations \n\n🤖 To start using the bot, click the /menu command\n\n🔓 Want to unlock all features?\n💳 Subscribe to get full access!`
+          ? `🚀 Чтобы разблокировать следующий уровень аватара и получить доступ к функции: <b>${nameStep}</b>, пригласите друга! 🌟\n\n🆔 Уровень вашего аватара: ${newCount} \n\n🤖 Чтобы начать пользоваться ботом нажмите команду /menu\n\n🔓 Хотите разблокировать все функции?\n💳 Оформите подписку, чтобы получить полный доступ!`
+          : `🚀 To unlock the next level of the avatar and gain access to new features, invite friend! 🌟\n\n🆔 Level your avatar: ${newCount} invitations \n\n🤖 To start using the bot, click the /menu command\n\n🔓 Want to unlock all features?\n💳 Subscribe to get full access!`
 
         const inlineKeyboard = [
           [

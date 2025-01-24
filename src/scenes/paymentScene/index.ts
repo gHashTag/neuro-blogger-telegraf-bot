@@ -72,5 +72,21 @@ paymentScene.hears(['⭐️ Звездами', '⭐️ Stars'], async ctx => {
 
 paymentScene.hears(['💳 Рублями', '💳 In rubles'], async ctx => {
   console.log('CASE: 💳 Рублями', ctx.match)
-  await ctx.scene.enter('emailWizard')
+
+  const subscription = ctx.session.subscription
+  console.log('CASE: subscription', subscription)
+
+  if (subscription === 'neurobase') {
+    console.log('CASE: 📚 НейроБаза - rubGetWizard')
+    return ctx.scene.enter('rubGetWizard')
+  } else if (subscription === 'neuromeeting') {
+    console.log('CASE: 🧠 НейроВстреча - rubGetWizard')
+    return ctx.scene.enter('rubGetWizard')
+  } else if (subscription === 'neuroblogger') {
+    console.log('CASE: 🤖 НейроБлогер - rubGetWizard')
+    return ctx.scene.enter('rubGetWizard')
+  } else if (subscription === 'stars') {
+    console.log('CASE: 💳 Рублями - emailWizard')
+    await ctx.scene.enter('emailWizard')
+  }
 })

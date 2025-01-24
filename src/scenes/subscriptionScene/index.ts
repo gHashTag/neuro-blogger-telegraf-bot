@@ -66,10 +66,14 @@ export const subscriptionScene = new Scenes.WizardScene<MyContext>(
           text: isRu ? '📚 НейроБаза' : '📚 NeuroBase',
           callback_data: 'neurobase',
         },
+      ],
+      [
         {
           text: isRu ? '🧠 НейроВстреча' : '🧠 NeuroMeeting',
           callback_data: 'neuromeeting',
         },
+      ],
+      [
         {
           text: isRu ? '🤖 НейроБлогер' : '🤖 NeuroBlogger',
           callback_data: 'neuroblogger',

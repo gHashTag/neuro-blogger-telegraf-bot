@@ -1,5 +1,11 @@
 import { supabase } from '.'
 
+export type Subscription =
+  | 'neurobase'
+  | 'neuromeeting'
+  | 'neuroblogger'
+  | 'neurotester'
+
 type Payment = {
   user_id: string
   OutSum: string
@@ -9,6 +15,7 @@ type Payment = {
   email: string
   status: 'COMPLETED' | 'PENDING' | 'FAILED'
   payment_method: 'Robokassa' | 'YooMoney' | 'Telegram' | 'Stripe' | 'Other'
+  subscription: Subscription | 'stars'
 }
 
 export const setPayments = async ({
@@ -20,6 +27,7 @@ export const setPayments = async ({
   email,
   status,
   payment_method,
+  subscription,
 }: Payment) => {
   try {
     const { error } = await supabase.from('payments').insert({
@@ -32,6 +40,7 @@ export const setPayments = async ({
       description: `Purchase and sale:: ${stars}`,
       stars,
       email,
+      subscription,
     })
     if (error) {
       console.error('Ошибка создания платежа:', error)
