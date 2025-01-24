@@ -51,11 +51,6 @@ bot.action(/top_up_\d+/, handleTopUp)
 bot.on('pre_checkout_query', handlePreCheckoutQuery)
 bot.on('successful_payment', handleSuccessfulPayment)
 
-bot.on('text', (ctx: MyContext) => {
-  console.log('CASE: text', ctx)
-  handleTextMessage(ctx)
-})
-
 bot.catch(err => {
   const error = err as Error
   console.error('Error:', error.message)

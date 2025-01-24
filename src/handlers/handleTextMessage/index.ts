@@ -13,7 +13,7 @@ export async function handleTextMessage(ctx: MyContext) {
       return
     }
   }
-
+  console.log('ctx', ctx)
   try {
     const userId = ctx.from?.id.toString() || ''
     console.log('User ID:', userId)

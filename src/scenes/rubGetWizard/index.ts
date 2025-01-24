@@ -39,7 +39,9 @@ function generateRobokassaUrl(
   ).toUpperCase()
   const url = `https://auth.robokassa.ru/Merchant/Index.aspx?MerchantLogin=${merchantLogin}&OutSum=${outSum}&InvId=${invId}&Description=${encodeURIComponent(
     description
-  )}&SignatureValue=${signatureValue}`
+  )}&SignatureValue=${signatureValue}&ResultUrl2=${encodeURIComponent(
+    resultUrl2
+  )}`
 
   return url
 }

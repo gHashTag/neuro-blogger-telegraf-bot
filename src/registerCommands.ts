@@ -45,6 +45,7 @@ import { myComposer } from './hearsHandlers'
 
 import { defaultSession } from './store'
 import { rubGetWizard } from './scenes/rubGetWizard'
+import { handleTextMessage } from './handlers'
 
 export const stage = new Scenes.Stage<MyContext>([
   startScene,
@@ -119,4 +120,9 @@ export function registerCommands(bot: Telegraf<MyContext>) {
   myComposer.command('neuro_coder', async ctx => {
     await ctx.scene.enter('neuroCoderScene')
   })
+
+  // myComposer.on('text', (ctx: MyContext) => {
+  //   console.log('CASE: text')
+  //   handleTextMessage(ctx)
+  // })
 }

@@ -103,7 +103,7 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
     }
   },
   async ctx => {
-    console.log('CASE: menuScene.next', ctx.update)
+    console.log('CASE: menuScene.next')
     if ('callback_query' in ctx.update && 'data' in ctx.update.callback_query) {
       const text = ctx.update.callback_query.data
       console.log('text', text)
