@@ -49,10 +49,7 @@ export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
     const userModel = await getLatestUserModel(userId)
 
     const telegram_id = ctx.from?.id?.toString() || ''
-    const inviteCount = (await getReferalsCount(telegram_id)) || {
-      count: 0,
-      vip: false,
-    }
+    const { count, vip } = await getReferalsCount(telegram_id)
 
     if (!userModel || !userModel.model_url) {
       await ctx.reply(
@@ -61,9 +58,7 @@ export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
           : "❌ You don't have any trained models.\n\nUse the '🤖  Digital avatar body' command in the main menu to create your AI model for generating neurophotos with your face.",
         {
           reply_markup: {
-            keyboard: (
-              await mainMenu(isRu, inviteCount.count, inviteCount.vip)
-            ).reply_markup.keyboard,
+            keyboard: (await mainMenu(isRu, count, vip)).reply_markup.keyboard,
           },
         }
       )

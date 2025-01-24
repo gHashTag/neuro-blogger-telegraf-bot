@@ -57,6 +57,7 @@ async function processPayment(
     status: 'COMPLETED',
     email: ctx.session.email,
     payment_method: 'Telegram',
+    subscription: 'stars',
   })
 }
 
@@ -101,6 +102,7 @@ export async function handleSuccessfulPayment(ctx: MyContext) {
       status: 'COMPLETED',
       email: ctx.session.email,
       payment_method: 'Telegram',
+      subscription: 'stars',
     })
   }
 }

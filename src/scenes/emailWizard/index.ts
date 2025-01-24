@@ -174,6 +174,7 @@ emailWizard.on('text', async ctx => {
           payment_method: 'Telegram',
           subscription: 'stars',
         })
+        //
 
         console.log('invoiceURL', invoiceURL)
 

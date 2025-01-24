@@ -67,6 +67,10 @@ export const levels: Record<number, Level> = {
     title_ru: '👥 Пригласить друга',
     title_en: '👥 Invite a friend',
   },
+  103: {
+    title_ru: '💫 Оформление подписки',
+    title_en: '💫 Subscription',
+  },
 }
 
 export async function mainMenu(
@@ -75,18 +79,19 @@ export async function mainMenu(
   vip = false
 ): Promise<Markup.Markup<ReplyKeyboardMarkup>> {
   console.log('CASE: mainMenu')
-
+  console.log('inviteCount', inviteCount)
+  console.log('vip', vip)
   const availableLevels = Object.keys(levels)
     .filter(level => vip || parseInt(level) <= inviteCount)
     .map(level => levels[parseInt(level)])
+  console.log('availableLevels', availableLevels)
+  const subscriptionButton = isRu ? levels[103].title_ru : levels[103].title_en
 
   if (availableLevels.length === 0) {
     console.warn(
       'No available levels for the current invite count and VIP status.'
     )
-    return Markup.keyboard([
-      [Markup.button.text(isRu ? '💎 Пополнить баланс' : '💎 Top up balance')],
-    ]).resize()
+    return Markup.keyboard([[Markup.button.text(subscriptionButton)]]).resize()
   }
 
   const buttons = availableLevels.map(level =>
@@ -102,7 +107,7 @@ export async function mainMenu(
 
   // Добавляем дополнительные кнопки в конце
   buttonRows.push([
-    Markup.button.text(isRu ? '💎 Пополнить баланс' : '💎 Top up balance'),
+    Markup.button.text(subscriptionButton),
     // Markup.button.text(isRu ? '🎮 Начать обучение' : '🎮 Start learning'),
   ])
 

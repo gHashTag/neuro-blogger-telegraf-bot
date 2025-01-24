@@ -5,6 +5,7 @@ import { isRussian } from '@/helpers'
 export const subscriptionScene = new Scenes.WizardScene<MyContext>(
   'subscriptionScene',
   async ctx => {
+    console.log('CASE: subscriptionScene')
     const isRu = isRussian(ctx)
     const message = isRu
       ? `<b>💫 Для получения полного доступа ко всем нейрокомандам, выберите одну из предложенных месячных подписок:</b>

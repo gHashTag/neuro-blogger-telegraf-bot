@@ -18,10 +18,12 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
       let newVip = false
 
       if (isDev) {
-        newCount = 1
+        newCount = 0
         newVip = false
       } else {
         const { count, vip } = await getReferalsCount(telegram_id)
+        console.log('count', count)
+        console.log('vip', vip)
         newCount = count
         newVip = vip
       }
@@ -32,9 +34,16 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
         newCount + 1
       }`
 
-      const nameStep = isRu
-        ? levels[newCount + 1].title_ru
-        : levels[newCount + 1].title_en
+      const nextLevel = levels[newCount]
+      const nameStep = nextLevel
+        ? isRu
+          ? nextLevel.title_ru
+          : nextLevel.title_en
+        : isRu
+        ? 'Неизвестный уровень'
+        : 'Unknown level'
+
+      console.log('nameStep', nameStep)
 
       if (newCount <= 10) {
         const message = isRu
@@ -94,12 +103,20 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
     }
   },
   async ctx => {
-    console.log('CASE: menuScene.next')
+    console.log('CASE: menuScene.next', ctx.update)
     if ('callback_query' in ctx.update && 'data' in ctx.update.callback_query) {
       const text = ctx.update.callback_query.data
       console.log('text', text)
       if (text === 'unlock_features') {
         console.log('CASE: 🔓 Разблокировать все функции')
+        await ctx.scene.enter('subscriptionScene')
+      }
+    } else if ('message' in ctx.update && 'text' in ctx.update.message) {
+      const text = ctx.update.message.text
+      console.log('text', text)
+      const isRu = isRussian(ctx)
+      if (text === (isRu ? levels[103].title_ru : levels[103].title_en)) {
+        console.log('CASE: 💵 Оформление подписки')
         await ctx.scene.enter('subscriptionScene')
       }
     } else {
