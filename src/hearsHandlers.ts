@@ -121,7 +121,7 @@ myComposer.hears([levels[101].title_ru, levels[101].title_en], async ctx => {
 myComposer.hears([levels[102].title_ru, levels[102].title_en], async ctx => {
   console.log('CASE: Пригласить друга')
   ctx.session.mode = 'invite'
-  await ctx.scene.enter('inviteCommand')
+  await ctx.scene.enter('inviteScene')
 })
 
 myComposer.hears(['🏠 Главное меню', '🏠 Main menu'], async ctx => {
@@ -233,8 +233,8 @@ myComposer.hears(/^(Отмена|отмена|Cancel|cancel)$/i, async ctx => {
   console.log('CASE: Отмена')
   const isRu = isRussian(ctx)
   const telegram_id = ctx.from?.id?.toString() || ''
-  const { count, vip } = await getReferalsCount(telegram_id)
-  await mainMenu(isRu, count, vip)
+  const { count, subscription } = await getReferalsCount(telegram_id)
+  await mainMenu(isRu, count, subscription)
   return ctx.scene.leave()
 })
 

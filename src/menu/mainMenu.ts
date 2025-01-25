@@ -8,62 +8,77 @@ interface Level {
 }
 
 export const levels: Record<number, Level> = {
+  // avatarWizard
   1: {
     title_ru: '🧠 Мозг аватара',
     title_en: '🧠 Avatar Brain',
   },
+  // chatWithAvatarWizard
   2: {
     title_ru: '💭 Чат с аватаром',
     title_en: '💭 Chat with avatar',
   },
+  // selectModelWizard
   3: {
     title_ru: '🤖 Выбор модели ИИ',
     title_en: '🤖 Choose AI Model',
   },
+  // digitalAvatarBodyWizard
   4: {
     title_ru: '🤖 Цифровое тело',
     title_en: '🤖 Digital Body',
   },
+  // neuroPhotoWizard
   5: {
     title_ru: '📸 Нейрофото',
     title_en: '📸 NeuroPhoto',
   },
+  // imageToPromptWizard
   6: {
     title_ru: '🔍 Промпт из фото',
     title_en: '🔍 Prompt from Photo',
   },
+  // voiceAvatarWizard
   7: {
     title_ru: '🎤 Голос аватара',
     title_en: '🎤 Avatar Voice',
   },
+  // textToSpeechWizard
   8: {
     title_ru: '🎙️ Текст в голос',
     title_en: '🎙️ Text to Voice',
   },
+  // imageToVideoWizard
   9: {
     title_ru: '🎥 Фото в видео',
     title_en: '🎥 Photo to Video',
   },
+  // textToVideoWizard
   10: {
     title_ru: '🎥 Видео из текста',
     title_en: '🎥 Text to Video',
   },
+  // textToImageWizard
   11: {
     title_ru: '🖼️ Текст в фото',
     title_en: '🖼️ Text to Image',
   },
+  // step0
   99: {
     title_ru: '🎮 Начать обучение',
     title_en: '🎮 Start learning',
   },
+  // paymentScene
   100: {
     title_ru: '💎 Пополнить баланс',
     title_en: '💎 Top up balance',
   },
+  // balanceCommand
   101: {
     title_ru: '🤑 Баланс',
     title_en: '🤑 Balance',
   },
+  // inviteCommand
   102: {
     title_ru: '👥 Пригласить друга',
     title_en: '👥 Invite a friend',
@@ -117,10 +132,7 @@ export async function mainMenu(
   }
 
   // Добавляем дополнительные кнопки в конце
-  buttonRows.push([
-    Markup.button.text(subscriptionButton),
-    // Markup.button.text(isRu ? '🎮 Начать обучение' : '🎮 Start learning'),
-  ])
+  buttonRows.push([Markup.button.text(subscriptionButton)])
 
   return Markup.keyboard(buttonRows).resize()
 }

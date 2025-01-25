@@ -135,11 +135,10 @@ export const subscriptionMiddleware = async (
         )
       }
     } else {
+      const { count } = await getReferalsCount(telegram_id.toString())
       await bot.telegram.sendMessage(
         '@neuro_blogger_group',
-        `💵 New user registered in the bot: @${finalUsername}. 🆔 Avatar level: ${await getReferalsCount(
-          telegram_id.toString()
-        )}`
+        `🔗 Новый пользователь зарегистрировался в боте: @${finalUsername}. 🆔 Уровень аватара: ${count}`
       )
     }
 

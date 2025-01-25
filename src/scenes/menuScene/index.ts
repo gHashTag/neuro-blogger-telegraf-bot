@@ -18,7 +18,7 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
       let newSubscription: Subscription = 'stars'
 
       if (isDev) {
-        newCount = 8
+        newCount = 12
         newSubscription = 'stars'
       } else {
         const { count, subscription } = await getReferalsCount(telegram_id)
@@ -114,58 +114,61 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
     } else if ('message' in ctx.update && 'text' in ctx.update.message) {
       const text = ctx.update.message.text
       console.log('text', text)
-      const isRu = isRussian(ctx)
-      if (text === (isRu ? levels[103].title_ru : levels[103].title_en)) {
-        console.log('CASE: 💵 Оформление подписки')
-        await ctx.scene.enter('subscriptionScene')
-      } else if (text === (isRu ? levels[2].title_ru : levels[2].title_en)) {
-        console.log('CASE: 💭 Чат с аватаром')
-        await ctx.scene.enter('chatWithAvatarWizard')
-      } else if (text === (isRu ? levels[3].title_ru : levels[3].title_en)) {
-        console.log('CASE: 🤖 Выбор модели ИИ')
-        await ctx.scene.enter('selectModelWizard')
-      } else if (text === (isRu ? levels[4].title_ru : levels[4].title_en)) {
-        console.log('CASE: 🤖 Цифровое тело')
-        await ctx.scene.enter('digitalAvatarBodyWizard')
-      } else if (text === (isRu ? levels[5].title_ru : levels[5].title_en)) {
-        console.log('CASE: 📸 Нейрофото')
-        await ctx.scene.enter('neuroPhotoWizard')
-      } else if (text === (isRu ? levels[6].title_ru : levels[6].title_en)) {
-        console.log('CASE: 🔍 Промпт из фото')
-        await ctx.scene.enter('promptFromPhotoWizard')
-      } else if (text === (isRu ? levels[7].title_ru : levels[7].title_en)) {
-        console.log('CASE: 🎤 Голос аватара')
-        await ctx.scene.enter('voiceAvatarWizard')
-      } else if (text === (isRu ? levels[8].title_ru : levels[8].title_en)) {
-        console.log('CASE: 🎤 Голос аватара')
-        await ctx.scene.enter('voiceAvatarWizard')
-      } else if (text === (isRu ? levels[9].title_ru : levels[9].title_en)) {
-        console.log('CASE: 🎤 Голос аватара')
-        await ctx.scene.enter('voiceAvatarWizard')
-      } else if (text === (isRu ? levels[10].title_ru : levels[10].title_en)) {
-        console.log('CASE: 🎤 Голос аватара')
-        await ctx.scene.enter('voiceAvatarWizard')
-      } else if (text === (isRu ? levels[11].title_ru : levels[11].title_en)) {
-        console.log('CASE: 🎤 Голос аватара')
-        await ctx.scene.enter('voiceAvatarWizard')
-      } else if (text === (isRu ? levels[99].title_ru : levels[99].title_en)) {
-        console.log('CASE: 🎤 Голос аватара')
-        await ctx.scene.enter('voiceAvatarWizard')
-      } else if (
-        text === (isRu ? levels[100].title_ru : levels[100].title_en)
-      ) {
-        console.log('CASE: 🎤 Голос аватара')
-        await ctx.scene.enter('voiceAvatarWizard')
-      } else if (
-        text === (isRu ? levels[101].title_ru : levels[101].title_en)
-      ) {
-        console.log('CASE: 🎤 Голос аватара')
-        await ctx.scene.enter('voiceAvatarWizard')
-      }
+      handleMenu(ctx, text)
     } else {
-      console.log('CASE: menuScene.next.else')
+      console.log('CASE: menuScene.next.else', ctx)
       return ctx.scene.leave()
     }
     return ctx.scene.leave()
   }
 )
+
+const handleMenu = async (ctx: MyContext, text: string) => {
+  const isRu = isRussian(ctx)
+  if (text === (isRu ? levels[103].title_ru : levels[103].title_en)) {
+    console.log('CASE: 💵 Оформление подписки')
+    await ctx.scene.enter('subscriptionScene')
+  } else if (text === (isRu ? levels[2].title_ru : levels[2].title_en)) {
+    console.log('CASE: 💭 Чат с аватаром')
+    await ctx.scene.enter('chatWithAvatarWizard')
+  } else if (text === (isRu ? levels[3].title_ru : levels[3].title_en)) {
+    console.log('CASE: 🤖 Выбор модели ИИ')
+    await ctx.scene.enter('selectModelWizard')
+  } else if (text === (isRu ? levels[4].title_ru : levels[4].title_en)) {
+    console.log('CASE: 🤖 Цифровое тело')
+    await ctx.scene.enter('digitalAvatarBodyWizard')
+  } else if (text === (isRu ? levels[5].title_ru : levels[5].title_en)) {
+    console.log('CASE: 📸 Нейрофото')
+    await ctx.scene.enter('neuroPhotoWizard')
+  } else if (text === (isRu ? levels[6].title_ru : levels[6].title_en)) {
+    console.log('CASE: 🔍 Промпт из фото')
+    await ctx.scene.enter('promptFromPhotoWizard')
+  } else if (text === (isRu ? levels[7].title_ru : levels[7].title_en)) {
+    console.log('CASE: 🎤 Голос аватара')
+    await ctx.scene.enter('voiceAvatarWizard')
+  } else if (text === (isRu ? levels[8].title_ru : levels[8].title_en)) {
+    console.log('CASE: 🎙️ Текст в голос')
+    await ctx.scene.enter('textToSpeechWizard')
+  } else if (text === (isRu ? levels[9].title_ru : levels[9].title_en)) {
+    console.log('CASE: 🎥 Фото в видео')
+    await ctx.scene.enter('imageToVideoWizard')
+  } else if (text === (isRu ? levels[10].title_ru : levels[10].title_en)) {
+    console.log('CASE: �� Видео из текста')
+    await ctx.scene.enter('textToVideoWizard')
+  } else if (text === (isRu ? levels[11].title_ru : levels[11].title_en)) {
+    console.log('CASE: 🖼️ Текст в фото')
+    await ctx.scene.enter('textToImageWizard')
+  } else if (text === (isRu ? levels[99].title_ru : levels[99].title_en)) {
+    console.log('CASE: 🎮 Начать обучение')
+    await ctx.scene.enter('step0')
+  } else if (text === (isRu ? levels[100].title_ru : levels[100].title_en)) {
+    console.log('CASE: 💎 Пополнить баланс')
+    await ctx.scene.enter('paymentScene')
+  } else if (text === (isRu ? levels[101].title_ru : levels[101].title_en)) {
+    console.log('CASE: 🤑 Баланс')
+    await ctx.scene.enter('balanceCommand')
+  } else if (text === (isRu ? levels[102].title_ru : levels[102].title_en)) {
+    console.log('CASE: 👥 Пригласить друга')
+    await ctx.scene.enter('inviteCommand')
+  }
+}
