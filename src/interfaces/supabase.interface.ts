@@ -20,3 +20,9 @@ export interface ModelTraining {
   trigger_word: string
   model_url: string
 }
+export type Subscription =
+  | 'neurobase'
+  | 'neuromeeting'
+  | 'neuroblogger'
+  | 'neurotester'
+  | 'stars'

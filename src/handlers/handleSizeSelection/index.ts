@@ -18,7 +18,7 @@ export async function handleSizeSelection(ctx: MyContext, size: string) {
   } else {
     console.log('CASE: Неизвестный режим')
     const telegram_id = ctx.from?.id?.toString() || ''
-    const { count, vip } = await getReferalsCount(telegram_id)
-    await mainMenu(isRu, count, vip)
+    const { count, subscription } = await getReferalsCount(telegram_id)
+    await mainMenu(isRu, count, subscription)
   }
 }

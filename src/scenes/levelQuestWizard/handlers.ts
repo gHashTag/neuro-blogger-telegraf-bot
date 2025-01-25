@@ -701,9 +701,9 @@ export async function handleQuestComplete(ctx: MyContext) {
   try {
     const isRu = ctx.from?.language_code === 'ru'
     const telegram_id = ctx.from?.id?.toString() || ''
-    const { count, vip } = (await getReferalsCount(telegram_id)) || {
+    const { count, subscription } = (await getReferalsCount(telegram_id)) || {
       count: 0,
-      vip: false,
+      subscription: 'stars',
     }
     const message = isRu
       ? `🎉 НейроКвест завершен! 🎉
@@ -731,7 +731,9 @@ You have successfully completed all tasks and reached the maximum level! 🌟✨
 
     await ctx.reply(message, {
       reply_markup: {
-        keyboard: (await mainMenu(isRu, count, vip)).reply_markup.keyboard,
+        keyboard: (
+          await mainMenu(isRu, count, subscription)
+        ).reply_markup.keyboard,
       },
     })
     return

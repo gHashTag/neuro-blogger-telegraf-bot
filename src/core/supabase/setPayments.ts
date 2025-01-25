@@ -1,10 +1,5 @@
 import { supabase } from '.'
-
-export type Subscription =
-  | 'neurobase'
-  | 'neuromeeting'
-  | 'neuroblogger'
-  | 'neurotester'
+import { Subscription } from '../../interfaces/supabase.interface'
 
 type Payment = {
   user_id: string
@@ -15,7 +10,7 @@ type Payment = {
   email: string
   status: 'COMPLETED' | 'PENDING' | 'FAILED'
   payment_method: 'Robokassa' | 'YooMoney' | 'Telegram' | 'Stripe' | 'Other'
-  subscription: Subscription | 'stars'
+  subscription: Subscription
 }
 
 export const setPayments = async ({

@@ -1,5 +1,5 @@
 import { Context, NarrowedContext, Scenes } from 'telegraf'
-import { ModelUrl, UserModel } from './index'
+import { ModelUrl, Subscription, UserModel } from './index'
 import type { Update, Message } from 'telegraf/typings/core/types/typegram'
 import { Buffer } from 'buffer'
 import { Mode } from './cost.interface'
@@ -43,7 +43,7 @@ export interface MySession extends Scenes.WizardSession<MyWizardSession> {
   videoUrl: string
   audioUrl: string
   paymentAmount: number
-  subscription: string
+  subscription: Subscription
   images: BufferType
   modelName: string
   targetUserId: number

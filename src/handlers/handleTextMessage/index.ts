@@ -71,7 +71,6 @@ export async function handleTextMessage(ctx: MyContext) {
 
       await ctx.reply(response, {
         parse_mode: 'Markdown',
-        reply_markup: { remove_keyboard: true },
       })
       return
     } else {

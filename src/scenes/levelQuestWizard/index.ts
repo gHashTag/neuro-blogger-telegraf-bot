@@ -29,7 +29,7 @@ const createStepScene = (
   const scene = new Scenes.BaseScene<MyContext>(`step${stepNumber}`)
   scene.enter(async ctx => {
     const telegram_id = ctx.from?.id?.toString() || ''
-    const { count, vip } = await getReferalsCount(telegram_id)
+    const { count, subscription } = await getReferalsCount(telegram_id)
     await handler(ctx)
     const isRu = isRussian(ctx)
     await ctx.reply(
@@ -42,7 +42,7 @@ const createStepScene = (
         : `You have successfully completed all training and reached the maximum level! 🌟✨`,
       stepNumber < 12
         ? Markup.keyboard([[nextStepText], ['➡️ Завершить']]).resize()
-        : await mainMenu(isRu, count, vip)
+        : await mainMenu(isRu, count, subscription)
     )
   })
 

@@ -1,3 +1,4 @@
+import { Subscription } from '@/interfaces/supabase.interface'
 import { Markup } from 'telegraf'
 import { ReplyKeyboardMarkup } from 'telegraf/typings/core/types/typegram'
 
@@ -76,20 +77,30 @@ export const levels: Record<number, Level> = {
 export async function mainMenu(
   isRu: boolean,
   inviteCount: number,
-  vip = false
+  subscription: Subscription
 ): Promise<Markup.Markup<ReplyKeyboardMarkup>> {
   console.log('CASE: mainMenu')
   console.log('inviteCount', inviteCount)
-  console.log('vip', vip)
+  console.log('subscription', subscription)
+
+  // Определяем, имеет ли пользователь доступ ко всем уровням
+  const hasFullAccess = [
+    'neurobase',
+    'neuromeeting',
+    'neuroblogger',
+    'neurotester',
+  ].includes(subscription)
+
   const availableLevels = Object.keys(levels)
-    .filter(level => vip || parseInt(level) <= inviteCount)
+    .filter(level => hasFullAccess || parseInt(level) <= inviteCount)
     .map(level => levels[parseInt(level)])
   console.log('availableLevels', availableLevels)
+
   const subscriptionButton = isRu ? levels[103].title_ru : levels[103].title_en
 
   if (availableLevels.length === 0) {
     console.warn(
-      'No available levels for the current invite count and VIP status.'
+      'No available levels for the current invite count and subscription status.'
     )
     return Markup.keyboard([[Markup.button.text(subscriptionButton)]]).resize()
   }

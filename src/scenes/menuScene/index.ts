@@ -1,6 +1,6 @@
 import { Scenes } from 'telegraf'
 import { sendGenericErrorMessage } from '@/menu'
-import { MyContext } from '../../interfaces'
+import { MyContext, Subscription } from '../../interfaces'
 import { levels, mainMenu } from '../../menu/mainMenu'
 import { getReferalsCount } from '@/core/supabase/getReferalsCount'
 import { isDev, isRussian } from '@/helpers'
@@ -15,20 +15,20 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
       console.log('CASE: menu')
       const telegram_id = ctx.from?.id?.toString() || ''
       let newCount = 0
-      let newVip = false
+      let newSubscription: Subscription = 'stars'
 
       if (isDev) {
-        newCount = 0
-        newVip = false
+        newCount = 8
+        newSubscription = 'stars'
       } else {
-        const { count, vip } = await getReferalsCount(telegram_id)
+        const { count, subscription } = await getReferalsCount(telegram_id)
         console.log('count', count)
-        console.log('vip', vip)
+        console.log('subscription', subscription)
         newCount = count
-        newVip = vip
+        newSubscription = subscription
       }
 
-      const menu = await mainMenu(isRu, newCount, newVip)
+      const menu = await mainMenu(isRu, newCount, newSubscription)
 
       const url = `https://neuro-blogger-web-u14194.vm.elestio.app/neuro_sage/1/1/1/1/1/${
         newCount + 1
@@ -103,7 +103,7 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
     }
   },
   async ctx => {
-    console.log('CASE: menuScene.next')
+    console.log('CASE 1: menuScene.next')
     if ('callback_query' in ctx.update && 'data' in ctx.update.callback_query) {
       const text = ctx.update.callback_query.data
       console.log('text', text)
@@ -118,9 +118,54 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
       if (text === (isRu ? levels[103].title_ru : levels[103].title_en)) {
         console.log('CASE: 💵 Оформление подписки')
         await ctx.scene.enter('subscriptionScene')
+      } else if (text === (isRu ? levels[2].title_ru : levels[2].title_en)) {
+        console.log('CASE: 💭 Чат с аватаром')
+        await ctx.scene.enter('chatWithAvatarWizard')
+      } else if (text === (isRu ? levels[3].title_ru : levels[3].title_en)) {
+        console.log('CASE: 🤖 Выбор модели ИИ')
+        await ctx.scene.enter('selectModelWizard')
+      } else if (text === (isRu ? levels[4].title_ru : levels[4].title_en)) {
+        console.log('CASE: 🤖 Цифровое тело')
+        await ctx.scene.enter('digitalAvatarBodyWizard')
+      } else if (text === (isRu ? levels[5].title_ru : levels[5].title_en)) {
+        console.log('CASE: 📸 Нейрофото')
+        await ctx.scene.enter('neuroPhotoWizard')
+      } else if (text === (isRu ? levels[6].title_ru : levels[6].title_en)) {
+        console.log('CASE: 🔍 Промпт из фото')
+        await ctx.scene.enter('promptFromPhotoWizard')
+      } else if (text === (isRu ? levels[7].title_ru : levels[7].title_en)) {
+        console.log('CASE: 🎤 Голос аватара')
+        await ctx.scene.enter('voiceAvatarWizard')
+      } else if (text === (isRu ? levels[8].title_ru : levels[8].title_en)) {
+        console.log('CASE: 🎤 Голос аватара')
+        await ctx.scene.enter('voiceAvatarWizard')
+      } else if (text === (isRu ? levels[9].title_ru : levels[9].title_en)) {
+        console.log('CASE: 🎤 Голос аватара')
+        await ctx.scene.enter('voiceAvatarWizard')
+      } else if (text === (isRu ? levels[10].title_ru : levels[10].title_en)) {
+        console.log('CASE: 🎤 Голос аватара')
+        await ctx.scene.enter('voiceAvatarWizard')
+      } else if (text === (isRu ? levels[11].title_ru : levels[11].title_en)) {
+        console.log('CASE: 🎤 Голос аватара')
+        await ctx.scene.enter('voiceAvatarWizard')
+      } else if (text === (isRu ? levels[99].title_ru : levels[99].title_en)) {
+        console.log('CASE: 🎤 Голос аватара')
+        await ctx.scene.enter('voiceAvatarWizard')
+      } else if (
+        text === (isRu ? levels[100].title_ru : levels[100].title_en)
+      ) {
+        console.log('CASE: 🎤 Голос аватара')
+        await ctx.scene.enter('voiceAvatarWizard')
+      } else if (
+        text === (isRu ? levels[101].title_ru : levels[101].title_en)
+      ) {
+        console.log('CASE: 🎤 Голос аватара')
+        await ctx.scene.enter('voiceAvatarWizard')
       }
     } else {
+      console.log('CASE: menuScene.next.else')
       return ctx.scene.leave()
     }
+    return ctx.scene.leave()
   }
 )

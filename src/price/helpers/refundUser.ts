@@ -20,9 +20,9 @@ export async function refundUser(ctx: MyContext, paymentAmount: number) {
   // Отправляем сообщение пользователю
   const isRu = ctx.from.language_code === 'ru'
   const telegram_id = ctx.from?.id?.toString() || ''
-  const { count, vip } = (await getReferalsCount(telegram_id)) || {
+  const { count, subscription } = (await getReferalsCount(telegram_id)) || {
     count: 0,
-    vip: false,
+    subscription: 'stars',
   }
   await ctx.reply(
     isRu
@@ -36,7 +36,9 @@ export async function refundUser(ctx: MyContext, paymentAmount: number) {
         )} ⭐️`,
     {
       reply_markup: {
-        keyboard: (await mainMenu(isRu, count, vip)).reply_markup.keyboard,
+        keyboard: (
+          await mainMenu(isRu, count, subscription)
+        ).reply_markup.keyboard,
       },
     }
   )
