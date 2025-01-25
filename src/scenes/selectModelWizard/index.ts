@@ -72,6 +72,11 @@ export const selectModelWizard = new Scenes.WizardScene<MyContext>(
     } else {
       const model = message.text
       console.log('CASE: selectModelWizard', model)
+      const models = await getAvailableModels()
+      if (!models.includes(model)) {
+        await ctx.reply(isRu ? '❌ Модель не найдена' : '❌ Model not found')
+        return ctx.scene.leave()
+      }
 
       await setModel(ctx.from.id.toString(), model)
 
