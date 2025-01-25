@@ -45,6 +45,7 @@ import { myComposer } from './hearsHandlers'
 import { defaultSession } from './store'
 import { rubGetWizard } from './scenes/rubGetWizard'
 import { handleTextMessage } from './handlers'
+import { get100Command } from './commands/get100Command'
 
 export const stage = new Scenes.Stage<MyContext>([
   startScene,
@@ -89,6 +90,11 @@ export function registerCommands(bot: Telegraf<MyContext>) {
   myComposer.command('start', async ctx => {
     console.log('CASE: start')
     await neuroQuestCommand(ctx)
+  })
+
+  myComposer.command('get100', async ctx => {
+    console.log('CASE: get100')
+    await get100Command(ctx)
   })
 
   myComposer.command('buy', async ctx => {
