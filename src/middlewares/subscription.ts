@@ -112,6 +112,12 @@ export const subscriptionMiddleware = async (
 
       inviter = inviter_id
 
+      const isSubscribed = await checkSubscription(ctx)
+      if (!isSubscribed) {
+        await handleSubscriptionMessage(ctx, language_code)
+        return
+      }
+
       const { count } = await getReferalsCount(inviter_telegram_id)
       const newCount = count + 1
       if (inviter_telegram_id) {
@@ -135,6 +141,12 @@ export const subscriptionMiddleware = async (
         )
       }
     } else {
+      const isSubscribed = await checkSubscription(ctx)
+      if (!isSubscribed) {
+        await handleSubscriptionMessage(ctx, language_code)
+        return
+      }
+
       const { count } = await getReferalsCount(telegram_id.toString())
       await bot.telegram.sendMessage(
         '@neuro_blogger_group',
@@ -160,12 +172,6 @@ export const subscriptionMiddleware = async (
     }
 
     await createUser(userData as CreateUserData)
-
-    const isSubscribed = await checkSubscription(ctx)
-    if (!isSubscribed) {
-      await handleSubscriptionMessage(ctx, language_code)
-      return
-    }
 
     await next()
   } catch (error) {
