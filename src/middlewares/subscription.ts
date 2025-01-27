@@ -36,8 +36,8 @@ async function handleSubscriptionMessage(
 ): Promise<void> {
   const message =
     language_code === 'ru'
-      ? '❗️ВНИМАНИЕ\nВы видите это сообщение потому что не подписаны на канал @neuro_blogger_group\n Группа нужна для того чтобы вы могли задать вопросы и получить помощь. Пожалуйста, подпишитесь на наш канал, чтобы продолжить использование бота.'
-      : '❗️ATTENTION\nYou see this message because you are not subscribed to the channel @neuro_blogger_group\nThe group is needed so that you can ask questions and get help. Please subscribe to our channel to continue using the bot.'
+      ? '❗️ВНИМАНИЕ\nВы видите это сообщение потому что не подписаны на канал @neuro_blogger_group\n Группа нужна для того чтобы вы могли задать вопросы и получить помощь. Пожалуйста, подпишитесь на наш канал, чтобы продолжить использование бота и после нажатия на кнопку "Подписаться" вернитесь в бот и нажмите команду /start.'
+      : '❗️ATTENTION\nYou see this message because you are not subscribed to the channel @neuro_blogger_group\nThe group is needed so that you can ask questions and get help. Please subscribe to our channel to continue using the bot and after clicking the "Subscribe" button, return to the bot and click the /start command.'
 
   await ctx.reply(message, {
     reply_markup: Markup.inlineKeyboard([
@@ -75,7 +75,7 @@ export const subscriptionMiddleware = async (
     const inviteCode = ctx.message.text.split(' ')[1]
 
     console.log('inviteCode', inviteCode)
-
+    ctx.session.inviteCode = inviteCode
     const {
       username,
       id: telegram_id,
@@ -89,7 +89,7 @@ export const subscriptionMiddleware = async (
 
     // Проверяем, существует ли пользователь
     const existingUser = await getUserByTelegramId(telegram_id.toString())
-    console.log('existingUser', existingUser)
+
     if (existingUser) {
       console.log('User already registered:', telegram_id)
       const isSubscribed = await checkSubscription(ctx)
@@ -101,8 +101,8 @@ export const subscriptionMiddleware = async (
     }
     const photo_url = await getUserPhotoUrl(ctx, telegram_id)
     // Создаем пользователя с inviter из start параметра
-    let inviter: string | null = null
-    if (inviteCode) {
+
+    if (ctx.session.inviteCode) {
       const {
         inviter_id,
         inviter_username,
@@ -110,7 +110,7 @@ export const subscriptionMiddleware = async (
         inviter_balance,
       } = await getUidInviter(inviteCode)
 
-      inviter = inviter_id
+      ctx.session.inviter = inviter_id
 
       const isSubscribed = await checkSubscription(ctx)
       if (!isSubscribed) {
@@ -137,7 +137,7 @@ export const subscriptionMiddleware = async (
         })
         await bot.telegram.sendMessage(
           '@neuro_blogger_group',
-          `🔗 Новый пользователь зарегистрировался в боте: @${finalUsername}. По реферальной ссылке от: @${inviter_username}. 🆔 Уровень аватара: ${newCount}\n🎁 Получил(a) бонус в размере 100⭐️ на свой баланс.\nСпасибо за участие в нашей программе!`
+          `🔗 Новый пользователь зарегистрировался в боте: @${finalUsername}. По реферальной ссылке от: @${inviter_username}.\n🆔 Уровень аватара: ${newCount}\n🎁 Получил(a) бонус в размере 100⭐️ на свой баланс.\nСпасибо за участие в нашей программе!`
         )
       }
     } else {
@@ -150,7 +150,7 @@ export const subscriptionMiddleware = async (
       const { count } = await getReferalsCount(telegram_id.toString())
       await bot.telegram.sendMessage(
         '@neuro_blogger_group',
-        `🔗 Новый пользователь зарегистрировался в боте: @${finalUsername}. 🆔 Уровень аватара: ${count}`
+        `🔗 Новый пользователь зарегистрировался в боте: @${finalUsername}.\n🆔 Уровень аватара: ${count}`
       )
     }
 
@@ -168,7 +168,8 @@ export const subscriptionMiddleware = async (
       count: 0,
       aspect_ratio: '9:16',
       balance: 100,
-      inviter: inviter || null,
+      inviter: ctx.session.inviter || null,
+      token: ctx.telegram.token || null,
     }
 
     await createUser(userData as CreateUserData)
