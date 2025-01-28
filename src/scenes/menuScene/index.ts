@@ -18,7 +18,7 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
       let newSubscription: Subscription = 'stars'
 
       if (isDev) {
-        newCount = 12
+        newCount = 0
         newSubscription = 'stars'
       } else {
         const { count, subscription } = await getReferalsCount(telegram_id)
@@ -34,7 +34,7 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
         newCount + 1
       }`
 
-      const nextLevel = levels[newCount]
+      const nextLevel = levels[newCount + 1]
       const nameStep = nextLevel
         ? isRu
           ? nextLevel.title_ru
