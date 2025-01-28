@@ -18,7 +18,7 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
       let newSubscription: Subscription = 'stars'
 
       if (isDev) {
-        newCount = 4
+        newCount = 12
         newSubscription = 'stars'
       } else {
         const { count, subscription } = await getReferalsCount(telegram_id)
@@ -47,8 +47,12 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
 
       if (newCount <= 10) {
         const message = isRu
-          ? `🚀 Чтобы разблокировать следующий уровень аватара и получить доступ к функции: <b>${nameStep}</b>, пригласите друга! 🌟\n\n🆔 Уровень вашего аватара: ${newCount} \n\n🤖 Чтобы начать пользоваться ботом нажмите команду /menu\n\n🔓 Хотите разблокировать все функции?\n💳 Оформите подписку, чтобы получить полный доступ!`
-          : `🚀 To unlock the next level of the avatar and gain access to new features, invite friend! 🌟\n\n🆔 Level your avatar: ${newCount} invitations \n\n🤖 To start using the bot, click the /menu command\n\n🔓 Want to unlock all features?\n💳 Subscribe to get full access!`
+          ? `🚀 Чтобы разблокировать следующий уровень аватара и получить доступ к функции: <b>${nameStep}</b>, пригласите друга! 🌟\n\n🆔 Уровень вашего аватара: ${
+              newCount + 1
+            } \n\n🤖 Чтобы начать пользоваться ботом нажмите команду /menu\n\n🔓 Хотите разблокировать все функции?\n💳 Оформите подписку, чтобы получить полный доступ!`
+          : `🚀 To unlock the next level of the avatar and gain access to new features, invite friend! 🌟\n\n🆔 Level your avatar: ${
+              newCount + 1
+            } invitations \n\n🤖 To start using the bot, click the /menu command\n\n🔓 Want to unlock all features?\n💳 Subscribe to get full access!`
 
         const inlineKeyboard = [
           [

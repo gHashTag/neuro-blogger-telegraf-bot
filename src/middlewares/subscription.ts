@@ -150,7 +150,7 @@ export const subscriptionMiddleware = async (
       const { count } = await getReferalsCount(telegram_id.toString())
       await bot.telegram.sendMessage(
         '@neuro_blogger_group',
-        `🔗 Новый пользователь зарегистрировался в боте: @${finalUsername}.\n🆔 Уровень аватара: ${count}`
+        `🔗 Новый пользователь зарегистрировался в боте: @${finalUsername}.\n🆔 Уровень аватара: ${count}.`
       )
     }
 
