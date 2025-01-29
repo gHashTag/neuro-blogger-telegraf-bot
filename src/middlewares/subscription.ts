@@ -53,7 +53,7 @@ export const subscriptionMiddleware = async (
     console.log('existingUser', existingUser)
 
     if (existingUser) {
-      await verifySubscription(ctx, language_code, SUBSCRIBE_CHANNEL_ID, next)
+      await verifySubscription(ctx, language_code, SUBSCRIBE_CHANNEL_ID)
       return
     }
 
@@ -66,7 +66,7 @@ export const subscriptionMiddleware = async (
 
       ctx.session.inviter = userData.user_id
 
-      await verifySubscription(ctx, language_code, SUBSCRIBE_CHANNEL_ID, next)
+      await verifySubscription(ctx, language_code, SUBSCRIBE_CHANNEL_ID)
 
       const newCount = count + 1
       if (ctx.session.inviteCode) {
@@ -81,7 +81,7 @@ export const subscriptionMiddleware = async (
               }⭐️`
         )
         await incrementBalance({
-          telegram_id: ctx.session.inviteCode,
+          telegram_id: inviteCode,
           amount: BONUS_AMOUNT,
         })
         await bot.telegram.sendMessage(
@@ -90,7 +90,7 @@ export const subscriptionMiddleware = async (
         )
       }
     } else {
-      await verifySubscription(ctx, language_code, SUBSCRIBE_CHANNEL_ID, next)
+      await verifySubscription(ctx, language_code, SUBSCRIBE_CHANNEL_ID)
       const { count } = await getReferalsCountAndUserData(
         telegram_id.toString()
       )
