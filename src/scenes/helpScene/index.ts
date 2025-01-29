@@ -17,7 +17,7 @@ import {
 } from '../../scenes/levelQuestWizard/handlers'
 import { mainMenu } from '@/menu'
 import { isRussian } from '@/helpers'
-import { getReferalsCount } from '@/core/supabase'
+import { getReferalsCountAndUserData } from '@/core/supabase'
 
 export const helpScene = new Scenes.BaseScene<MyContext>('helpScene')
 
@@ -25,10 +25,8 @@ helpScene.enter(async ctx => {
   const mode = ctx.session.mode
   const isRu = isRussian(ctx)
   const telegram_id = ctx.from?.id?.toString() || ''
-  const { count, subscription } = (await getReferalsCount(telegram_id)) || {
-    count: 0,
-    subscription: 'stars',
-  }
+  const { count, subscription } = await getReferalsCountAndUserData(telegram_id)
+
   try {
     switch (mode) {
       case 'avatar':

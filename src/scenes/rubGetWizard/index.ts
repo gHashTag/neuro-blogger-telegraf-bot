@@ -1,12 +1,13 @@
 import { Markup, Scenes } from 'telegraf'
 import md5 from 'md5'
 import { MyContext } from '../../interfaces'
-import { saveUserEmail, setPayments, Subscription } from '../../core/supabase'
+import { saveUserEmail, setPayments } from '../../core/supabase'
 import { isRussian } from '@/helpers'
-import { calculateStars } from '@/price/helpers'
+
 import { MERCHANT_LOGIN, PASSWORD1, RESULT_URL2 } from '@/config'
 import { handleHelpCancel } from '@/handlers'
 import { updateUserSubscription } from '@/core/supabase/updateUserSubscription'
+import { Subscription } from '@/interfaces/supabase.interface'
 
 const merchantLogin = MERCHANT_LOGIN
 const password1 = PASSWORD1
