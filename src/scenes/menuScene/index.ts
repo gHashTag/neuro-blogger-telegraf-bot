@@ -74,12 +74,14 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
           parse_mode: 'HTML',
         })
 
-        await ctx.reply(
-          isRu
-            ? `Ссылка для приглашения друзей 👇🏻`
-            : `Invite link for friends 👇🏻`,
-          menu
-        )
+        if (newCount > 1) {
+          await ctx.reply(
+            isRu
+              ? `Ссылка для приглашения друзей 👇🏻`
+              : `Invite link for friends 👇🏻`,
+            menu
+          )
+        }
         const botUsername = ctx.botInfo.username
 
         const linkText = `<a href="https://t.me/${botUsername}?start=${telegram_id}">https://t.me/${botUsername}?start=${telegram_id}</a>`
@@ -121,6 +123,7 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
 )
 
 const handleMenu = async (ctx: MyContext, text: string) => {
+  console.log('CASE:handleMenu', text)
   const isRu = isRussian(ctx)
   if (text === (isRu ? levels[0].title_ru : levels[0].title_en)) {
     console.log('CASE: 💵 Оформление подписки')
@@ -178,5 +181,8 @@ const handleMenu = async (ctx: MyContext, text: string) => {
   } else if (text === (isRu ? levels[102].title_ru : levels[102].title_en)) {
     console.log('CASE: 👥 Пригласить друга')
     await ctx.scene.enter('inviteCommand')
+  } else if (text === (isRu ? levels[103].title_ru : levels[103].title_en)) {
+    console.log('CASE: ❓ Помощь')
+    await ctx.scene.enter('step0')
   }
 }

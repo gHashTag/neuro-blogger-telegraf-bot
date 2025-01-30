@@ -92,6 +92,10 @@ export const levels: Record<number, Level> = {
     title_ru: '❓ Помощь',
     title_en: '❓ Help',
   },
+  104: {
+    title_ru: '🏠 Главное меню',
+    title_en: '🏠 Main menu',
+  },
 }
 
 export async function mainMenu(
@@ -112,16 +116,19 @@ export async function mainMenu(
   ].includes(subscription)
 
   const availableLevels = Object.keys(levels)
-    .filter(level => hasFullAccess || parseInt(level) <= inviteCount)
+    .filter(
+      level =>
+        (hasFullAccess || parseInt(level) <= inviteCount) && level !== '103'
+    )
     .map(level => levels[parseInt(level)])
 
-  const subscriptionButton = isRu ? levels[0].title_ru : levels[0].title_en
+  const helpButton = isRu ? levels[103].title_ru : levels[103].title_en
 
   if (availableLevels.length === 0) {
     console.warn(
       'No available levels for the current invite count and subscription status.'
     )
-    return Markup.keyboard([[Markup.button.text(subscriptionButton)]]).resize()
+    return Markup.keyboard([[Markup.button.text(helpButton)]]).resize()
   }
 
   const buttons = availableLevels.map(level =>
@@ -136,7 +143,7 @@ export async function mainMenu(
   }
 
   // Добавляем дополнительные кнопки в конце
-  buttonRows.push([Markup.button.text(subscriptionButton)])
+  buttonRows.push([Markup.button.text(helpButton)])
 
   return Markup.keyboard(buttonRows).resize()
 }

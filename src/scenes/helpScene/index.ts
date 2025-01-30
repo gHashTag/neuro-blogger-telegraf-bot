@@ -81,6 +81,9 @@ helpScene.enter(async ctx => {
         await handleLevel13(ctx)
         await mainMenu(isRu, count, subscription)
         break
+      case 'help':
+        ctx.scene.enter('step0')
+        break
       default:
         ctx.scene.enter('step0')
         break
