@@ -109,7 +109,6 @@ export async function mainMenu(
   const availableLevels = Object.keys(levels)
     .filter(level => hasFullAccess || parseInt(level) <= inviteCount)
     .map(level => levels[parseInt(level)])
-  console.log('availableLevels', availableLevels)
 
   const subscriptionButton = isRu ? levels[103].title_ru : levels[103].title_en
 
