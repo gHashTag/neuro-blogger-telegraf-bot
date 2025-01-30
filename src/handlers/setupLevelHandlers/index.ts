@@ -1,7 +1,6 @@
 import { Telegraf } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import {
-  handleLevel0,
   handleLevel1,
   handleLevel2,
   handleLevel3,
@@ -17,7 +16,6 @@ import {
 } from '../../scenes/levelQuestWizard/handlers'
 
 export function setupLevelHandlers(bot: Telegraf<MyContext>) {
-  bot.action('level_0', handleLevel0)
   bot.action('level_1', handleLevel1)
   bot.action('level_2', handleLevel2)
   bot.action('level_3', handleLevel3)

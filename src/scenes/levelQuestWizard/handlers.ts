@@ -43,7 +43,7 @@ In this bot, you will discover the world of neural networks and learn how to use
   }
 }
 
-export async function handleLevel0(ctx: MyContext) {
+export async function handleLevel4(ctx: MyContext) {
   try {
     const isRu = ctx.from?.language_code === 'ru'
     const message = isRu
@@ -247,48 +247,7 @@ Using the "Image to Prompt" function opens up new possibilities for creativity a
   }
 }
 
-export async function handleLevel4(ctx: MyContext) {
-  try {
-    const isRu = ctx.from?.language_code === 'ru'
-    const message = isRu
-      ? `📏 <b>Команда: ИЗМЕНЕНИЕ РАЗМЕРА (Change Size)</b> 🌟\n\n
-Позволяет вам легко адаптировать изображения с аватаром для различных платформ и нужд, будь то социальные сети, презентации или личные проекты. Это особенно важно в современном цифровом мире, где каждая платформа предъявляет свои уникальные требования к размерам изображений. 📱💻\n\n
-<b>Зачем это нужно:</b>\n
-Изменение размера изображения — это ключевой аспект работы с графикой, особенно когда речь идет о публикации в интернете. Разные платформы имеют свои стандарты и предпочтения. Например, Instagram часто использует квадратные изображения, в то время как YouTube предпочитает широкоформатные. Правильный размер изображения помогает улучшить его восприятие и взаимодействие с аудиторией. 🌐\n\n
-<b>Предустановленные размеры:</b>\n
-Наш бот предлагает вам выбрать из нескольких предустановленных размеров, каждый из которых имеет свои особенности и подходит для определенных целей:\n
-- 📺 <b>16:9</b> — Идеально подходит для видео и презентаций, так как этот формат широко используется в кино и телевидении.\n
-- 🔲 <b>1:1</b> — Квадратный формат, часто используемый в социальных сетях, таких как Instagram, для публикации фотографий и графики.\n
-- 📱 <b>9:16</b> — Вертикальный формат, отлично подходящий для сторис и вертикальных видео на платформах, таких как TikTok и Instagram.\n\n
-<b>Как это работает:</b>\n
-Процесс изменения размера изображения с нашим ботом прост и интуитивно понятен. Все, что вам нужно сделать, это выбрать нужный размер из предложенных вариантов. Бот автоматически изменит размер вашего изображения, сохраняя его качество и пропорции. Это особенно полезно, если у вас нет доступа к профессиональным инструментам для редактирования изображений или если вы хотите быстро подготовить изображение для публикации. ⚙️\n\n
-Использование функции "Изменение размера" позволяет вам легко адаптировать ваши изображения с аватаром под нужды различных платформ, обеспечивая их оптимальное отображение и взаимодействие с аудиторией. 🚀`
-      : `📏 <b>Command: Change Size</b> 🌟\n\n
-Allows you to easily adapt avatar images for various platforms and needs, whether it's social media, presentations, or personal projects. This is especially important in today's digital world, where each platform has its unique image size requirements. 📱💻\n\n
-<b>Why it's needed:</b>\n
-Changing the size of an image is a key aspect of working with graphics, especially when it comes to online publishing. Different platforms have their standards and preferences. For example, Instagram often uses square images, while YouTube prefers widescreen. The correct image size helps improve its perception and interaction with the audience. 🌐\n\n
-<b>Preset sizes:</b>\n
-Our bot offers you a choice of several preset sizes, each with its features and suitable for specific purposes:\n
-- 📺 <b>16:9</b> — Ideal for videos and presentations, as this format is widely used in film and television.\n
-- 🔲 <b>1:1</b> — Square format, often used in social networks like Instagram for posting photos and graphics.\n
-- 📱 <b>9:16</b> — Vertical format, perfect for stories and vertical videos on platforms like TikTok and Instagram.\n\n
-<b>How it works:</b>\n
-The process of changing the size of an image with our bot is simple and intuitive. All you need to do is select the desired size from the available options. The bot will automatically resize your image, preserving its quality and proportions. This is especially useful if you don't have access to professional image editing tools or if you want to quickly prepare an image for publication. ⚙️\n\n
-Using the "Change Size" function allows you to easily adapt your avatar images to the needs of various platforms, ensuring their optimal display and interaction with the audience. 🚀`
-
-    await ctx.reply(message, { parse_mode: 'HTML' })
-  } catch (error) {
-    console.error('Error in handleLevel4:', error)
-    errorMessage(
-      error,
-      ctx.from?.id.toString(),
-      ctx.from?.language_code === 'ru'
-    )
-    throw error
-  }
-}
-
-export async function handleLevel5(ctx: MyContext) {
+export async function handleLevel7(ctx: MyContext) {
   try {
     const isRu = ctx.from?.language_code === 'ru'
     const message = isRu
@@ -341,7 +300,7 @@ The "Voice for Avatar" function allows you to personalize your digital image, ma
 
     await ctx.reply(message, { parse_mode: 'HTML' })
   } catch (error) {
-    console.error('Error in handleLevel5:', error)
+    console.error('Error in handleLevel7:', error)
     errorMessage(
       error,
       ctx.from?.id.toString(),
@@ -351,7 +310,7 @@ The "Voice for Avatar" function allows you to personalize your digital image, ma
   }
 }
 
-export async function handleLevel6(ctx: MyContext) {
+export async function handleLevel8(ctx: MyContext) {
   try {
     const isRu = ctx.from?.language_code === 'ru'
     const message = isRu
@@ -398,7 +357,7 @@ The "Text to Voice" function makes your digital content more lively and expressi
   }
 }
 
-export async function handleLevel7(ctx: MyContext) {
+export async function handleLevel6(ctx: MyContext) {
   try {
     const isRu = ctx.from?.language_code === 'ru'
     const message = isRu
@@ -445,7 +404,7 @@ The "Select AI Model" function opens up the possibility of more flexible and eff
   }
 }
 
-export async function handleLevel8(ctx: MyContext) {
+export async function handleLevel5(ctx: MyContext) {
   try {
     const isRu = ctx.from?.language_code === 'ru'
     const message = isRu
@@ -644,6 +603,47 @@ After selecting a model, the next step is to create a text description or prompt
 }
 
 export async function handleLevel12(ctx: MyContext) {
+  try {
+    const isRu = ctx.from?.language_code === 'ru'
+    const message = isRu
+      ? `📏 <b>Команда: ИЗМЕНЕНИЕ РАЗМЕРА (Change Size)</b> 🌟\n\n
+Позволяет вам легко адаптировать изображения с аватаром для различных платформ и нужд, будь то социальные сети, презентации или личные проекты. Это особенно важно в современном цифровом мире, где каждая платформа предъявляет свои уникальные требования к размерам изображений. 📱💻\n\n
+<b>Зачем это нужно:</b>\n
+Изменение размера изображения — это ключевой аспект работы с графикой, особенно когда речь идет о публикации в интернете. Разные платформы имеют свои стандарты и предпочтения. Например, Instagram часто использует квадратные изображения, в то время как YouTube предпочитает широкоформатные. Правильный размер изображения помогает улучшить его восприятие и взаимодействие с аудиторией. 🌐\n\n
+<b>Предустановленные размеры:</b>\n
+Наш бот предлагает вам выбрать из нескольких предустановленных размеров, каждый из которых имеет свои особенности и подходит для определенных целей:\n
+- 📺 <b>16:9</b> — Идеально подходит для видео и презентаций, так как этот формат широко используется в кино и телевидении.\n
+- 🔲 <b>1:1</b> — Квадратный формат, часто используемый в социальных сетях, таких как Instagram, для публикации фотографий и графики.\n
+- 📱 <b>9:16</b> — Вертикальный формат, отлично подходящий для сторис и вертикальных видео на платформах, таких как TikTok и Instagram.\n\n
+<b>Как это работает:</b>\n
+Процесс изменения размера изображения с нашим ботом прост и интуитивно понятен. Все, что вам нужно сделать, это выбрать нужный размер из предложенных вариантов. Бот автоматически изменит размер вашего изображения, сохраняя его качество и пропорции. Это особенно полезно, если у вас нет доступа к профессиональным инструментам для редактирования изображений или если вы хотите быстро подготовить изображение для публикации. ⚙️\n\n
+Использование функции "Изменение размера" позволяет вам легко адаптировать ваши изображения с аватаром под нужды различных платформ, обеспечивая их оптимальное отображение и взаимодействие с аудиторией. 🚀`
+      : `📏 <b>Command: Change Size</b> 🌟\n\n
+Allows you to easily adapt avatar images for various platforms and needs, whether it's social media, presentations, or personal projects. This is especially important in today's digital world, where each platform has its unique image size requirements. 📱💻\n\n
+<b>Why it's needed:</b>\n
+Changing the size of an image is a key aspect of working with graphics, especially when it comes to online publishing. Different platforms have their standards and preferences. For example, Instagram often uses square images, while YouTube prefers widescreen. The correct image size helps improve its perception and interaction with the audience. 🌐\n\n
+<b>Preset sizes:</b>\n
+Our bot offers you a choice of several preset sizes, each with its features and suitable for specific purposes:\n
+- 📺 <b>16:9</b> — Ideal for videos and presentations, as this format is widely used in film and television.\n
+- 🔲 <b>1:1</b> — Square format, often used in social networks like Instagram for posting photos and graphics.\n
+- 📱 <b>9:16</b> — Vertical format, perfect for stories and vertical videos on platforms like TikTok and Instagram.\n\n
+<b>How it works:</b>\n
+The process of changing the size of an image with our bot is simple and intuitive. All you need to do is select the desired size from the available options. The bot will automatically resize your image, preserving its quality and proportions. This is especially useful if you don't have access to professional image editing tools or if you want to quickly prepare an image for publication. ⚙️\n\n
+Using the "Change Size" function allows you to easily adapt your avatar images to the needs of various platforms, ensuring their optimal display and interaction with the audience. 🚀`
+
+    await ctx.reply(message, { parse_mode: 'HTML' })
+  } catch (error) {
+    console.error('Error in handleLevel4:', error)
+    errorMessage(
+      error,
+      ctx.from?.id.toString(),
+      ctx.from?.language_code === 'ru'
+    )
+    throw error
+  }
+}
+
+export async function handleLevel13(ctx: MyContext) {
   try {
     const isRu = ctx.from?.language_code === 'ru'
     const message = isRu

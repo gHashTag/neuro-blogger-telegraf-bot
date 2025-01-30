@@ -44,7 +44,7 @@ import { myComposer } from './hearsHandlers'
 
 import { defaultSession } from './store'
 import { rubGetWizard } from './scenes/rubGetWizard'
-import { handleTextMessage } from './handlers'
+// import { handleTextMessage } from './handlers'
 import { get100Command } from './commands/get100Command'
 
 export const stage = new Scenes.Stage<MyContext>([

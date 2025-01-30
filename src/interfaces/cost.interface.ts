@@ -30,6 +30,7 @@ export const VIDEO_MODELS: VideoModelConfig[] = [
 ]
 
 export type Mode =
+  | 'subscribe'
   | 'chat_with_avatar'
   | 'neuro_photo'
   | 'image_to_video'

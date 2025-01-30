@@ -18,7 +18,7 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
       let newSubscription: Subscription = 'stars'
 
       if (isDev) {
-        newCount = 12
+        newCount = 0
         newSubscription = 'stars'
       } else {
         const { count, subscription } = await getReferalsCountAndUserData(
@@ -48,36 +48,28 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
 
       if (newCount <= 10) {
         const message = isRu
-          ? `🚀 Чтобы разблокировать следующий уровень аватара и получить доступ к функции: <b>${nameStep}</b>, пригласите друга! 🌟\n\n🆔 Уровень вашего аватара: ${
-              newCount + 1
-            } \n\n🤖 Чтобы начать пользоваться ботом нажмите команду /menu\n\n🔓 Хотите разблокировать все функции?\n💳 Оформите подписку, чтобы получить полный доступ!`
-          : `🚀 To unlock the next level of the avatar and gain access to new features, invite friend! 🌟\n\n🆔 Level your avatar: ${
-              newCount + 1
-            } invitations \n\n🤖 To start using the bot, click the /menu command\n\n🔓 Want to unlock all features?\n💳 Subscribe to get full access!`
+          ? `🚀 Чтобы начать создавать нейрофотографии, купите подписку! 🌟\n\n🆔 Уровень вашего аватара: ${newCount} \n\n🤖 Чтобы начать пользоваться ботом нажмите команду /menu\n\n🔓 Хотите разблокировать все функции?\n💳 Оформите подписку, чтобы получить полный доступ!`
+          : `🚀 To unlock the next level of the avatar and gain access to new features, invite friend! 🌟\n\n🆔 Level your avatar: ${newCount} invitations \n\n🤖 To start using the bot, click the /menu command\n\n🔓 Want to unlock all features?\n💳 Subscribe to get full access!`
 
-        const inlineKeyboard = [
-          [
-            {
-              text: isRu ? '🚀 Открыть нейроквест' : '🚀 Open neuroquest',
-              web_app: {
-                url,
-              },
-            },
-          ],
-          [
-            {
-              text: isRu
-                ? '🔓 Разблокировать все функции'
-                : '🔓 Unlock all features',
-              callback_data: 'unlock_features',
-            },
-          ],
+        const inlineKeyboard: InlineKeyboardButton[][] = [
+          ...(newCount > 1
+            ? [
+                [
+                  {
+                    text: isRu ? '🚀 Открыть нейроквест' : '🚀 Open neuroquest',
+                    web_app: {
+                      url,
+                    },
+                  },
+                ],
+              ]
+            : []),
         ]
 
         // Отправка сообщения с клавиатурой
         await ctx.reply(message, {
           reply_markup: {
-            inline_keyboard: inlineKeyboard as InlineKeyboardButton[][],
+            inline_keyboard: inlineKeyboard,
           },
           parse_mode: 'HTML',
         })
@@ -130,8 +122,9 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
 
 const handleMenu = async (ctx: MyContext, text: string) => {
   const isRu = isRussian(ctx)
-  if (text === (isRu ? levels[103].title_ru : levels[103].title_en)) {
+  if (text === (isRu ? levels[0].title_ru : levels[0].title_en)) {
     console.log('CASE: 💵 Оформление подписки')
+    ctx.session.mode = 'subscribe'
     await ctx.scene.enter('subscriptionScene')
   } else if (text === (isRu ? levels[2].title_ru : levels[2].title_en)) {
     console.log('CASE: 💭 Чат с аватаром')

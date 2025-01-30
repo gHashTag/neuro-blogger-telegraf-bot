@@ -8,35 +8,39 @@ interface Level {
 }
 
 export const levels: Record<number, Level> = {
-  // avatarWizard
-  1: {
-    title_ru: '🧠 Мозг аватара',
-    title_en: '🧠 Avatar Brain',
-  },
-  // chatWithAvatarWizard
-  2: {
-    title_ru: '💭 Чат с аватаром',
-    title_en: '💭 Chat with avatar',
-  },
-  // selectModelWizard
-  3: {
-    title_ru: '🤖 Выбор модели ИИ',
-    title_en: '🤖 Choose AI Model',
+  0: {
+    title_ru: '💫 Оформить подписку',
+    title_en: '💫 Subscribe',
   },
   // digitalAvatarBodyWizard
-  4: {
+  1: {
     title_ru: '🤖 Цифровое тело',
     title_en: '🤖 Digital Body',
   },
   // neuroPhotoWizard
-  5: {
+  2: {
     title_ru: '📸 Нейрофото',
     title_en: '📸 NeuroPhoto',
   },
   // imageToPromptWizard
-  6: {
+  3: {
     title_ru: '🔍 Промпт из фото',
     title_en: '🔍 Prompt from Photo',
+  },
+  // avatarWizard
+  4: {
+    title_ru: '🧠 Мозг аватара',
+    title_en: '🧠 Avatar Brain',
+  },
+  // chatWithAvatarWizard
+  5: {
+    title_ru: '💭 Чат с аватаром',
+    title_en: '💭 Chat with avatar',
+  },
+  // selectModelWizard
+  6: {
+    title_ru: '🤖 Выбор модели ИИ',
+    title_en: '🤖 Choose AI Model',
   },
   // voiceAvatarWizard
   7: {
@@ -83,9 +87,10 @@ export const levels: Record<number, Level> = {
     title_ru: '👥 Пригласить друга',
     title_en: '👥 Invite a friend',
   },
+  // helpCommand
   103: {
-    title_ru: '💫 Оформление подписки',
-    title_en: '💫 Subscription',
+    title_ru: '❓ Помощь',
+    title_en: '❓ Help',
   },
 }
 
@@ -110,7 +115,7 @@ export async function mainMenu(
     .filter(level => hasFullAccess || parseInt(level) <= inviteCount)
     .map(level => levels[parseInt(level)])
 
-  const subscriptionButton = isRu ? levels[103].title_ru : levels[103].title_en
+  const subscriptionButton = isRu ? levels[0].title_ru : levels[0].title_en
 
   if (availableLevels.length === 0) {
     console.warn(

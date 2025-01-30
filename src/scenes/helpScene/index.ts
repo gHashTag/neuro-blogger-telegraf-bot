@@ -1,7 +1,6 @@
 import { Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import {
-  handleLevel0,
   handleLevel1,
   handleLevel2,
   handleLevel3,
@@ -14,6 +13,7 @@ import {
   handleLevel10,
   handleLevel11,
   handleLevel12,
+  handleLevel13,
 } from '../../scenes/levelQuestWizard/handlers'
 import { mainMenu } from '@/menu'
 import { isRussian } from '@/helpers'
@@ -29,10 +29,6 @@ helpScene.enter(async ctx => {
 
   try {
     switch (mode) {
-      case 'avatar':
-        await handleLevel0(ctx)
-        await mainMenu(isRu, count, subscription)
-        break
       case 'digital_avatar_body':
         await handleLevel1(ctx)
         await mainMenu(isRu, count, subscription)
@@ -45,23 +41,23 @@ helpScene.enter(async ctx => {
         await handleLevel3(ctx)
         await mainMenu(isRu, count, subscription)
         break
-      case 'change_size':
+      case 'avatar':
         await handleLevel4(ctx)
         await mainMenu(isRu, count, subscription)
         break
-      case 'voice':
+      case 'chat_with_avatar':
         await handleLevel5(ctx)
         await mainMenu(isRu, count, subscription)
         break
-      case 'text_to_speech':
+      case 'select_model':
         await handleLevel6(ctx)
         await mainMenu(isRu, count, subscription)
         break
-      case 'select_model':
+      case 'voice':
         await handleLevel7(ctx)
         await mainMenu(isRu, count, subscription)
         break
-      case 'chat_with_avatar':
+      case 'text_to_speech':
         await handleLevel8(ctx)
         await mainMenu(isRu, count, subscription)
         break
@@ -77,15 +73,16 @@ helpScene.enter(async ctx => {
         await handleLevel11(ctx)
         await mainMenu(isRu, count, subscription)
         break
-      case 'invite':
+      case 'change_size':
         await handleLevel12(ctx)
         await mainMenu(isRu, count, subscription)
         break
-      default:
-        await ctx.reply(
-          'Неизвестный режим. Пожалуйста, выберите корректный режим.'
-        )
+      case 'invite':
+        await handleLevel13(ctx)
         await mainMenu(isRu, count, subscription)
+        break
+      default:
+        ctx.scene.enter('step0')
         break
     }
   } catch (error) {
