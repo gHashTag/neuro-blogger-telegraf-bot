@@ -1,4 +1,5 @@
 import { MyContext } from '@/interfaces'
+import { levels } from '@/menu/mainMenu'
 
 interface BuyParams {
   ctx: MyContext
@@ -8,6 +9,7 @@ interface BuyParams {
 export async function handleBuySubscription({ ctx, isRu }: BuyParams) {
   try {
     const subscriptionTitles = {
+      neurophoto: isRu ? levels[2].title_ru : levels[2].title_en,
       neurobase: isRu ? '📚 НейроБаза' : '📚 NeuroBase',
       neuromeeting: isRu ? '🧠 НейроВстреча' : '🧠 NeuroMeeting',
       neuroblogger: isRu ? '🤖 НейроБлогер' : '🤖 NeuroBlogger',
@@ -15,6 +17,9 @@ export async function handleBuySubscription({ ctx, isRu }: BuyParams) {
     }
 
     const subscriptionDescriptions = {
+      neurophoto: isRu
+        ? 'Создание фотографий с помощью нейросетей.'
+        : 'Creating photos using neural networks.',
       neurobase: isRu
         ? 'Самостоятельное обучение по нейросетям с ИИ аватаром.'
         : 'Self-study on neural networks with AI avatar.',
@@ -24,11 +29,15 @@ export async function handleBuySubscription({ ctx, isRu }: BuyParams) {
       neuroblogger: isRu
         ? 'Обучение по нейросетям с ментором.'
         : 'Training on neural networks with a mentor.',
+      neuromentor: isRu
+        ? 'Обучение по нейросетям с ментором.'
+        : 'Training on neural networks with a mentor.',
     }
 
     const subscriptionStarAmounts = {
+      neurophoto: 3000,
       neurobase: 7000,
-      neuromeeting: 44000,
+      neuromeeting: 28000,
       neuroblogger: 75000,
     }
 

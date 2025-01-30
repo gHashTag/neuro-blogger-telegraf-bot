@@ -83,4 +83,5 @@ Ready to become a content creation pro and upgrade your digital avatar? Then pre
     }
   )
   await startMenu(ctx, isRu)
+  return
 }

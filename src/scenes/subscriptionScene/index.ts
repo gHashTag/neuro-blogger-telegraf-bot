@@ -1,16 +1,20 @@
 import { Markup, Scenes } from 'telegraf'
 import { MyContext } from '../../interfaces'
 import { isRussian } from '@/helpers'
+import { levels } from '@/menu/mainMenu'
+const message = (isRu: boolean) =>
+  isRu
+    ? `<b>💫 Для получения полного доступа ко всем нейрокомандам, выберите одну из предложенных месячных подписок:</b>
 
-export const subscriptionScene = new Scenes.WizardScene<MyContext>(
-  'subscriptionScene',
-  async ctx => {
-    console.log('CASE: subscriptionScene')
-    const isRu = isRussian(ctx)
-    const message = isRu
-      ? `<b>💫 Для получения полного доступа ко всем нейрокомандам, выберите одну из предложенных месячных подписок:</b>
+<b>📸 НейроФото - Цена: 3000 ⭐️ - 4800₽</b>
+- 📖 Самостоятельное обучение по нейросетям с ИИ аватаром
+- ⏰ Учитесь в удобное время
+- 🎥 Включает видеоуроки, текстовые материалы
+- 🔧 Поддержка и актуальные технологии
+- 💬 Доступ к чату с ментором
+- ⭐️ 3000 на баланс бота
 
-<b>📚 НейроБаза - Цена: 7000 ⭐️</b>
+<b>📚 НейроБаза - Цена: 7000 ⭐️ - 9999₽</b>
 - 📖 Самостоятельное обучение по нейросетям с ИИ аватаром
 - ⏰ Учитесь в удобное время
 - 🎥 Включает видеоуроки, текстовые материалы
@@ -18,8 +22,7 @@ export const subscriptionScene = new Scenes.WizardScene<MyContext>(
 - 💬 Доступ к чату с ментором
 - ⭐️ 1000 на баланс бота
 
-
-<b>🧠 НейроВстреча - Цена: 44000 ⭐️</b>
+<b>🧠 НейроВстреча - Цена: 28000 ⭐️ - 44999₽</b>
 - Индивидуальная встреча с экспертом
 - Обсуждение ваших проектов и идей
 - Персональные рекомендации и стратегии
@@ -27,17 +30,16 @@ export const subscriptionScene = new Scenes.WizardScene<MyContext>(
 - Интеграция ИИ с вашими проектами
 - ⭐️ 5000 на баланс бота
 
-
-<b>🤖 НейроБлогер - Цена: 75000 ⭐️</b>
+<b>🤖 НейроБлогер - Цена: 75000 ⭐️ - 75000₽</b>
 - Все из тарифа НейроБаза
 - Обучение по нейросетям с ментором
 - Курс на 1 месяц с 4 онлайн уроками по 2 часа
 - Практические занятия, домашние задания и поддержка куратора
 - ⭐️ 7500 на баланс бота
 `
-      : `<b>💫 To get full access to all neurocommands, choose one of the proposed monthly subscriptions:</b>
+    : `<b>💫 To get full access to all neurocommands, choose one of the proposed monthly subscriptions:</b>
 
-      <b>📚 NeuroBase - Цена: 7000 ⭐️</b>
+<b>📸 NeuroPhoto - Price: 3000 ⭐️ - 48$</b>
 - Self-study on neural networks with AI avatar
 - Learn at your convenience
 - Includes video lessons, text materials
@@ -45,7 +47,15 @@ export const subscriptionScene = new Scenes.WizardScene<MyContext>(
 - Access to chat with a mentor
 - ⭐️ 1000 on bot balance
 
-<b>🧠 NeuroMeeting - Цена: 44000 ⭐️</b>
+<b>📚 NeuroBase - Price: 7000 ⭐️ - 112$</b>
+- Self-study on neural networks with AI avatar
+- Learn at your convenience
+- Includes video lessons, text materials
+- Support and up-to-date technologies
+- Access to chat with a mentor
+- ⭐️ 1000 on bot balance
+
+<b>🧠 NeuroMeeting - Price: 28000 ⭐️ - 448$</b>
 - Individual meeting with an expert
 - Discussion of your projects and ideas
 - Personal recommendations and strategies
@@ -53,16 +63,25 @@ export const subscriptionScene = new Scenes.WizardScene<MyContext>(
 - AI integration with your projects
 - ⭐️ 5000 on bot balance
 
-<b>🤖 NeuroBlogger - Цена: 75000 ⭐️</b>
+<b>🤖 NeuroBlogger - Price: 75000 ⭐️ - 1200$</b>
 - Everything from the NeuroBase plan
 - Training on neural networks with a mentor
 - 1-month course with 4 online lessons of 2 hours each
 - Practical classes, homework, and curator support
 - ⭐️ 7500 on bot balance
 `
+export const subscriptionScene = new Scenes.WizardScene<MyContext>(
+  'subscriptionScene',
+  async ctx => {
+    console.log('CASE: subscriptionScene')
+    const isRu = isRussian(ctx)
 
     const inlineKeyboard = Markup.inlineKeyboard([
       [
+        {
+          text: isRu ? levels[2].title_ru : levels[2].title_en,
+          callback_data: 'neurophoto',
+        },
         {
           text: isRu ? '📚 НейроБаза' : '📚 NeuroBase',
           callback_data: 'neurobase',
@@ -73,8 +92,6 @@ export const subscriptionScene = new Scenes.WizardScene<MyContext>(
           text: isRu ? '🧠 НейроВстреча' : '🧠 NeuroMeeting',
           callback_data: 'neuromeeting',
         },
-      ],
-      [
         {
           text: isRu ? '🤖 НейроБлогер' : '🤖 NeuroBlogger',
           callback_data: 'neuroblogger',
@@ -82,7 +99,7 @@ export const subscriptionScene = new Scenes.WizardScene<MyContext>(
       ],
     ])
 
-    await ctx.reply(message, {
+    await ctx.reply(message(isRu), {
       reply_markup: inlineKeyboard.reply_markup,
       parse_mode: 'HTML',
     })
@@ -106,6 +123,15 @@ export const subscriptionScene = new Scenes.WizardScene<MyContext>(
         console.log('CASE: 🤖 НейроБлогер')
         ctx.session.subscription = 'neuroblogger'
         return ctx.scene.enter('paymentScene')
+      } else if (text === 'neurophoto') {
+        console.log('CASE: 🎨 НейроФото')
+        ctx.session.subscription = 'neurophoto'
+        return ctx.scene.enter('paymentScene')
+      } else {
+        console.warn('Unknown subscription type:', text)
+        await ctx.reply(
+          'Неизвестный тип подписки. Пожалуйста, выберите другой вариант.'
+        )
       }
     } else {
       return ctx.scene.leave()

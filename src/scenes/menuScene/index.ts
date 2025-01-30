@@ -4,7 +4,9 @@ import { MyContext, Subscription } from '../../interfaces'
 import { levels, mainMenu } from '../../menu/mainMenu'
 import { getReferalsCountAndUserData } from '@/core/supabase/getReferalsCountAndUserData'
 import { isDev, isRussian } from '@/helpers'
-import { InlineKeyboardButton } from 'telegraf/typings/core/types/typegram'
+import { handleMenu } from './handleMenu'
+import { getText } from './getText'
+import { sendReplyWithKeyboard } from './sendReplyWithKeyboard'
 
 export const menuScene = new Scenes.WizardScene<MyContext>(
   'menuScene',
@@ -31,6 +33,7 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
 
       const menu = await mainMenu(isRu, newCount, newSubscription)
 
+      console.log('menu', menu)
       const url = `https://neuro-blogger-web-u14194.vm.elestio.app/neuro_sage/1/1/1/1/1/${
         newCount + 1
       }`
@@ -44,52 +47,58 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
         ? 'Неизвестный уровень'
         : 'Unknown level'
 
+      const inlineKeyboard = [
+        ...(newCount > 1
+          ? [
+              [
+                {
+                  text: isRu ? '🚀 Открыть нейроквест' : '🚀 Open neuroquest',
+                  web_app: {
+                    url,
+                  },
+                },
+              ],
+            ]
+          : []),
+      ]
+
       console.log('nameStep', nameStep)
 
-      if (newCount <= 10) {
-        const message = isRu
-          ? `🚀 Чтобы начать создавать нейрофотографии, купите подписку! 🌟\n\n🆔 Уровень вашего аватара: ${newCount} \n\n🤖 Чтобы начать пользоваться ботом нажмите команду /menu\n\n🔓 Хотите разблокировать все функции?\n💳 Оформите подписку, чтобы получить полный доступ!`
-          : `🚀 To unlock the next level of the avatar and gain access to new features, invite friend! 🌟\n\n🆔 Level your avatar: ${newCount} invitations \n\n🤖 To start using the bot, click the /menu command\n\n🔓 Want to unlock all features?\n💳 Subscribe to get full access!`
+      const hasFullAccess = [
+        'neurophoto',
+        'neurobase',
+        'neuromeeting',
+        'neuroblogger',
+        'neurotester',
+      ].includes(newSubscription)
 
-        const inlineKeyboard: InlineKeyboardButton[][] = [
-          ...(newCount > 1
-            ? [
-                [
-                  {
-                    text: isRu ? '🚀 Открыть нейроквест' : '🚀 Open neuroquest',
-                    web_app: {
-                      url,
-                    },
-                  },
-                ],
-              ]
-            : []),
-        ]
+      let message = ''
+      if (!hasFullAccess) {
+        message = getText(isRu, 'digitalAvatar')
+        await sendReplyWithKeyboard(ctx, message, inlineKeyboard, menu)
+      } else if (
+        nameStep === (isRu ? levels[2].title_ru : levels[2].title_en)
+      ) {
+        message = getText(isRu, 'neurophoto', newCount)
+        await sendReplyWithKeyboard(ctx, message, inlineKeyboard, menu)
+      } else if (newCount > 2 && newCount <= 10) {
+        message = getText(isRu, 'avatarLevel', newCount)
+        await sendReplyWithKeyboard(ctx, message, inlineKeyboard, menu)
+        if (newCount > 1) {
+          await ctx.reply(getText(isRu, 'inviteLink'), menu)
+          const botUsername = ctx.botInfo.username
 
-        // Отправка сообщения с клавиатурой
-        await ctx.reply(message, {
-          reply_markup: {
-            inline_keyboard: inlineKeyboard,
-          },
-          parse_mode: 'HTML',
-        })
+          const linkText = `<a href="https://t.me/${botUsername}?start=${telegram_id}">https://t.me/${botUsername}?start=${telegram_id}</a>`
 
-        await ctx.reply(
-          isRu
-            ? `Ссылка для приглашения друзей 👇🏻`
-            : `Invite link for friends 👇🏻`,
-          menu
-        )
-        const botUsername = ctx.botInfo.username
+          await ctx.reply(linkText, { parse_mode: 'HTML' })
+        } else {
+          const message = getText(isRu, 'mainMenu')
+          await ctx.reply(message, menu)
+        }
 
-        const linkText = `<a href="https://t.me/${botUsername}?start=${telegram_id}">https://t.me/${botUsername}?start=${telegram_id}</a>`
-
-        await ctx.reply(linkText, { parse_mode: 'HTML' })
         return ctx.wizard.next()
       } else {
-        const message = isRu
-          ? '🏠 Главное меню\nВыберите нужный раздел 👇'
-          : '🏠 Main menu\nChoose the section 👇'
+        const message = getText(isRu, 'mainMenu')
         await ctx.reply(message, menu)
         return ctx.wizard.next()
       }
@@ -119,64 +128,3 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
     return ctx.scene.leave()
   }
 )
-
-const handleMenu = async (ctx: MyContext, text: string) => {
-  const isRu = isRussian(ctx)
-  if (text === (isRu ? levels[0].title_ru : levels[0].title_en)) {
-    console.log('CASE: 💵 Оформление подписки')
-    ctx.session.mode = 'subscribe'
-    await ctx.scene.enter('subscriptionScene')
-  } else if (text === (isRu ? levels[2].title_ru : levels[2].title_en)) {
-    console.log('CASE: 💭 Чат с аватаром')
-    ctx.session.mode = 'chat_with_avatar'
-    await ctx.scene.enter('chatWithAvatarWizard')
-  } else if (text === (isRu ? levels[3].title_ru : levels[3].title_en)) {
-    console.log('CASE: 🤖 Выбор модели ИИ')
-    ctx.session.mode = 'select_model'
-    await ctx.scene.enter('selectModelWizard')
-  } else if (text === (isRu ? levels[4].title_ru : levels[4].title_en)) {
-    console.log('CASE: 🤖 Цифровое тело')
-    ctx.session.mode = 'digital_avatar_body'
-    await ctx.scene.enter('digitalAvatarBodyWizard')
-  } else if (text === (isRu ? levels[5].title_ru : levels[5].title_en)) {
-    console.log('CASE: 📸 Нейрофото')
-    ctx.session.mode = 'neuro_photo'
-    await ctx.scene.enter('neuroPhotoWizard')
-  } else if (text === (isRu ? levels[6].title_ru : levels[6].title_en)) {
-    console.log('CASE: 🔍 Промпт из фото')
-    ctx.session.mode = 'image_to_prompt'
-    await ctx.scene.enter('promptFromPhotoWizard')
-  } else if (text === (isRu ? levels[7].title_ru : levels[7].title_en)) {
-    console.log('CASE: 🎤 Голос аватара')
-    ctx.session.mode = 'voice'
-    await ctx.scene.enter('voiceAvatarWizard')
-  } else if (text === (isRu ? levels[8].title_ru : levels[8].title_en)) {
-    console.log('CASE: 🎙️ Текст в голос')
-    ctx.session.mode = 'text_to_speech'
-    await ctx.scene.enter('textToSpeechWizard')
-  } else if (text === (isRu ? levels[9].title_ru : levels[9].title_en)) {
-    console.log('CASE: 🎥 Фото в видео')
-    ctx.session.mode = 'image_to_video'
-    await ctx.scene.enter('imageToVideoWizard')
-  } else if (text === (isRu ? levels[10].title_ru : levels[10].title_en)) {
-    console.log('CASE:  Видео из текста')
-    ctx.session.mode = 'text_to_video'
-    await ctx.scene.enter('textToVideoWizard')
-  } else if (text === (isRu ? levels[11].title_ru : levels[11].title_en)) {
-    console.log('CASE: 🖼️ Текст в фото')
-    ctx.session.mode = 'text_to_image'
-    await ctx.scene.enter('textToImageWizard')
-  } else if (text === (isRu ? levels[99].title_ru : levels[99].title_en)) {
-    console.log('CASE: 🎮 Начать обучение')
-    await ctx.scene.enter('step0')
-  } else if (text === (isRu ? levels[100].title_ru : levels[100].title_en)) {
-    console.log('CASE: 💎 Пополнить баланс')
-    await ctx.scene.enter('paymentScene')
-  } else if (text === (isRu ? levels[101].title_ru : levels[101].title_en)) {
-    console.log('CASE: 🤑 Баланс')
-    await ctx.scene.enter('balanceCommand')
-  } else if (text === (isRu ? levels[102].title_ru : levels[102].title_en)) {
-    console.log('CASE: 👥 Пригласить друга')
-    await ctx.scene.enter('inviteCommand')
-  }
-}

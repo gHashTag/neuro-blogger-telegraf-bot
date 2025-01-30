@@ -25,6 +25,8 @@ export type Subscription =
   | 'neuromeeting'
   | 'neuroblogger'
   | 'neurotester'
+  | 'neurophoto'
+  | 'neuromentor'
   | 'stars'
 
 export interface UserType {
