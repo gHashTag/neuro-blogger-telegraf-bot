@@ -23,7 +23,7 @@ export async function handleSizeSelection(ctx: MyContext, size: string) {
     )
 
     if (isExist) {
-      await mainMenu(isRu, count, subscription)
+      await mainMenu({ isRu, inviteCount: count, subscription })
     } else {
       await ctx.scene.enter('helpScene')
     }

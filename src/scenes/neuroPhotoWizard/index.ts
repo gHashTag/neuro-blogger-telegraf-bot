@@ -61,7 +61,7 @@ export const neuroPhotoWizard = new Scenes.WizardScene<MyContext>(
         {
           reply_markup: {
             keyboard: (
-              await mainMenu(isRu, count, subscription)
+              await mainMenu({ isRu, inviteCount: count, subscription })
             ).reply_markup.keyboard,
           },
         }

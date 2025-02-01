@@ -35,7 +35,7 @@ export async function refundUser(ctx: MyContext, paymentAmount: number) {
     {
       reply_markup: {
         keyboard: (
-          await mainMenu(isRu, count, subscription)
+          await mainMenu({ isRu, inviteCount: count, subscription })
         ).reply_markup.keyboard,
       },
     }

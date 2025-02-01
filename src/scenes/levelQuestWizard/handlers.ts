@@ -704,6 +704,8 @@ export async function handleQuestComplete(ctx: MyContext) {
     const { count, subscription } = await getReferalsCountAndUserData(
       telegram_id
     )
+    console.log('handleQuestComplete count', count)
+    console.log('handleQuestComplete subscription', subscription)
     const message = isRu
       ? `🎉 НейроКвест завершен! 🎉
 
@@ -731,7 +733,7 @@ You have successfully completed all tasks and reached the maximum level! 🌟✨
     await ctx.reply(message, {
       reply_markup: {
         keyboard: (
-          await mainMenu(isRu, count, subscription)
+          await mainMenu({ isRu, inviteCount: count, subscription })
         ).reply_markup.keyboard,
       },
     })

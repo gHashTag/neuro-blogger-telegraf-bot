@@ -98,11 +98,15 @@ export const levels: Record<number, Level> = {
   },
 }
 
-export async function mainMenu(
-  isRu: boolean,
-  inviteCount: number,
+export async function mainMenu({
+  isRu,
+  inviteCount,
+  subscription = 'stars',
+}: {
+  isRu: boolean
+  inviteCount: number
   subscription: Subscription
-): Promise<Markup.Markup<ReplyKeyboardMarkup>> {
+}): Promise<Markup.Markup<ReplyKeyboardMarkup>> {
   console.log('CASE: mainMenu')
   console.log('inviteCount', inviteCount)
   console.log('subscription', subscription)
@@ -116,22 +120,23 @@ export async function mainMenu(
     'neurotester',
   ].includes(subscription)
 
-  let availableLevels
+  // Определяем доступные уровни в зависимости от подписки
+  const subscriptionLevelsMap = {
+    stars: [levels[0]],
+    neurophoto: [levels[1], levels[2], levels[3]],
+    neurobase: Object.values(levels).slice(1),
+    neuromeeting: Object.values(levels).slice(1),
+    neuroblogger: Object.values(levels).slice(1),
+    neurotester: Object.values(levels).slice(1),
+  }
 
-  if (inviteCount === 0 && !hasFullAccess) {
+  let availableLevels
+  if (subscriptionLevelsMap[subscription]) {
+    availableLevels = subscriptionLevelsMap[subscription]
+  } else if (inviteCount === 0 && !hasFullAccess) {
     availableLevels = [levels[0]]
   } else {
-    availableLevels = Object.keys(levels)
-      .filter(level => {
-        const levelNumber = parseInt(level)
-        // Исключаем уровень 0, если подписка куплена
-        return (
-          (hasFullAccess || levelNumber <= inviteCount) &&
-          level !== '103' &&
-          (!hasFullAccess || levelNumber !== 0)
-        )
-      })
-      .map(level => levels[parseInt(level)])
+    availableLevels = [levels[0]]
   }
 
   console.log('availableLevels', availableLevels)
@@ -156,8 +161,9 @@ export async function mainMenu(
     buttonRows.push(buttons.slice(i, i + 2))
   }
 
-  // Добавляем дополнительные кнопки в конце
-  buttonRows.push([Markup.button.text(helpButton)])
-
+  // Добавляем дополнительные кнопки в конце если нет доступа ко всем уровням
+  if (!hasFullAccess) {
+    buttonRows.push([Markup.button.text(helpButton)])
+  }
   return Markup.keyboard(buttonRows).resize()
 }

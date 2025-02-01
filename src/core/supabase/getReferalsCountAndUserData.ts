@@ -46,7 +46,7 @@ export const getReferalsCountAndUserData = async (
 
     return {
       count: data?.length || 0,
-      subscription: userData.subscription,
+      subscription: userData.subscription || 'stars',
       userData: userData as UserType,
       isExist: true,
     }

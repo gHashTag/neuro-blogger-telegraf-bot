@@ -21,7 +21,7 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
 
       if (isDev) {
         newCount = 0
-        newSubscription = 'stars'
+        newSubscription = 'neurobase'
       } else {
         const { count, subscription } = await getReferalsCountAndUserData(
           telegram_id
@@ -31,7 +31,11 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
         newSubscription = subscription
       }
 
-      const menu = await mainMenu(isRu, newCount, newSubscription)
+      const menu = await mainMenu({
+        isRu,
+        inviteCount: newCount,
+        subscription: newSubscription,
+      })
 
       console.log('menu', menu)
       const url = `https://neuro-blogger-web-u14194.vm.elestio.app/neuro_sage/1/1/1/1/1/${
@@ -112,14 +116,14 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
     console.log('CASE 1: menuScene.next')
     if ('callback_query' in ctx.update && 'data' in ctx.update.callback_query) {
       const text = ctx.update.callback_query.data
-      console.log('text', text)
+      console.log('text 1', text)
       if (text === 'unlock_features') {
         console.log('CASE: 🔓 Разблокировать все функции')
         await ctx.scene.enter('subscriptionScene')
       }
     } else if ('message' in ctx.update && 'text' in ctx.update.message) {
       const text = ctx.update.message.text
-      console.log('text', text)
+      console.log('text 2', text)
       handleMenu(ctx, text)
     } else {
       console.log('CASE: menuScene.next.else', ctx)
