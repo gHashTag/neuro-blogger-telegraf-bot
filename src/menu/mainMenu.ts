@@ -121,6 +121,7 @@ export async function mainMenu(
         (hasFullAccess || parseInt(level) <= inviteCount) && level !== '103'
     )
     .map(level => levels[parseInt(level)])
+  console.log('availableLevels', availableLevels)
 
   const helpButton = isRu ? levels[103].title_ru : levels[103].title_en
 
