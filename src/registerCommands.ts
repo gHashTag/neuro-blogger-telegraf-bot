@@ -94,6 +94,7 @@ export function registerCommands({
   // Регистрация команд
   composer.command('start', async ctx => {
     console.log('CASE: start')
+    ctx.session = defaultSession()
     await neuroQuestCommand(ctx)
   })
 
