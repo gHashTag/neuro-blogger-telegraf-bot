@@ -16,6 +16,7 @@ import { handlePreCheckoutQuery } from './handlers/paymentHandlers/handlePreChec
 import { handleTopUp } from './handlers/paymentHandlers/handleTopUp'
 import { handleSuccessfulPayment } from './handlers/paymentHandlers'
 import { development, production } from '@/utils/launch'
+
 // Загружаем переменные окружения из .env файла
 dotenv.config()
 
@@ -27,29 +28,31 @@ if (!process.env.TELEGRAM_BOT_TOKEN_PROD) {
   throw new Error('TELEGRAM_BOT_TOKEN_PROD is not set')
 }
 
-export const BOT_TOKEN = isDev
-  ? process.env.TELEGRAM_BOT_TOKEN_DEV
-  : process.env.TELEGRAM_BOT_TOKEN_PROD
+// Создаем массив токенов для ботов
+const BOT_TOKENS = [
+  isDev
+    ? process.env.TELEGRAM_BOT_TOKEN_DEV
+    : process.env.TELEGRAM_BOT_TOKEN_PROD,
+  process.env.BOT_TOKEN_2,
+]
 
-const BOT_TOKEN_2 = process.env.BOT_TOKEN_2
-const bot1 = new Telegraf<MyContext>(BOT_TOKEN)
-const bot2 = new Telegraf<MyContext>(BOT_TOKEN_2)
+// Инициализируем ботов
+const bots = BOT_TOKENS.map(token => new Telegraf<MyContext>(token))
 
 export const createBots = async () => {
-  // Define your logic
-  bot1.on('text', ctx => ctx.reply('I am bot1'))
-  bot2.on('text', ctx => ctx.reply('I am bot2'))
+  // Определяем логику для каждого бота
+  bots.forEach((bot, index) => {
+    bot.on('text', ctx => ctx.reply(`I am bot${index + 1}`))
+  })
 
   console.log(`NODE_ENV: ${NODE_ENV}`) // Логирование значения NODE_ENV
 
   if (NODE_ENV === 'development') {
     console.log('Starting bots in development mode...')
-    await development(bot1)
-    await development(bot2)
+    await Promise.all(bots.map(bot => development(bot)))
   } else {
     console.log('Starting bots in production mode...')
-    await production(bot1)
-    await production(bot2)
+    await Promise.all(bots.map(bot => production(bot)))
   }
 }
 
