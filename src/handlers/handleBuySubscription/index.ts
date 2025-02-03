@@ -13,7 +13,7 @@ export async function handleBuySubscription({ ctx, isRu }: BuyParams) {
       neurobase: isRu ? '📚 НейроБаза' : '📚 NeuroBase',
       neuromeeting: isRu ? '🧠 НейроВстреча' : '🧠 NeuroMeeting',
       neuroblogger: isRu ? '🤖 НейроБлогер' : '🤖 NeuroBlogger',
-      neuromentor: isRu ? '🦸🏼‍♂️ НейроМентор' : '🦸🏼‍♂️ NeuroMentor',
+      // neuromentor: isRu ? '🦸🏼‍♂️ НейроМентор' : '🦸🏼‍♂️ NeuroMentor',
     }
 
     const subscriptionDescriptions = {
@@ -29,14 +29,15 @@ export async function handleBuySubscription({ ctx, isRu }: BuyParams) {
       neuroblogger: isRu
         ? 'Обучение по нейросетям с ментором.'
         : 'Training on neural networks with a mentor.',
-      neuromentor: isRu
-        ? 'Обучение по нейросетям с ментором.'
-        : 'Training on neural networks with a mentor.',
+      // neuromentor: isRu
+      //   ? 'Обучение по нейросетям с ментором.'
+      //   : 'Training on neural networks with a mentor.',
     }
 
     const subscriptionStarAmounts = {
       neurophoto: 3000,
       neurobase: 7000,
+      // neuromentor: 100000,
       neuromeeting: 28000,
       neuroblogger: 75000,
     }

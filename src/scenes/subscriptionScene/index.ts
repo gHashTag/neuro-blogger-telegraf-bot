@@ -96,6 +96,10 @@ export const subscriptionScene = new Scenes.WizardScene<MyContext>(
           text: isRu ? '🤖 НейроБлогер' : '🤖 NeuroBlogger',
           callback_data: 'neuroblogger',
         },
+        // {
+        //   text: isRu ? '🧠 НейроМентор' : '🧠 NeuroMentor',
+        //   callback_data: 'neuromentor',
+        // },
       ],
     ])
 
@@ -126,6 +130,10 @@ export const subscriptionScene = new Scenes.WizardScene<MyContext>(
       } else if (text === 'neurophoto') {
         console.log('CASE: 🎨 НейроФото')
         ctx.session.subscription = 'neurophoto'
+        return ctx.scene.enter('paymentScene')
+      } else if (text === 'neuromentor') {
+        console.log('CASE: 🧠 НейроМентор')
+        ctx.session.subscription = 'neuromentor'
         return ctx.scene.enter('paymentScene')
       } else {
         console.warn('Unknown subscription type:', text)

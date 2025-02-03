@@ -4,15 +4,17 @@ import { getStepSelectionMenu } from '../../menu/getStepSelectionMenu'
 import { isRussian } from '@/helpers/language'
 import { handleTrainingCost } from '@/price/helpers'
 import { handleHelpCancel } from '@/handlers/handleHelpCancel'
+import {
+  stepsCostMessageEn,
+  stepsCostMessageRu,
+} from '../stepSelectionScene/costMessage'
 
 export const digitalAvatarBodyWizard = new Scenes.WizardScene<MyContext>(
   'digitalAvatarBodyWizard',
   async ctx => {
     const isRu = isRussian(ctx)
     await ctx.reply(
-      isRu
-        ? '🔢 Пожалуйста, выберите количество шагов для обучения модели.\n\n📈 Чем больше шагов, тем лучше качество, но это будет стоить дороже. 💰'
-        : '🔢 Please select the number of steps for model training.\n\n📈 The more steps, the better the quality, but it will be more expensive. 💰',
+      isRu ? stepsCostMessageRu : stepsCostMessageEn,
       getStepSelectionMenu(isRu)
     )
     return ctx.wizard.next()

@@ -66,6 +66,9 @@ paymentScene.hears(['⭐️ Звездами', '⭐️ Stars'], async ctx => {
     } else if (subscription === 'neurophoto') {
       await handleBuySubscription({ ctx, isRu })
       await ctx.scene.leave()
+    } else if (subscription === 'neuromentor') {
+      await handleBuySubscription({ ctx, isRu })
+      await ctx.scene.leave()
     } else if (subscription === 'stars') {
       await handleSelectStars({ ctx, isRu, starAmounts })
       await ctx.scene.leave()
@@ -90,6 +93,9 @@ paymentScene.hears(['💳 Рублями', '💳 In rubles'], async ctx => {
     return ctx.scene.enter('rubGetWizard')
   } else if (subscription === 'neuromeeting') {
     console.log('CASE: 🧠 НейроВстреча - rubGetWizard')
+    return ctx.scene.enter('rubGetWizard')
+  } else if (subscription === 'neuromentor') {
+    console.log('CASE: 🧠 НейроМентор - rubGetWizard')
     return ctx.scene.enter('rubGetWizard')
   } else if (subscription === 'neuroblogger') {
     console.log('CASE: 🤖 НейроБлогер - rubGetWizard')
