@@ -20,8 +20,8 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
       let newSubscription: Subscription = 'stars'
 
       if (isDev) {
-        newCount = 1
-        newSubscription = 'stars'
+        newCount = 10
+        newSubscription = 'neuroblogger'
       } else {
         const { count, subscription } = await getReferalsCountAndUserData(
           telegram_id
@@ -77,42 +77,58 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
       ].includes(newSubscription)
 
       let message = ''
-      if (!hasFullAccess) {
-        message = getText(isRu, 'digitalAvatar')
-        const photo_url =
-          'https://yuukfqcsdhkyxegfwlcb.supabase.co/storage/v1/object/public/landingpage/avatars/neuro_sage/neuroblogger.jpg'
-        await sendReplyWithKeyboard(
-          ctx,
-          message,
-          inlineKeyboard,
-          menu,
-          photo_url
-        )
-      } else if (
-        nameStep === (isRu ? levels[2].title_ru : levels[2].title_en)
-      ) {
-        message = getText(isRu, 'neurophoto', newCount)
-        await sendReplyWithKeyboard(ctx, message, inlineKeyboard, menu)
-      } else if (newCount > 2 && newCount <= 10) {
-        message = getText(isRu, 'avatarLevel', newCount)
-        await sendReplyWithKeyboard(ctx, message, inlineKeyboard, menu)
-        if (newCount > 1) {
-          await ctx.reply(getText(isRu, 'inviteLink'), menu)
-          const botUsername = ctx.botInfo.username
 
-          const linkText = `<a href="https://t.me/${botUsername}?start=${telegram_id}">https://t.me/${botUsername}?start=${telegram_id}</a>`
-
-          await ctx.reply(linkText, { parse_mode: 'HTML' })
-        } else {
-          const message = getText(isRu, 'mainMenu')
-          await ctx.reply(message, menu)
+      switch (true) {
+        case !hasFullAccess: {
+          console.log('CASE: !hasFullAccess')
+          message = getText(isRu, 'digitalAvatar')
+          const photo_url =
+            'https://yuukfqcsdhkyxegfwlcb.supabase.co/storage/v1/object/public/landingpage/avatars/neuro_sage/neuroblogger.jpg'
+          await sendReplyWithKeyboard(
+            ctx,
+            message,
+            inlineKeyboard,
+            menu,
+            photo_url
+          )
+          break
         }
 
-        return ctx.wizard.next()
-      } else {
-        const message = getText(isRu, 'mainMenu')
-        await ctx.reply(message, menu)
-        return ctx.wizard.next()
+        case nameStep === (isRu ? levels[2].title_ru : levels[2].title_en): {
+          console.log(
+            'CASE: nameStep === (isRu ? levels[2].title_ru : levels[2].title_en)'
+          )
+          message = getText(isRu, 'neurophoto', newCount)
+          await sendReplyWithKeyboard(ctx, message, inlineKeyboard, menu)
+          break
+        }
+
+        case newCount > 2 && newCount <= 10: {
+          console.log('CASE: newCount > 2 && newCount <= 10')
+          message = getText(isRu, 'avatarLevel', newCount)
+          await sendReplyWithKeyboard(ctx, message, inlineKeyboard, menu)
+
+          if (newCount > 1) {
+            await ctx.reply(getText(isRu, 'inviteLink'), menu)
+            const botUsername = ctx.botInfo.username
+
+            const linkText = `<a href="https://t.me/${botUsername}?start=${telegram_id}">https://t.me/${botUsername}?start=${telegram_id}</a>`
+
+            await ctx.reply(linkText, { parse_mode: 'HTML' })
+          } else {
+            const message = getText(isRu, 'mainMenu')
+            await ctx.reply(message, menu)
+          }
+          console.log('ctx.wizard.next()')
+          return ctx.wizard.next()
+        }
+
+        default: {
+          console.log('CASE: default')
+          const message = getText(isRu, 'mainMenu')
+          await ctx.reply(message, menu)
+          return ctx.wizard.next()
+        }
       }
     } catch (error) {
       console.error('Error in menu command:', error)
