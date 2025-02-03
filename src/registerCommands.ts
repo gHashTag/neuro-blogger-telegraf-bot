@@ -120,8 +120,8 @@ export function registerCommands({
 
   composer.command('balance', ctx => balanceCommand(ctx))
 
-  composer.command('help', async ctx => {
-    await neuroQuestCommand(ctx)
+  myComposer.command('help', async ctx => {
+    await ctx.scene.enter('step0')
   })
 
   composer.command('price', async ctx => {

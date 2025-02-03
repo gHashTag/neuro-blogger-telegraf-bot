@@ -1,6 +1,9 @@
 import { levels } from '@/menu/mainMenu'
 import { MyContext } from '@/interfaces'
 import { isRussian } from '@/helpers/language'
+import { neuroQuestCommand } from '@/commands/neuroQuestCommand'
+import { balanceCommand } from '@/commands/balanceCommand'
+import { priceCommand } from '@/commands/priceCommand'
 
 export const handleMenu = async (ctx: MyContext, text: string) => {
   console.log('CASE:handleMenu', text)
@@ -89,6 +92,30 @@ export const handleMenu = async (ctx: MyContext, text: string) => {
       await ctx.scene.enter('step0')
     },
     [isRu ? levels[104].title_ru : levels[104].title_en]: async () => {
+      console.log('CASE: 🏠 Главное меню')
+      await ctx.scene.enter('menuScene')
+    },
+    '/invite': async () => {
+      console.log('CASE: 👥 Пригласить друга')
+      await ctx.scene.enter('inviteScene')
+    },
+    '/price': async () => {
+      console.log('CASE: 💰 Цена')
+      await priceCommand(ctx)
+    },
+    '/buy': async () => {
+      console.log('CASE: 💰 Пополнить баланс')
+      await ctx.scene.enter('paymentScene')
+    },
+    '/balance': async () => {
+      console.log('CASE: 💰 Баланс')
+      await balanceCommand(ctx)
+    },
+    '/help': async () => {
+      console.log('CASE: ❓ Помощь')
+      await ctx.scene.enter('helpScene')
+    },
+    '/menu': async () => {
       console.log('CASE: 🏠 Главное меню')
       await ctx.scene.enter('menuScene')
     },
