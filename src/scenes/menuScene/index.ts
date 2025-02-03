@@ -20,8 +20,8 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
       let newSubscription: Subscription = 'stars'
 
       if (isDev) {
-        newCount = 0
-        newSubscription = 'neurobase'
+        newCount = 1
+        newSubscription = 'stars'
       } else {
         const { count, subscription } = await getReferalsCountAndUserData(
           telegram_id
@@ -79,7 +79,15 @@ export const menuScene = new Scenes.WizardScene<MyContext>(
       let message = ''
       if (!hasFullAccess) {
         message = getText(isRu, 'digitalAvatar')
-        await sendReplyWithKeyboard(ctx, message, inlineKeyboard, menu)
+        const photo_url =
+          'https://yuukfqcsdhkyxegfwlcb.supabase.co/storage/v1/object/public/landingpage/avatars/neuro_sage/neuroblogger.jpg'
+        await sendReplyWithKeyboard(
+          ctx,
+          message,
+          inlineKeyboard,
+          menu,
+          photo_url
+        )
       } else if (
         nameStep === (isRu ? levels[2].title_ru : levels[2].title_en)
       ) {
