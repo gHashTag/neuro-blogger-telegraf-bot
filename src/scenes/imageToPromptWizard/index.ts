@@ -15,16 +15,18 @@ if (!process.env.HUGGINGFACE_TOKEN) {
 export const imageToPromptWizard = new Scenes.WizardScene<MyContext>(
   'imageToPromptWizard',
   async ctx => {
+    console.log('CASE 0: imageToPromptWizard')
     const isRu = ctx.from?.language_code === 'ru'
-    console.log('CASE: imageToPromptCommand')
+    console.log('CASE: imageToPromptCommand', ctx)
     if (!ctx.from?.id) {
       await ctx.reply('User ID not found')
       return ctx.scene.leave()
     }
 
     const userId = ctx.from.id
+    console.log('userId', userId)
     const currentBalance = await getUserBalance(userId)
-
+    console.log('currentBalance', currentBalance)
     await sendBalanceMessage(userId, currentBalance, imageToPromptCost, isRu)
     const isCancel = await handleHelpCancel(ctx)
     if (isCancel) {
@@ -41,6 +43,7 @@ export const imageToPromptWizard = new Scenes.WizardScene<MyContext>(
     return ctx.wizard.next()
   },
   async ctx => {
+    console.log('CASE 1: imageToPromptWizard')
     const isRu = ctx.from?.language_code === 'ru'
     console.log('Waiting for photo message...')
     const imageMsg = ctx.message

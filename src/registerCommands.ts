@@ -46,11 +46,17 @@ import { rubGetWizard } from './scenes/rubGetWizard'
 // import { handleTextMessage } from './handlers'
 import { get100Command } from './commands/get100Command'
 
+//https://github.com/telegraf/telegraf/issues/705
 export const stage = new Scenes.Stage<MyContext>([
   startScene,
   chatWithAvatarWizard,
   neuroQuestScene,
-  menuScene,
+  menuScene('menuScene', async ctx => {
+    console.log('CASE: new menuScene')
+    ctx.session.mode = 'main_menu'
+    await ctx.scene.enter('menuScene')
+    return 'menuScene'
+  }),
   balanceScene,
   avatarWizard,
   imageToPromptWizard,
@@ -111,6 +117,7 @@ export function registerCommands({
 
   composer.command('menu', async ctx => {
     console.log('CASE: myComposer.command menu')
+    ctx.session.mode = 'main_menu'
     await ctx.scene.enter('menuScene')
   })
 

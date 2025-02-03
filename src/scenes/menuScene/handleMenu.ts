@@ -29,7 +29,7 @@ export const handleMenu = async (ctx: MyContext, text: string) => {
     [isRu ? levels[3].title_ru : levels[3].title_en]: async () => {
       console.log('CASE: 🔍 Промпт из фото')
       ctx.session.mode = 'image_to_prompt'
-      await ctx.scene.enter('promptFromPhotoWizard')
+      await ctx.scene.enter('imageToPromptWizard')
     },
     [isRu ? levels[4].title_ru : levels[4].title_en]: async () => {
       console.log('CASE: 🧠 Мозг аватара')
@@ -123,6 +123,7 @@ export const handleMenu = async (ctx: MyContext, text: string) => {
 
   // Выполняем действие, если оно существует, иначе переходим в главное меню
   if (actions[text]) {
+    console.log('CASE: menuScene.handleMenu.if', text)
     await actions[text]()
   } else {
     console.log('CASE: menuScene.handleMenu.else', text)

@@ -84,9 +84,6 @@ helpScene.enter(async ctx => {
       case 'help':
         ctx.scene.enter('step0')
         break
-      case 'help':
-        ctx.scene.enter('step0')
-        break
       default:
         ctx.scene.enter('step0')
         break
