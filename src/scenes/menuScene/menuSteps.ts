@@ -97,28 +97,31 @@ export const handleMenuCommand = async (ctx: MyContext): Promise<void> => {
       case newCount > 2 && newCount <= 10: {
         console.log('CASE: newCount > 2 && newCount <= 10')
         message = getText(isRu, 'avatarLevel', newCount)
-        await sendReplyWithKeyboard(ctx, message, inlineKeyboard, menu)
 
-        if (newCount > 1) {
-          await ctx.reply(getText(isRu, 'inviteLink'), menu)
-          const botUsername = ctx.botInfo.username
-          const linkText = `<a href="https://t.me/${botUsername}?start=${telegram_id}">https://t.me/${botUsername}?start=${telegram_id}</a>`
-          await ctx.reply(linkText, { parse_mode: 'HTML' })
-        } else {
-          const message = getText(isRu, 'mainMenu')
-          await ctx.reply(message, menu)
-        }
+        // Создаем клавиатуру с кнопкой для приглашения
+        const inlineKeyboardWithInvite = [
+          ...inlineKeyboard,
+          [{ text: getText(isRu, 'inviteLink'), callback_data: 'invite' }],
+        ]
+
+        // Отправляем сообщение с клавиатурой
+        await sendReplyWithKeyboard(
+          ctx,
+          message,
+          inlineKeyboardWithInvite,
+          menu
+        )
         console.log('ctx.wizard.next()')
-        ctx.wizard.next()
-        return
+        ctx.scene.leave()
+        break
       }
 
       default: {
         console.log('CASE: default')
         const message = getText(isRu, 'mainMenu')
         await ctx.reply(message, menu)
-        ctx.wizard.next()
-        return
+        ctx.scene.leave()
+        break
       }
     }
     return
