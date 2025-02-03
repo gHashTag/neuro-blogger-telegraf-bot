@@ -13,9 +13,9 @@ const password1 = PASSWORD1
 const description = 'Покупка звезд'
 
 const paymentOptions = [
-  { amount: 1999, stars: '1999' },
-  { amount: 5000, stars: '5000' },
-  { amount: 10000, stars: '10000' },
+  { amount: 1999, stars: '1249' },
+  { amount: 5000, stars: '3125' },
+  { amount: 10000, stars: '6250' },
   { amount: 10, stars: '6' },
 ]
 
@@ -136,23 +136,23 @@ emailWizard.on('text', async ctx => {
 
   if (msg && 'text' in msg) {
     const selectedOption = msg.text
+
     const isCancel = await handleHelpCancel(ctx)
     if (isCancel) {
       return ctx.scene.leave()
     }
-    const selectedPayment = paymentOptions.find(option =>
-      selectedOption.includes(option.amount.toString())
-    )
 
-    if (selectedPayment) {
-      const email = ctx.session.email
-      const amount = selectedPayment.amount
-      const stars = calculateStars(amount, 10)
+    const match = isRu
+      ? selectedOption.match(/Купить (\d+)⭐️ за (\d+) р/)
+      : selectedOption.match(/Buy (\d+)⭐️ for (\d+) RUB/)
+
+    if (match) {
+      const stars = parseInt(match[1], 10) // Количество звезд
+      const amount = parseInt(match[2], 10) // Сумма в рублях
 
       try {
         const userId = ctx.from?.id
         const invId = Math.floor(Math.random() * 1000000)
-
         // Получение invoiceID
         const invoiceURL = await getInvoiceId(
           merchantLogin,
@@ -161,6 +161,7 @@ emailWizard.on('text', async ctx => {
           description,
           password1
         )
+        const email = ctx.session.email
 
         // Сохранение платежа со статусом PENDING
         await setPayments({
