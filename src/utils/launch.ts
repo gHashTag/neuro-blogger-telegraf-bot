@@ -11,7 +11,7 @@ const production = async (bot: Telegraf<MyContext>): Promise<void> => {
     const webhookUrl = process.env.WEBHOOK_URL
     const port = Number(process.env.PORT) || 3000
 
-    await bot.launch({
+    bot.launch({
       webhook: {
         domain: webhookUrl,
         port: port,
@@ -22,6 +22,7 @@ const production = async (bot: Telegraf<MyContext>): Promise<void> => {
 
     console.log(`Webhook successfully set to ${webhookUrl}`)
     console.log('Bot is running in webhook mode')
+    return
   } catch (e) {
     console.error('Error in production setup:', e)
     throw e
@@ -34,7 +35,8 @@ const development = async (bot: Telegraf<MyContext>): Promise<void> => {
     console.log('[SERVER] Webhook deleted, starting polling...')
     await new Promise(resolve => setTimeout(resolve, 1000))
 
-    await bot.launch()
+    bot.launch()
+    return
   } catch (e) {
     console.error('Error in development setup:', e)
     throw e

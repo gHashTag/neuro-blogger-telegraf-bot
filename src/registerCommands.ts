@@ -1,4 +1,4 @@
-import { Telegraf, Scenes, session, Middleware } from 'telegraf'
+import { Telegraf, Scenes, session, Middleware, Composer } from 'telegraf'
 import { MyContext } from './interfaces'
 
 import { neuroQuestCommand } from './commands/neuroQuestCommand'
@@ -40,7 +40,6 @@ import { subscriptionMiddleware } from '@/middlewares/subscription'
 import { setupLevelHandlers } from './handlers/setupLevelHandlers'
 
 import { priceCommand } from './commands/priceCommand'
-import { myComposer } from './hearsHandlers'
 
 import { defaultSession } from './store'
 import { rubGetWizard } from './scenes/rubGetWizard'
@@ -79,7 +78,13 @@ export const stage = new Scenes.Stage<MyContext>([
   ...levelQuestWizard,
 ])
 
-export function registerCommands(bot: Telegraf<MyContext>) {
+export function registerCommands({
+  bot,
+  composer,
+}: {
+  bot: Telegraf<MyContext>
+  composer: Composer<MyContext>
+}) {
   bot.use(session({ defaultSession }))
 
   bot.use(subscriptionMiddleware as Middleware<MyContext>)
@@ -87,43 +92,43 @@ export function registerCommands(bot: Telegraf<MyContext>) {
   setupLevelHandlers(bot as Telegraf<MyContext>)
 
   // Регистрация команд
-  myComposer.command('start', async ctx => {
+  composer.command('start', async ctx => {
     console.log('CASE: start')
     await neuroQuestCommand(ctx)
   })
 
-  myComposer.command('get100', async ctx => {
+  composer.command('get100', async ctx => {
     console.log('CASE: get100')
     await get100Command(ctx)
   })
 
-  myComposer.command('buy', async ctx => {
+  composer.command('buy', async ctx => {
     console.log('CASE: buy')
     ctx.session.subscription = 'stars'
     await ctx.scene.enter('paymentScene')
   })
 
-  myComposer.command('menu', async ctx => {
+  composer.command('menu', async ctx => {
     console.log('CASE: myComposer.command menu')
     await ctx.scene.enter('menuScene')
   })
 
-  myComposer.command('invite', async ctx => {
+  composer.command('invite', async ctx => {
     console.log('CASE: invite')
     await ctx.scene.enter('inviteScene')
   })
 
-  myComposer.command('balance', ctx => balanceCommand(ctx))
+  composer.command('balance', ctx => balanceCommand(ctx))
 
-  myComposer.command('help', async ctx => {
+  composer.command('help', async ctx => {
     await neuroQuestCommand(ctx)
   })
 
-  myComposer.command('price', async ctx => {
+  composer.command('price', async ctx => {
     await priceCommand(ctx)
   })
 
-  myComposer.command('neuro_coder', async ctx => {
+  composer.command('neuro_coder', async ctx => {
     await ctx.scene.enter('neuroCoderScene')
   })
 
