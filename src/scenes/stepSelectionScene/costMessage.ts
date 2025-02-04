@@ -49,11 +49,3 @@ export const stepsCostMessageEn =
       detail => `${detail.steps} steps - ${detail.stars}⭐ / $${detail.dollars}`
     )
     .join('\n')
-
-// Вывод результатов
-console.log('💰 Стоимость:')
-costDetails.forEach(detail => {
-  console.log(
-    `${detail.steps} шагов - ${detail.stars}⭐ / ${detail.rubles}₽ / $${detail.dollars}`
-  )
-})

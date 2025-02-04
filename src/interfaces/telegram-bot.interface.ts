@@ -22,6 +22,7 @@ export interface SessionData {
   username: string
   triggerWord: string
   steps: number
+  selectedPayment: string
 }
 
 export interface MyWizardSession extends Scenes.WizardSessionData {
@@ -52,6 +53,12 @@ export interface MySession extends Scenes.WizardSession<MyWizardSession> {
   steps: number
   inviter: string
   inviteCode: string
+  invoiceURL: string
+  selectedPayment: {
+    amount: number
+    stars: string
+    subscription: Subscription
+  }
 }
 
 export interface MyContext extends Context {

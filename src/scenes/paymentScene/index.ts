@@ -1,12 +1,8 @@
 import { Markup, Scenes } from 'telegraf'
 import { MyContext } from '@/interfaces'
 import { isRussian } from '@/helpers'
-
 import { handleSelectStars } from '@/handlers/handleSelectStars'
-import { calculateStars } from '@/price/helpers/calculateStars'
-import { starCost } from '@/price/starCost'
 import { starAmounts } from '@/price/helpers/starAmounts'
-import { handleBuy } from '@/handlers/handleBuy'
 import { handleBuySubscription } from '@/handlers/handleBuySubscription'
 
 export const paymentScene = new Scenes.BaseScene<MyContext>('paymentScene')
@@ -86,20 +82,20 @@ paymentScene.hears(['💳 Рублями', '💳 In rubles'], async ctx => {
   console.log('CASE: subscription', subscription)
 
   if (subscription === 'neurobase') {
-    console.log('CASE: 📚 НейроБаза - rubGetWizard')
-    return ctx.scene.enter('rubGetWizard')
+    console.log('CASE: 📚 НейроБаза - getEmailWizard')
+    return ctx.scene.enter('getEmailWizard')
   } else if (subscription === 'neurophoto') {
-    console.log('CASE: 📸 НейроФото - rubGetWizard')
-    return ctx.scene.enter('rubGetWizard')
+    console.log('CASE: 📸 НейроФото - getEmailWizard')
+    return ctx.scene.enter('getEmailWizard')
   } else if (subscription === 'neuromeeting') {
-    console.log('CASE: 🧠 НейроВстреча - rubGetWizard')
-    return ctx.scene.enter('rubGetWizard')
+    console.log('CASE: 🧠 НейроВстреча - getEmailWizard')
+    return ctx.scene.enter('getEmailWizard')
   } else if (subscription === 'neuromentor') {
-    console.log('CASE: 🧠 НейроМентор - rubGetWizard')
-    return ctx.scene.enter('rubGetWizard')
+    console.log('CASE: 🧠 НейроМентор - getEmailWizard')
+    return ctx.scene.enter('getEmailWizard')
   } else if (subscription === 'neuroblogger') {
-    console.log('CASE: 🤖 НейроБлогер - rubGetWizard')
-    return ctx.scene.enter('rubGetWizard')
+    console.log('CASE: 🤖 НейроБлогер - getEmailWizard')
+    return ctx.scene.enter('getEmailWizard')
   } else if (subscription === 'stars') {
     console.log('CASE: 💳 Рублями - emailWizard')
     await ctx.scene.enter('emailWizard')

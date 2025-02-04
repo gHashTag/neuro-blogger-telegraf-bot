@@ -34,6 +34,8 @@ import {
   menuScene,
   subscriptionScene,
   inviteScene,
+  getRuBill,
+  getEmailWizard,
 } from './scenes'
 import { subscriptionMiddleware } from '@/middlewares/subscription'
 
@@ -42,7 +44,7 @@ import { setupLevelHandlers } from './handlers/setupLevelHandlers'
 import { priceCommand } from './commands/priceCommand'
 
 import { defaultSession } from './store'
-import { rubGetWizard } from './scenes/rubGetWizard'
+
 // import { handleTextMessage } from './handlers'
 import { get100Command } from './commands/get100Command'
 
@@ -56,6 +58,18 @@ export const stage = new Scenes.Stage<MyContext>([
     ctx.session.mode = 'main_menu'
     await ctx.scene.enter('menuScene')
     return 'menuScene'
+  }),
+  getEmailWizard('getEmailWizard', async ctx => {
+    console.log('CASE: new getEmailWizard')
+    ctx.session.mode = 'getEmailWizard'
+    await ctx.scene.enter('getEmailWizard')
+    return 'getEmailWizard'
+  }),
+  getRuBill('getRuBill', async ctx => {
+    console.log('CASE: new getRuBill')
+    ctx.session.mode = 'getRuBill'
+    await ctx.scene.enter('getRuBill')
+    return 'getRuBill'
   }),
   balanceScene,
   avatarWizard,
@@ -79,7 +93,7 @@ export const stage = new Scenes.Stage<MyContext>([
   lipSyncWizard,
   helpScene,
   subscriptionScene,
-  rubGetWizard,
+  inviteScene,
   inviteScene,
   ...levelQuestWizard,
 ])

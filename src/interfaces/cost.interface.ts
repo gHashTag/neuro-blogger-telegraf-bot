@@ -51,5 +51,6 @@ export type Mode =
   | 'improve_prompt'
   | 'change_size'
   | 'lip_sync'
-
+  | 'getRuBill'
+  | 'getEmailWizard'
 export type ModeCosts = Required<Record<Mode, number>>
