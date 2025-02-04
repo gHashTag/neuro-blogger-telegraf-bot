@@ -123,7 +123,15 @@ export async function mainMenu({
   // Определяем доступные уровни в зависимости от подписки
   const subscriptionLevelsMap = {
     stars: [levels[0]],
-    neurophoto: [levels[1], levels[2], levels[3]],
+    neurophoto: [
+      levels[1],
+      levels[2],
+      levels[3],
+      levels[100],
+      levels[101],
+      levels[102],
+      levels[103],
+    ],
     neurobase: Object.values(levels).slice(1),
     neuromeeting: Object.values(levels).slice(1),
     neuroblogger: Object.values(levels).slice(1),

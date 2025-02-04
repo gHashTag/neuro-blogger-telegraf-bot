@@ -1,7 +1,6 @@
 import { levels } from '@/menu/mainMenu'
 import { MyContext } from '@/interfaces'
 import { isRussian } from '@/helpers/language'
-import { neuroQuestCommand } from '@/commands/neuroQuestCommand'
 import { balanceCommand } from '@/commands/balanceCommand'
 import { priceCommand } from '@/commands/priceCommand'
 

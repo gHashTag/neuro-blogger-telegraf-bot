@@ -17,7 +17,7 @@ export const handleMenuCommand = async (ctx: MyContext): Promise<void> => {
 
     if (isDev) {
       newCount = 0
-      newSubscription = 'stars'
+      newSubscription = 'neurophoto'
     } else {
       const { count, subscription } = await getReferalsCountAndUserData(
         telegram_id
