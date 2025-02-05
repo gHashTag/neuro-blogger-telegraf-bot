@@ -8,8 +8,8 @@ import {
   textToSpeechCost,
   textToVideoCost,
   speechGenerationCost,
-  costPerStepInStars,
 } from '@/price/helpers'
+import { conversionRates } from '@/price/helpers/calculateTrainingCost'
 
 export async function priceCommand(ctx: MyContext) {
   console.log('CASE: priceCommand')
@@ -23,7 +23,9 @@ export async function priceCommand(ctx: MyContext) {
   const message = isRu
     ? `
     <b>💰 Стоимость всех услуг:</b>
-    - 🧠 Обучение модели за 1 шаг: ${costPerStepInStars.toFixed(2)} ⭐️
+    - 🧠 Обучение модели за 1 шаг: ${conversionRates.costPerStepInStars.toFixed(
+      2
+    )} ⭐️
     - ✍️ Генерация промпта: ${promptGenerationCost.toFixed(2)} ⭐️
     - 🖼️ Генерация изображения: от ${minCost.toFixed(2)} до ${maxCost.toFixed(
         2
@@ -39,7 +41,7 @@ export async function priceCommand(ctx: MyContext) {
     `
     : `
     <b>💰 Price of all services:</b>
-    - 🧠 Training model: ${costPerStepInStars.toFixed(2)} ⭐️
+    - 🧠 Training model: ${conversionRates.costPerStepInStars.toFixed(2)} ⭐️
     - ✍️ Prompt generation: ${promptGenerationCost.toFixed(2)} ⭐️
     - 🖼️ Image generation: from ${minCost.toFixed(2)} to ${maxCost.toFixed(
         2

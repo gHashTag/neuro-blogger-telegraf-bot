@@ -1,5 +1,5 @@
 import { MyContext } from '../interfaces'
-import { bot } from '../core/bot'
+import bot from '../core/bot'
 
 export const pulse = async (
   ctx: MyContext,

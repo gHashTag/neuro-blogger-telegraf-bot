@@ -10,7 +10,6 @@ type BalanceOperationProps = {
 }
 
 export const processBalanceOperation = async ({
-  model,
   telegram_id,
   paymentAmount,
   is_ru,
@@ -28,6 +27,7 @@ export const processBalanceOperation = async ({
         newBalance: currentBalance,
         success: false,
         error: message,
+        modePrice: paymentAmount,
       }
     }
 
@@ -40,6 +40,7 @@ export const processBalanceOperation = async ({
     return {
       newBalance,
       success: true,
+      modePrice: paymentAmount,
     }
   } catch (error) {
     console.error('Error in processBalanceOperation:', error)

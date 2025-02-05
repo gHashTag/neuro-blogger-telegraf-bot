@@ -28,4 +28,10 @@ export const defaultSession: () => MySession = () => ({
   subscription: 'stars',
   inviter: '',
   inviteCode: '',
+  invoiceURL: '',
+  selectedPayment: {
+    amount: 0,
+    stars: '',
+    subscription: 'stars',
+  },
 })
