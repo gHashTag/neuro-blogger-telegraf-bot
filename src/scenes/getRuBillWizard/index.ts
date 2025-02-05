@@ -1,4 +1,3 @@
-import { composeWizardScene } from '../sceneFactory'
 import { MyContext } from '@/interfaces/telegram-bot.interface'
 import { isRussian } from '@/helpers'
 import {
@@ -9,9 +8,10 @@ import {
   subscriptionTitles,
 } from './helper'
 import { setPayments, updateUserSubscription } from '../../core/supabase'
-
 import { mainMenu } from '@/menu'
-export const generateInvoiceStep = async (ctx: MyContext): Promise<void> => {
+import { WizardScene } from 'telegraf/scenes'
+
+const generateInvoiceStep = async (ctx: MyContext) => {
   console.log('CASE: generateInvoiceStep')
   const isRu = isRussian(ctx)
   const selectedPayment = ctx.session.selectedPayment
@@ -112,7 +112,6 @@ export const generateInvoiceStep = async (ctx: MyContext): Promise<void> => {
         return ctx.scene.leave()
       }
       ctx.wizard.next()
-      return
     } catch (error) {
       console.error('Error in creating invoice:', error)
       await ctx.reply(
@@ -124,4 +123,7 @@ export const generateInvoiceStep = async (ctx: MyContext): Promise<void> => {
   }
 }
 
-export const getRuBill = composeWizardScene(generateInvoiceStep)
+export const getRuBillWizard = new WizardScene(
+  'getRuBillWizard',
+  generateInvoiceStep
+)

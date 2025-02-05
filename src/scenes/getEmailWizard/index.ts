@@ -3,14 +3,10 @@ import { MyContext } from '../../interfaces'
 import { saveUserEmail } from '../../core/supabase'
 import { isRussian } from '@/helpers'
 import { handleHelpCancel } from '@/handlers'
+import { paymentOptions, subscriptionTitles } from '../getRuBillWizard/helper'
+import { WizardScene } from 'telegraf/scenes'
 
-import { paymentOptions, subscriptionTitles } from '../getRuBill/helper'
-import { composeWizardScene } from '../sceneFactory'
-
-const enterStep = async (
-  ctx: MyContext,
-  doneCallback: () => Promise<void>
-): Promise<void> => {
+const enterStep = async (ctx: MyContext) => {
   console.log('CASE: enterStep')
   const isRu = isRussian(ctx)
   const email = ctx.session.email
@@ -23,13 +19,12 @@ const enterStep = async (
       Markup.keyboard([Markup.button.text(isRu ? 'Отмена' : 'Cancel')]).resize()
     )
     ctx.wizard.next()
-    return
   } else {
-    await doneCallback()
+    ctx.scene.leave()
   }
 }
 
-const emailStep = async (ctx: MyContext): Promise<void> => {
+const emailStep = async (ctx: MyContext) => {
   console.log('CASE: emailStep')
   const isRu = isRussian(ctx)
   if (!ctx.message || !('text' in ctx.message)) {
@@ -72,7 +67,6 @@ const emailStep = async (ctx: MyContext): Promise<void> => {
       }
     )
     ctx.wizard.next()
-    return
   } catch (error) {
     await ctx.reply(
       isRu
@@ -82,7 +76,7 @@ const emailStep = async (ctx: MyContext): Promise<void> => {
   }
 }
 
-const selectPaymentOptionStep = async (ctx: MyContext): Promise<void> => {
+const selectPaymentOptionStep = async (ctx: MyContext) => {
   console.log('CASE: selectPaymentOptionStep')
   const isRu = isRussian(ctx)
   const msg = ctx.message
@@ -118,7 +112,8 @@ const selectPaymentOptionStep = async (ctx: MyContext): Promise<void> => {
   }
 }
 
-export const getEmailWizard = composeWizardScene(
+export const getEmailWizard = new WizardScene(
+  'getEmailWizard',
   enterStep,
   emailStep,
   selectPaymentOptionStep

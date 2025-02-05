@@ -34,7 +34,7 @@ import {
   menuScene,
   subscriptionScene,
   inviteScene,
-  getRuBill,
+  getRuBillWizard,
   getEmailWizard,
 } from './scenes'
 import { subscriptionMiddleware } from '@/middlewares/subscription'
@@ -53,24 +53,9 @@ export const stage = new Scenes.Stage<MyContext>([
   startScene,
   chatWithAvatarWizard,
   neuroQuestScene,
-  menuScene('menuScene', async ctx => {
-    console.log('CASE: new menuScene')
-    ctx.session.mode = 'main_menu'
-    await ctx.scene.enter('menuScene')
-    return 'menuScene'
-  }),
-  getEmailWizard('getEmailWizard', async ctx => {
-    console.log('CASE: new getEmailWizard')
-    ctx.session.mode = 'getEmailWizard'
-    await ctx.scene.enter('getEmailWizard')
-    return 'getEmailWizard'
-  }),
-  getRuBill('getRuBill', async ctx => {
-    console.log('CASE: new getRuBill')
-    ctx.session.mode = 'getRuBill'
-    await ctx.scene.enter('getRuBill')
-    return 'getRuBill'
-  }),
+  menuScene,
+  getEmailWizard,
+  getRuBillWizard,
   balanceScene,
   avatarWizard,
   imageToPromptWizard,
@@ -78,12 +63,7 @@ export const stage = new Scenes.Stage<MyContext>([
   textToImageWizard,
   improvePromptWizard,
   sizeWizard,
-  neuroPhotoWizard('neuroPhotoWizard', async ctx => {
-    console.log('CASE: new neuroPhotoWizard')
-    ctx.session.mode = 'neuro_photo'
-    await ctx.scene.enter('neuroPhotoWizard')
-    return 'neuroPhotoWizard'
-  }),
+  neuroPhotoWizard,
   textToVideoWizard,
   imageToVideoWizard,
   cancelPredictionsWizard,

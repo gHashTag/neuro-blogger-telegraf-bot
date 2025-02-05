@@ -12,13 +12,9 @@ import {
 } from '@/core/supabase'
 import { mainMenu, sendPhotoDescriptionRequest } from '@/menu'
 import { handleHelpCancel } from '@/handlers/handleHelpCancel'
-import { composeWizardScene } from '../sceneFactory'
+import { WizardScene } from 'telegraf/scenes'
 
-const neuroPhotoConversation = async (
-  ctx: MyContext,
-  doneCallback: () => Promise<void>,
-  next: () => void
-) => {
+const neuroPhotoConversationStep = async (ctx: MyContext) => {
   console.log('CASE: neuroPhotoConversation')
   const isRu = ctx.from?.language_code === 'ru'
   const userId = ctx.from?.id
@@ -29,14 +25,14 @@ const neuroPhotoConversation = async (
         ? '❌ Ошибка идентификации пользователя'
         : '❌ User identification error'
     )
-    return doneCallback()
+    return ctx.scene.leave()
   }
 
   const currentBalance = await getUserBalance(userId)
 
   if (currentBalance < imageNeuroGenerationCost) {
     await sendInsufficientStarsMessage(userId, currentBalance, isRu)
-    return doneCallback()
+    return ctx.scene.leave()
   }
 
   await sendBalanceMessage(
@@ -65,7 +61,7 @@ const neuroPhotoConversation = async (
       }
     )
 
-    return doneCallback()
+    return ctx.scene.leave()
   }
 
   ctx.session.userModel = userModel as UserModel
@@ -74,16 +70,13 @@ const neuroPhotoConversation = async (
   await sendPhotoDescriptionRequest(ctx, isRu, 'neuro_photo')
   const isCancel = await handleHelpCancel(ctx)
   if (isCancel) {
-    return doneCallback()
+    return ctx.scene.leave()
   }
   console.log('CASE: neuroPhotoConversation next')
-  ctx.wizard.next()
+  ctx.wizard.next() // Переход к следующему шагу
 }
 
-const neuroPhotoPromptStep = async (
-  ctx: MyContext,
-  doneCallback: () => Promise<void>
-) => {
+const neuroPhotoPromptStep = async (ctx: MyContext) => {
   console.log('CASE: neuroPhotoPromptStep')
   const isRu = ctx.from?.language_code === 'ru'
   const promptMsg = ctx.message
@@ -95,7 +88,7 @@ const neuroPhotoPromptStep = async (
     const isCancel = await handleHelpCancel(ctx)
 
     if (isCancel) {
-      return doneCallback()
+      return ctx.scene.leave()
     } else {
       ctx.session.prompt = promptText
       const model_url = ctx.session.userModel.model_url as ModelUrl
@@ -111,11 +104,12 @@ const neuroPhotoPromptStep = async (
       }
     }
 
-    ctx.scene.leave()
+    ctx.scene.leave() // Завершение сцены
   }
 }
 
-export const neuroPhotoWizard = composeWizardScene(
-  neuroPhotoConversation,
+export const neuroPhotoWizard = new WizardScene(
+  'neuroPhotoWizard',
+  neuroPhotoConversationStep,
   neuroPhotoPromptStep
 )
