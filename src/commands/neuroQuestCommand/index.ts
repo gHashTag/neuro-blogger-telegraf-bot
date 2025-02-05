@@ -1,5 +1,6 @@
+import { getReferalsCountAndUserData } from '@/core/supabase/getReferalsCountAndUserData'
 import { MyContext } from '../../interfaces'
-import { startMenu } from '../../menu'
+import { mainMenu, startMenu } from '../../menu'
 
 export async function neuroQuestCommand(ctx: MyContext) {
   console.log('CASE: neuroQuest')
@@ -82,6 +83,9 @@ export async function neuroQuestCommand(ctx: MyContext) {
 Ready to become a content creation pro and upgrade your digital avatar? Then press the /menu command`,
     }
   )
-  await startMenu(ctx, isRu)
+  const { count, subscription } = await getReferalsCountAndUserData(
+    ctx.from?.id?.toString() || ''
+  )
+  await mainMenu({ isRu, inviteCount: count, subscription })
   return
 }
