@@ -12,9 +12,9 @@ export async function handleSizeSelection(ctx: MyContext, size: string) {
   )
   const mode = ctx.session.mode
   if (mode === 'neuro_photo') {
-    await ctx.scene.enter('neuroPhotoWizard')
+    ctx.scene.enter('neuroPhotoWizard')
   } else if (mode === 'text_to_image') {
-    await ctx.scene.enter('textToImageWizard')
+    ctx.scene.enter('textToImageWizard')
   } else {
     console.log('CASE: Неизвестный режим')
     const telegram_id = ctx.from?.id?.toString() || ''
@@ -25,7 +25,7 @@ export async function handleSizeSelection(ctx: MyContext, size: string) {
     if (isExist) {
       await mainMenu({ isRu, inviteCount: count, subscription })
     } else {
-      await ctx.scene.enter('helpScene')
+      ctx.scene.enter('helpScene')
     }
   }
 }

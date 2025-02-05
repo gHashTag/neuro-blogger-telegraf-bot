@@ -78,7 +78,12 @@ export const stage = new Scenes.Stage<MyContext>([
   textToImageWizard,
   improvePromptWizard,
   sizeWizard,
-  neuroPhotoWizard,
+  neuroPhotoWizard('neuroPhotoWizard', async ctx => {
+    console.log('CASE: new neuroPhotoWizard')
+    ctx.session.mode = 'neuro_photo'
+    await ctx.scene.enter('neuroPhotoWizard')
+    return 'neuroPhotoWizard'
+  }),
   textToVideoWizard,
   imageToVideoWizard,
   cancelPredictionsWizard,
