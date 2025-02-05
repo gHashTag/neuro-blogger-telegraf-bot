@@ -13,6 +13,7 @@ import {
 import { mainMenu, sendPhotoDescriptionRequest } from '@/menu'
 import { handleHelpCancel } from '@/handlers/handleHelpCancel'
 import { WizardScene } from 'telegraf/scenes'
+import { generateTextToImage } from '@/services/generateTextToImage'
 
 const neuroPhotoConversationStep = async (ctx: MyContext) => {
   console.log('CASE: neuroPhotoConversation')
@@ -99,17 +100,72 @@ const neuroPhotoPromptStep = async (ctx: MyContext) => {
       if (model_url && trigger_word) {
         const fullPrompt = `Fashionable ${trigger_word}, ${promptText}`
         await generateNeuroImage(fullPrompt, model_url, 1, userId || 0, ctx)
+        ctx.wizard.next()
       } else {
         await ctx.reply(isRu ? '❌ Некорректный промпт' : '❌ Invalid prompt')
+        ctx.scene.leave()
+      }
+    }
+  }
+}
+
+const neuroPhotoButtonStep = async (ctx: MyContext) => {
+  console.log('CASE: neuroPhotoButtonStep')
+  if (ctx.message && 'text' in ctx.message) {
+    const text = ctx.message.text
+    console.log(`CASE: Нажата кнопка ${text}`)
+    const isRu = ctx.from?.language_code === 'ru'
+
+    // Обработка кнопок "Улучшить промпт" и "Изменить размер"
+    if (text === '⬆️ Улучшить промпт' || text === '⬆️ Improve prompt') {
+      console.log('CASE: Улучшить промпт')
+      await ctx.scene.enter('improvePromptWizard')
+      return
+    }
+
+    if (text === '📐 Изменить размер' || text === '📐 Change size') {
+      console.log('CASE: Изменить размер')
+      await ctx.scene.enter('sizeWizard')
+      return
+    }
+
+    // Обработка кнопок с числами
+    const numImages = parseInt(text[0])
+    const prompt = ctx.session.prompt
+    const userId = ctx.from?.id
+
+    const generate = async (num: number) => {
+      if (ctx.session.mode === 'neuro_photo') {
+        await generateNeuroImage(
+          prompt,
+          ctx.session.userModel.model_url,
+          num,
+          userId,
+          ctx
+        )
+      } else {
+        await generateTextToImage(
+          prompt,
+          ctx.session.selectedModel || '',
+          num,
+          userId,
+          isRu,
+          ctx
+        )
       }
     }
 
-    ctx.scene.leave() // Завершение сцены
+    if (numImages >= 1 && numImages <= 4) {
+      await generate(numImages)
+    } else {
+      await ctx.reply('Неизвестная кнопка')
+    }
   }
 }
 
 export const neuroPhotoWizard = new WizardScene(
   'neuroPhotoWizard',
   neuroPhotoConversationStep,
-  neuroPhotoPromptStep
+  neuroPhotoPromptStep,
+  neuroPhotoButtonStep
 )
