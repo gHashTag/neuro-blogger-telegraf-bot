@@ -1,18 +1,13 @@
-const costPerStepInRubles = 0.276 // Стоимость за шаг в рублях
-const costPerStepInStars = 1.47 // Стоимость за шаг в звездах
-
-const rublesToDollarsRate = 100 // 100 рублей = 1 доллар
-
-const markupRate = 3 // Наценка 200%
+import { conversionRates } from '@/price/helpers/calculateTrainingCost'
 
 const stepOptions = [
   1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000,
 ]
 
 const costDetails = stepOptions.map(steps => {
-  const costInRubles = calculateTrainingCostInRubles(steps) * markupRate // Применяем наценку
+  const costInRubles = calculateTrainingCostInRubles(steps)
   const costInStars = calculateTrainingCostInStars(steps)
-  const costInDollars = costInRubles / rublesToDollarsRate // Переводим рубли в доллары
+  const costInDollars = calculateTrainingCostInDollars(steps)
 
   return {
     steps,
@@ -24,12 +19,25 @@ const costDetails = stepOptions.map(steps => {
 
 // Функция для расчета стоимости в звездах
 function calculateTrainingCostInStars(steps: number): number {
-  return steps * costPerStepInStars // Умножаем количество шагов на стоимость за шаг в звездах
+  return steps * conversionRates.costPerStepInStars // Умножаем количество шагов на стоимость за шаг в звездах
 }
 
 // Функция для расчета стоимости в рублях
 function calculateTrainingCostInRubles(steps: number): number {
-  return steps * costPerStepInRubles // Умножаем количество шагов на стоимость за шаг в рублях
+  return (
+    steps *
+    conversionRates.costPerStepInStars *
+    conversionRates.costPerStarInDollars *
+    conversionRates.rublesToDollarsRate
+  ) // Умножаем количество шагов на стоимость за шаг в рублях
+}
+
+function calculateTrainingCostInDollars(steps: number): number {
+  return (
+    steps *
+    conversionRates.costPerStepInStars *
+    conversionRates.costPerStarInDollars
+  ) // Умножаем количество шагов на стоимость за шаг в долларах
 }
 
 // Формирование сообщения
