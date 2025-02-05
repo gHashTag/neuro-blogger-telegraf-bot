@@ -118,7 +118,7 @@ const menuCommandStep = async (ctx: MyContext) => {
         console.log('CASE: default')
         const message = getText(isRu, 'mainMenu')
         await ctx.reply(message, menu)
-        ctx.scene.leave()
+        ctx.wizard.next()
         return
       }
     }

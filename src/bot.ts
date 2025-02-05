@@ -1,59 +1,64 @@
 import dotenv from 'dotenv'
 dotenv.config()
 
-import { Composer, Telegraf } from 'telegraf'
-import { MyContext } from '@/interfaces'
-import { isDev } from '@/config'
-import { handleModelCallback } from './handlers'
+import { development, production } from './utils/launch'
+
+import { handleModelCallback, handleTextMessage } from './handlers'
+import bot from './core/bot'
 
 import { setBotCommands } from './setCommands'
 import { registerCommands, stage } from './registerCommands'
 import { handleCallback } from './handlers/handleCallback'
+import { MyContext } from './interfaces'
 
 import { NODE_ENV } from './config'
 import { handlePaymentPolicyInfo } from './handlers/paymentHandlers/handlePaymentPolicyInfo'
 import { handlePreCheckoutQuery } from './handlers/paymentHandlers/handlePreCheckoutQuery'
 import { handleTopUp } from './handlers/paymentHandlers/handleTopUp'
 import { handleSuccessfulPayment } from './handlers/paymentHandlers'
-import { development, production } from '@/utils/launch'
+import { Composer } from 'telegraf'
 
-// Загружаем переменные окружения из .env файла
-dotenv.config()
-
-if (!process.env.TELEGRAM_BOT_TOKEN_DEV) {
-  throw new Error('TELEGRAM_BOT_TOKEN_DEV is not set')
+if (NODE_ENV === 'development') {
+  development(bot).catch(console.error)
+} else {
+  production(bot).catch(console.error)
 }
 
-if (!process.env.TELEGRAM_BOT_TOKEN_PROD) {
-  throw new Error('TELEGRAM_BOT_TOKEN_PROD is not set')
-}
+console.log(`Starting bot in ${NODE_ENV} mode`)
 
-// Создаем массив токенов для ботов
-const BOT_TOKENS = [
-  isDev
-    ? process.env.TELEGRAM_BOT_TOKEN_DEV
-    : process.env.TELEGRAM_BOT_TOKEN_PROD,
-  process.env.BOT_TOKEN_2,
-]
+export const composer = new Composer<MyContext>()
 
-// Инициализируем ботов
-const bots = BOT_TOKENS.map(token => new Telegraf<MyContext>(token))
+setBotCommands(bot)
+registerCommands({ bot, composer })
 
-export const createBots = async () => {
-  // Определяем логику для каждого бота
-  bots.forEach((bot, index) => {
-    bot.on('text', ctx => ctx.reply(`I am bot${index + 1}`))
-  })
+bot.use(stage.middleware())
 
-  console.log(`NODE_ENV: ${NODE_ENV}`) // Логирование значения NODE_ENV
+bot.use(composer.middleware())
 
-  if (NODE_ENV === 'development') {
-    console.log('Starting bots in development mode...')
-    await Promise.all(bots.map(bot => development(bot)))
-  } else {
-    console.log('Starting bots in production mode...')
-    await Promise.all(bots.map(bot => production(bot)))
-  }
-}
+bot.action('callback_query', (ctx: MyContext) => {
+  console.log('CASE: callback_query', ctx)
+  handleCallback(ctx)
+})
 
-createBots()
+bot.action(/^select_model_/, async ctx => {
+  console.log('CASE: select_model_', ctx.match)
+
+  const model = ctx.match.input.replace('select_model_', '')
+  ctx.session.selectedModel = model
+  console.log('Selected model:', model)
+  await handleModelCallback(ctx, model)
+})
+
+bot.action('payment_policy_info', handlePaymentPolicyInfo)
+bot.action(/top_up_\d+/, handleTopUp)
+bot.on('pre_checkout_query', handlePreCheckoutQuery)
+bot.on('successful_payment', handleSuccessfulPayment)
+
+bot.catch(err => {
+  const error = err as Error
+  console.error('Error:', error.message)
+})
+
+// Enable graceful stop
+process.once('SIGINT', () => bot.stop())
+process.once('SIGTERM', () => bot.stop())

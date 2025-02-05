@@ -127,7 +127,7 @@ export function registerCommands({
 
   composer.command('balance', ctx => balanceCommand(ctx))
 
-  myComposer.command('help', async ctx => {
+  composer.command('help', async ctx => {
     await ctx.scene.enter('step0')
   })
 
