@@ -17,7 +17,7 @@ const menuCommandStep = async (ctx: MyContext) => {
     let newSubscription: Subscription = 'stars'
 
     if (isDev) {
-      newCount = 0
+      newCount = 1
       newSubscription = 'neurophoto'
     } else {
       const { count, subscription } = await getReferalsCountAndUserData(
@@ -47,7 +47,7 @@ const menuCommandStep = async (ctx: MyContext) => {
       : 'Unknown level'
 
     const inlineKeyboard = [
-      ...(newCount > 1
+      ...(newCount >= 1
         ? [
             [
               {
@@ -87,16 +87,12 @@ const menuCommandStep = async (ctx: MyContext) => {
       }
 
       case nameStep === (isRu ? levels[2].title_ru : levels[2].title_en): {
-        console.log(
-          'CASE: nameStep === (isRu ? levels[2].title_ru : levels[2].title_en)'
-        )
         message = getText(isRu, 'neurophoto', newCount)
         await sendReplyWithKeyboard(ctx, message, inlineKeyboard, menu)
         break
       }
 
       case newCount > 2 && newCount <= 10: {
-        console.log('CASE: newCount > 2 && newCount <= 10')
         message = getText(isRu, 'avatarLevel', newCount)
 
         const inlineKeyboardWithInvite = [
@@ -115,7 +111,6 @@ const menuCommandStep = async (ctx: MyContext) => {
       }
 
       default: {
-        console.log('CASE: default')
         const message = getText(isRu, 'mainMenu')
         await ctx.reply(message, menu)
         ctx.wizard.next()
