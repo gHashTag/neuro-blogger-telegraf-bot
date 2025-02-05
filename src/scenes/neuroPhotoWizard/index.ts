@@ -158,7 +158,10 @@ const neuroPhotoButtonStep = async (ctx: MyContext) => {
     if (numImages >= 1 && numImages <= 4) {
       await generate(numImages)
     } else {
-      await ctx.reply('Неизвестная кнопка')
+      const { count, subscription } = await getReferalsCountAndUserData(
+        ctx.from?.id?.toString() || ''
+      )
+      await mainMenu({ isRu, inviteCount: count, subscription })
     }
   }
 }
