@@ -2,7 +2,7 @@ import { Markup } from 'telegraf'
 
 import { MyContext } from '@/interfaces'
 import { getUserBalance } from '@/core/supabase'
-import { calculateTrainingCostInStars } from './calculateTrainingCost'
+import { calculateCostInStars, conversionRates } from './calculateTrainingCost'
 
 export async function handleTrainingCost(
   ctx: MyContext,
@@ -13,7 +13,7 @@ export async function handleTrainingCost(
   trainingCostInStars: number
   currentBalance: number
 }> {
-  const trainingCostInStars = calculateTrainingCostInStars(steps)
+  const trainingCostInStars = calculateCostInStars(steps, conversionRates)
   const currentBalance = await getUserBalance(Number(ctx.from?.id))
 
   let leaveScene = false
