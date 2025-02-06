@@ -50,7 +50,7 @@ export const subscriptionMiddleware = async (
     const finalUsername = username || first_name || telegram_id.toString()
 
     const existingUser = await getUserByTelegramId(telegram_id.toString())
-    console.log('existingUser', existingUser)
+    // console.log('existingUser', existingUser)
 
     if (existingUser) {
       await verifySubscription(ctx, language_code, SUBSCRIBE_CHANNEL_ID)

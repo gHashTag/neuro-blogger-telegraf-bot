@@ -37,8 +37,8 @@ export const textToSpeechWizard = new Scenes.WizardScene<MyContext>(
         : '🎙️ Send text, to convert it to voice',
       createHelpCancelKeyboard(isRu)
     )
-
-    return ctx.wizard.next()
+    ctx.wizard.next()
+    return
   },
   async ctx => {
     const isRu = isRussian(ctx)

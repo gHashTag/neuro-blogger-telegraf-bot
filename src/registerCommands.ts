@@ -110,7 +110,7 @@ export function registerCommands({
 
   composer.command('menu', async ctx => {
     console.log('CASE: myComposer.command menu')
-    ctx.session = defaultSession()
+    // ctx.session = defaultSession()
     ctx.session.mode = 'main_menu'
     await ctx.scene.enter('menuScene')
   })
