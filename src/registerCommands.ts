@@ -1,8 +1,6 @@
 import { Telegraf, Scenes, session, Middleware, Composer } from 'telegraf'
 import { MyContext } from './interfaces'
 
-import { balanceCommand } from './commands/balanceCommand'
-
 import {
   avatarWizard,
   textToVideoWizard,
@@ -112,6 +110,7 @@ export function registerCommands({
 
   composer.command('menu', async ctx => {
     console.log('CASE: myComposer.command menu')
+    ctx.session = defaultSession()
     ctx.session.mode = 'main_menu'
     await ctx.scene.enter('menuScene')
   })
@@ -121,7 +120,10 @@ export function registerCommands({
     await ctx.scene.enter('inviteScene')
   })
 
-  composer.command('balance', ctx => balanceCommand(ctx))
+  composer.command('balance', async ctx => {
+    console.log('CASE: balance')
+    await ctx.scene.enter('balanceScene')
+  })
 
   composer.command('help', async ctx => {
     await ctx.scene.enter('step0')
