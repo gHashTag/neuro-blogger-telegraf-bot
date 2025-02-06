@@ -17,6 +17,7 @@ import { handlePreCheckoutQuery } from './handlers/paymentHandlers/handlePreChec
 import { handleTopUp } from './handlers/paymentHandlers/handleTopUp'
 import { handleSuccessfulPayment } from './handlers/paymentHandlers'
 import { Composer } from 'telegraf'
+import { isRussian } from './helpers/language'
 
 if (NODE_ENV === 'development') {
   development(bot).catch(console.error)
@@ -61,6 +62,26 @@ bot.hears(['🏠 Главное меню', '🏠 Main menu'], async ctx => {
   ctx.session.mode = 'main_menu'
   await ctx.scene.enter('menuScene')
 })
+
+bot.hears(
+  ['🎥 Сгенерировать новое видео?', '🎥 Generate new video?'],
+  async ctx => {
+    console.log('CASE: Сгенерировать новое видео')
+    const mode = ctx.session.mode
+    console.log('mode', mode)
+    if (mode === 'text_to_video') {
+      await ctx.scene.enter('textToVideoWizard')
+    } else if (mode === 'image_to_video') {
+      await ctx.scene.enter('imageToVideoWizard')
+    } else {
+      await ctx.reply(
+        isRussian(ctx)
+          ? 'Вы не можете сгенерировать новое видео в этом режиме'
+          : 'You cannot generate a new video in this mode'
+      )
+    }
+  }
+)
 
 bot.catch(err => {
   const error = err as Error
