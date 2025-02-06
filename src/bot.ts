@@ -3,11 +3,11 @@ dotenv.config()
 
 import { development, production } from './utils/launch'
 
-import { handleModelCallback, handleTextMessage } from './handlers'
+import { handleModelCallback } from './handlers'
 import bot from './core/bot'
 
 import { setBotCommands } from './setCommands'
-import { registerCommands, stage } from './registerCommands'
+import { registerCommands } from './registerCommands'
 import { handleCallback } from './handlers/handleCallback'
 import { MyContext } from './interfaces'
 
@@ -30,10 +30,6 @@ export const composer = new Composer<MyContext>()
 
 setBotCommands(bot)
 registerCommands({ bot, composer })
-
-bot.use(stage.middleware())
-
-bot.use(composer.middleware())
 
 bot.action('callback_query', (ctx: MyContext) => {
   console.log('CASE: callback_query', ctx)

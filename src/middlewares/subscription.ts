@@ -10,7 +10,6 @@ import bot from '@/core/bot'
 import { isRussian } from '@/helpers/language'
 import { getUserPhotoUrl } from './getUserPhotoUrl'
 import { verifySubscription } from './verifySubscription'
-import { neuroQuestCommand } from '@/commands/neuroQuestCommand'
 
 const SUBSCRIBE_CHANNEL_ID = 'neuro_blogger_group'
 const BONUS_AMOUNT = 100
@@ -55,7 +54,7 @@ export const subscriptionMiddleware = async (
 
     if (existingUser) {
       await verifySubscription(ctx, language_code, SUBSCRIBE_CHANNEL_ID)
-      await neuroQuestCommand(ctx)
+      ctx.scene.enter('startScene')
       return
     }
 
