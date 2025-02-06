@@ -50,6 +50,18 @@ bot.action(/top_up_\d+/, handleTopUp)
 bot.on('pre_checkout_query', handlePreCheckoutQuery)
 bot.on('successful_payment', handleSuccessfulPayment)
 
+bot.hears(['🎙️ Текст в голос', '🎙️ Text to speech'], async ctx => {
+  console.log('CASE bot: 🎙️ Текст в голос')
+  ctx.session.mode = 'text_to_speech'
+  await ctx.scene.enter('textToSpeechWizard')
+})
+
+bot.hears(['🏠 Главное меню', '🏠 Main menu'], async ctx => {
+  console.log('CASE: Главное меню')
+  ctx.session.mode = 'main_menu'
+  await ctx.scene.enter('menuScene')
+})
+
 bot.catch(err => {
   const error = err as Error
   console.error('Error:', error.message)
