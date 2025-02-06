@@ -14,7 +14,7 @@ export async function balanceCommand(ctx: MyContext) {
         : `💰✨ <b>Your balance:</b> ${balance} ⭐️`,
       { parse_mode: 'HTML' }
     )
-    return
+    await ctx.scene.leave()
   } catch (error) {
     console.error('Error sending balance:', error)
     throw error
